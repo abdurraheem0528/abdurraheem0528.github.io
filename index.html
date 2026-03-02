@@ -166,7 +166,7 @@
 
   <!-- Stats -->
   <div class="stats">
-    <div class="stat"><div class="sv">4</div><div class="sl">Projects</div></div>
+    <div class="stat"><div class="sv">5</div><div class="sl">Projects</div></div>
     <div class="stat"><div class="sv">AI</div><div class="sl">GPT-Powered</div></div>
     <div class="stat"><div class="sv">GA4</div><div class="sl">Analytics</div></div>
     <div class="stat"><div class="sv">A/B</div><div class="sl">Testing</div></div>
@@ -309,6 +309,42 @@
         </div>
       </div>
 
+      <!-- Notion Case Study -->
+      <div class="project">
+        <div class="project-inner">
+          <div class="project-visual">
+            <div class="mock">
+              <div class="mock-bar"><span></span><span></span><span></span></div>
+              <div class="mock-body">
+                <div style="font-size:11px;font-weight:700;margin-bottom:6px">Notion CRO Audit</div>
+                <div style="font-size:9px;color:var(--dim);margin-bottom:10px">B2B SaaS • Productivity Platform</div>
+                <div style="display:flex;gap:8px;margin-bottom:8px">
+                  <div style="flex:1;text-align:center;padding:6px;background:var(--surface2);border-radius:4px"><div style="font-size:14px;font-weight:800;color:#ff9500">58</div><div style="font-size:8px;color:var(--muted)">Score</div></div>
+                  <div style="flex:1;text-align:center;padding:6px;background:var(--surface2);border-radius:4px"><div style="font-size:14px;font-weight:800;color:#ff3b30">7</div><div style="font-size:8px;color:var(--muted)">Issues</div></div>
+                  <div style="flex:1;text-align:center;padding:6px;background:var(--surface2);border-radius:4px"><div style="font-size:14px;font-weight:800;color:var(--green-dark)">+$4.2M</div><div style="font-size:8px;color:var(--muted)">ARR Impact</div></div>
+                </div>
+                <div style="font-size:8px;font-weight:700;color:var(--muted);margin-bottom:4px">ICE PRIORITIZED ROADMAP</div>
+                <div class="mini-bar"><div class="mini-bar-fill" style="width:100%;background:linear-gradient(90deg,#ff3b30,#ff9500,#34c759)"></div></div>
+                <div style="font-size:8px;color:var(--dim)">6 tests • GA4 plan • 9 custom events</div>
+              </div>
+            </div>
+          </div>
+          <div class="project-content">
+            <div class="project-badge study">📊 Strategic Case Study</div>
+            <h3>Notion CRO Audit</h3>
+            <p>Strategic CRO audit of Notion's homepage. Identified 7 conversion issues (vague headline, missing quantified social proof, excessive nav links), built a 90-day test roadmap with ICE scoring, designed a GA4/GTM plan with 9 custom events, and projected +$4.2M ARR impact.</p>
+            <div class="feature-tags">
+              <span class="f-tag">7 Issues Found</span>
+              <span class="f-tag">ICE Prioritization</span>
+              <span class="f-tag">90-Day Roadmap</span>
+              <span class="f-tag">GA4/GTM Plan</span>
+              <span class="f-tag">$4.2M ARR Impact</span>
+            </div>
+            <a href="notion_case_study.html" class="project-link">View Case Study →</a>
+          </div>
+        </div>
+      </div>
+
       <!-- ClickUp Case Study -->
       <div class="project">
         <div class="project-inner">
@@ -352,7 +388,7 @@
     <h2>Let's connect</h2>
     <p>Open to CRO, analytics, and A/B testing opportunities.</p>
     <div class="contact-links">
-      <a href="mailto:abdurraheem0528@gmail.com" class="c-link">✉️ abdurraheem0528@gmail.com</a>
+      <a href="/cdn-cgi/l/email-protection#c4a5a6a0b1b6b6a5aca1a1a9f4f1f6fc84a3a9a5ada8eaa7aba9" class="c-link">✉️ <span class="__cf_email__" data-cfemail="afcecdcbdaddddcec7cacac29f9a9d97efc8c2cec6c381ccc0c2">[email&#160;protected]</span></a>
       <a href="https://linkedin.com/in/abdur-raheem-bbbb492ab/" target="_blank" class="c-link">💼 LinkedIn</a>
       <a href="https://github.com/abdurraheem0528" target="_blank" class="c-link">🐙 GitHub</a>
     </div>
@@ -362,7 +398,7 @@
 
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // Dark mode
 function toggleDark(){
   document.documentElement.classList.toggle('dark');
@@ -375,10 +411,4 @@ if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.ad
 
 // Scroll animations
 const observer=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible')}})},{threshold:0.1,rootMargin:'0px 0px -50px 0px'});
-document.querySelectorAll('.project,.reveal').forEach(el=>observer.observe(el));
-
-// Smooth scroll
-document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();document.querySelector(a.getAttribute('href')).scrollIntoView({behavior:'smooth'})})});
-</script>
-</body>
-</html>
+document.querySelectorAll('.project,.reveal').forEach(el=>obse
