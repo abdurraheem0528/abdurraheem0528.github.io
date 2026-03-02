@@ -5,898 +5,377 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AB Insight — A/B Test Results Analyzer</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#fafafa;--surface:#fff;--surface2:#f5f5f7;--surface3:#eeeff1;
+    --border:#e5e5e7;--border2:#d1d1d6;
+    --text:#1d1d1f;--dim:#6e6e73;--muted:#aeaeb2;
+    --accent:#0071e3;--accent-light:#e8f2ff;
+    --green:#34c759;--green-light:#eafbef;--green-dark:#248a3d;
+    --red:#ff3b30;--red-light:#fff0ef;--red-dark:#d70015;
+    --orange:#ff9500;--orange-light:#fff8eb;--orange-dark:#c93400;
+    --purple:#af52de;--purple-light:#f5ecfc;
+    --shadow-sm:0 1px 3px rgba(0,0,0,0.04);--shadow-md:0 4px 12px rgba(0,0,0,0.06);
+    --radius:12px;--radius-lg:16px;--radius-xl:20px;
+  }
+  body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+  .app{max-width:860px;margin:0 auto;padding:24px 20px 80px}
 
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  .header{display:flex;align-items:center;justify-content:space-between;padding:16px 0 20px;margin-bottom:24px}
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#0071e3,#5856d6);display:flex;align-items:center;justify-content:center;color:white;font-size:14px;font-weight:800;box-shadow:0 2px 8px rgba(0,113,227,0.3)}
+  .logo h1{font-size:20px;font-weight:700;letter-spacing:-0.03em}
+  .logo h1 span{color:var(--accent)}
 
-  :root {
-    --bg: #06080d;
-    --surface: #0c1018;
-    --surface2: #131a27;
-    --surface3: #1a2236;
-    --border: #1f2b3d;
-    --border2: #2a3a52;
-    --text: #e8ecf4;
-    --text-dim: #7a8599;
-    --text-muted: #4a5568;
-    --blue: #3b82f6;
-    --blue-dim: #1e40af;
-    --green: #10b981;
-    --green-bg: rgba(16, 185, 129, 0.08);
-    --red: #ef4444;
-    --red-bg: rgba(239, 68, 68, 0.08);
-    --orange: #f59e0b;
-    --orange-bg: rgba(245, 158, 11, 0.08);
-    --purple: #8b5cf6;
-    --cyan: #06b6d4;
-  }
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:28px;box-shadow:var(--shadow-sm);margin-bottom:20px}
+  .card h2{font-size:18px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
+  .card .sub{font-size:13px;color:var(--dim);margin-bottom:20px;line-height:1.5}
 
-  body {
-    font-family: 'Inter', -apple-system, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+  .sample-row{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap}
+  .sample-btn{font-size:12px;font-weight:600;padding:6px 14px;border-radius:8px;background:var(--surface2);color:var(--dim);border:1px solid var(--border);cursor:pointer;font-family:inherit;transition:all 0.15s}
+  .sample-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
 
-  /* Subtle grid background */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: 
-      linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none;
-    z-index: 0;
-  }
+  .input-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .group{background:var(--surface2);border-radius:var(--radius);padding:20px;border:2px solid transparent}
+  .group.control{border-top:3px solid var(--dim)}
+  .group.variant{border-top:3px solid var(--accent)}
+  .group h3{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px}
+  .group.control h3{color:var(--dim)}
+  .group.variant h3{color:var(--accent)}
+  .field{margin-bottom:12px}
+  .field:last-child{margin-bottom:0}
+  .field label{display:block;font-size:12px;font-weight:500;color:var(--dim);margin-bottom:5px}
+  .field input{width:100%;background:white;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-family:'DM Mono',monospace;font-size:15px;color:var(--text);outline:none;transition:all 0.15s}
+  .field input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,113,227,0.08)}
+  .field input::placeholder{color:var(--muted)}
 
-  .app { max-width: 1080px; margin: 0 auto; padding: 20px 20px 60px; position: relative; z-index: 1; }
+  .settings-row{display:flex;gap:12px;align-items:center;margin-top:16px;padding:14px 16px;background:var(--surface2);border-radius:10px;flex-wrap:wrap}
+  .settings-row label{font-size:12px;color:var(--dim);font-weight:500;white-space:nowrap}
+  .settings-row select,.settings-row input{background:white;border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-family:'DM Mono',monospace;font-size:12px;color:var(--text);outline:none}
+  .settings-row select{font-family:'DM Sans',sans-serif}
 
-  /* Header */
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 0 28px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 28px;
-  }
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .logo-icon {
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, var(--blue), var(--purple));
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    font-weight: 800;
-    color: white;
-  }
-  .logo h1 {
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-  }
-  .logo h1 span { color: var(--blue); }
-  .header-tag {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    color: var(--text-dim);
-  }
+  .btn-row{display:flex;gap:10px;margin-top:18px}
+  .btn-primary{background:var(--accent);color:white;border:none;padding:12px 28px;border-radius:10px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s}
+  .btn-primary:hover{background:#005bb5;box-shadow:0 4px 12px rgba(0,113,227,0.25)}
+  .btn-primary:disabled{opacity:0.5;cursor:not-allowed}
+  .btn-ghost{background:transparent;color:var(--dim);border:1px solid var(--border);padding:12px 20px;border-radius:10px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
+  .btn-ghost:hover{background:var(--surface2);color:var(--text)}
 
-  /* Input Section */
-  .input-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 28px;
-    margin-bottom: 24px;
-  }
-  .input-section h2 {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    color: var(--text);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .input-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-  .input-group {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px;
-  }
-  .input-group.control { border-top: 3px solid var(--text-dim); }
-  .input-group.variant { border-top: 3px solid var(--blue); }
-  .input-group h3 {
-    font-size: 13px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 16px;
-  }
-  .input-group.control h3 { color: var(--text-dim); }
-  .input-group.variant h3 { color: var(--blue); }
+  .results{display:none}
+  .results.show{display:block;animation:slideUp 0.5s ease}
+  @keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 
-  .field { margin-bottom: 14px; }
-  .field:last-child { margin-bottom: 0; }
-  .field label {
-    display: block;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-dim);
-    margin-bottom: 6px;
-  }
-  .field input {
-    width: 100%;
-    background: var(--surface3);
-    border: 1px solid var(--border2);
-    border-radius: 8px;
-    padding: 10px 14px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 15px;
-    color: var(--text);
-    outline: none;
-    transition: all 0.2s;
-  }
-  .field input:focus {
-    border-color: var(--blue);
-    box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
-  }
-  .field input::placeholder { color: var(--text-muted); }
+  /* Verdict */
+  .verdict{border-radius:var(--radius-lg);padding:24px;margin-bottom:20px;display:flex;align-items:center;gap:18px}
+  .verdict.winner{background:var(--green-light);border:1px solid rgba(52,199,89,0.2)}
+  .verdict.loser{background:var(--red-light);border:1px solid rgba(255,59,48,0.2)}
+  .verdict.inconclusive{background:var(--orange-light);border:1px solid rgba(255,149,0,0.2)}
+  .verdict-icon{font-size:36px}
+  .verdict h3{font-size:17px;font-weight:700;margin-bottom:3px}
+  .verdict.winner h3{color:var(--green-dark)}
+  .verdict.loser h3{color:var(--red-dark)}
+  .verdict.inconclusive h3{color:var(--orange-dark)}
+  .verdict p{font-size:13px;color:var(--dim);line-height:1.5}
 
-  .confidence-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: 20px;
-    padding-top: 16px;
-    border-top: 1px solid var(--border);
-  }
-  .confidence-row label {
-    font-size: 13px;
-    color: var(--text-dim);
-    white-space: nowrap;
-  }
-  .confidence-row select {
-    background: var(--surface3);
-    border: 1px solid var(--border2);
-    border-radius: 8px;
-    padding: 8px 12px;
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    outline: none;
-    cursor: pointer;
-  }
+  /* KPIs */
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+  .kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow-sm)}
+  .kpi .kl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-bottom:6px}
+  .kpi .kv{font-family:'DM Mono',monospace;font-size:24px;font-weight:700}
+  .kpi .ks{font-size:11px;color:var(--dim);margin-top:3px}
 
-  .btn-row { display: flex; gap: 10px; margin-top: 20px; }
-  .btn {
-    background: linear-gradient(135deg, var(--blue), var(--blue-dim));
-    color: white;
-    border: none;
-    padding: 12px 32px;
-    border-radius: 10px;
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(59,130,246,0.25); }
-  .btn:active { transform: translateY(0); }
-  .btn.secondary {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-  }
-  .btn.secondary:hover { background: var(--surface3); box-shadow: none; }
+  /* Bars */
+  .bars-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;margin-bottom:20px;box-shadow:var(--shadow-sm)}
+  .bars-card h3{font-size:14px;font-weight:700;margin-bottom:16px}
+  .bar-row{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+  .bar-row:last-child{margin-bottom:0}
+  .bar-label{width:90px;font-size:12px;font-weight:600;text-align:right}
+  .bar-label.c{color:var(--dim)}
+  .bar-label.v{color:var(--accent)}
+  .bar-track{flex:1;height:32px;background:var(--surface2);border-radius:8px;overflow:hidden}
+  .bar-fill{height:100%;border-radius:8px;display:flex;align-items:center;padding:0 12px;font-family:'DM Mono',monospace;font-size:12px;font-weight:600;color:white;transition:width 0.8s cubic-bezier(0.25,0.46,0.45,0.94);min-width:50px}
+  .bar-fill.c{background:linear-gradient(90deg,#8e8e93,#aeaeb2)}
+  .bar-fill.v{background:linear-gradient(90deg,#005bb5,#0071e3)}
 
-  /* Sample data buttons */
-  .sample-btns {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .sample-btn {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-family: 'Inter', sans-serif;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .sample-btn:hover { border-color: var(--blue); color: var(--blue); }
+  /* Gauge */
+  .gauge-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;margin-bottom:20px;box-shadow:var(--shadow-sm);text-align:center}
+  .gauge-card h3{font-size:14px;font-weight:700;margin-bottom:8px;text-align:left}
+  .gauge-container{position:relative;width:240px;height:130px;margin:10px auto}
+  .gauge-bg{width:240px;height:120px;border-radius:120px 120px 0 0;background:conic-gradient(from 0.75turn,#ff3b30 0deg,#ff9500 90deg,#34c759 150deg,#248a3d 180deg);position:relative;overflow:hidden}
+  .gauge-inner{position:absolute;bottom:0;left:24px;right:24px;height:96px;border-radius:96px 96px 0 0;background:var(--surface)}
+  .gauge-needle{position:absolute;bottom:0;left:50%;width:2px;height:86px;background:var(--text);border-radius:2px;transform-origin:bottom center;transform:rotate(-90deg);transition:transform 1s cubic-bezier(0.25,0.46,0.45,0.94);z-index:2}
+  .gauge-dot{position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);width:12px;height:12px;background:var(--text);border-radius:50%;z-index:3}
+  .gauge-val{font-family:'DM Mono',monospace;font-size:28px;font-weight:700;margin-top:6px}
+  .gauge-sub{font-size:12px;color:var(--dim);margin-top:2px}
+  .gauge-marks{display:flex;justify-content:space-between;padding:0 8px;font-size:10px;color:var(--muted);margin-top:4px}
 
-  /* Results Section */
-  .results { display: none; }
-  .results.show { display: block; animation: fadeUp 0.5s ease; }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  /* Revenue */
+  .revenue-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+  .rev-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;text-align:center;box-shadow:var(--shadow-sm)}
+  .rev-card .rl{font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-bottom:6px}
+  .rev-card .rv{font-family:'DM Mono',monospace;font-size:22px;font-weight:700}
+  .rev-card .rs{font-size:11px;color:var(--dim);margin-top:3px}
 
-  /* KPI Cards */
-  .kpi-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-bottom: 24px;
-  }
-  .kpi {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 18px;
-    position: relative;
-    overflow: hidden;
-  }
-  .kpi::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-  }
-  .kpi.blue::before { background: var(--blue); }
-  .kpi.green::before { background: var(--green); }
-  .kpi.orange::before { background: var(--orange); }
-  .kpi.purple::before { background: var(--purple); }
-  .kpi .kpi-label {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-dim);
-    margin-bottom: 8px;
-  }
-  .kpi .kpi-value {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 26px;
-    font-weight: 600;
-  }
-  .kpi .kpi-sub {
-    font-size: 11px;
-    color: var(--text-dim);
-    margin-top: 4px;
-  }
-  .kpi-value.green { color: var(--green); }
-  .kpi-value.red { color: var(--red); }
-  .kpi-value.blue { color: var(--blue); }
-  .kpi-value.orange { color: var(--orange); }
-  .kpi-value.purple { color: var(--purple); }
+  /* AI Section */
+  .ai-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;margin-bottom:20px;box-shadow:var(--shadow-sm)}
+  .ai-card h3{font-size:14px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+  .ai-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:100px;background:linear-gradient(135deg,#0071e3,#af52de);color:white}
 
-  /* Verdict Banner */
-  .verdict {
-    border-radius: 14px;
-    padding: 24px 28px;
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    border: 1px solid;
-  }
-  .verdict.winner {
-    background: var(--green-bg);
-    border-color: rgba(16,185,129,0.2);
-  }
-  .verdict.inconclusive {
-    background: var(--orange-bg);
-    border-color: rgba(245,158,11,0.2);
-  }
-  .verdict.loser {
-    background: var(--red-bg);
-    border-color: rgba(239,68,68,0.2);
-  }
-  .verdict-icon { font-size: 36px; }
-  .verdict-text h3 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
-  .verdict-text p { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
-  .verdict.winner h3 { color: var(--green); }
-  .verdict.inconclusive h3 { color: var(--orange); }
-  .verdict.loser h3 { color: var(--red); }
+  .ai-input-row{display:flex;gap:10px;margin:12px 0}
+  .ai-context{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;resize:none;height:60px}
+  .ai-context:focus{border-color:var(--accent)}
+  .ai-context::placeholder{color:var(--muted)}
 
-  /* Comparison Bars */
-  .comparison-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 24px;
-    margin-bottom: 24px;
-  }
-  .comparison-section h3 {
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .comp-row {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 16px;
-  }
-  .comp-row:last-child { margin-bottom: 0; }
-  .comp-label {
-    width: 100px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    text-align: right;
-  }
-  .comp-label.control { color: var(--text-dim); }
-  .comp-label.variant { color: var(--blue); }
-  .comp-bar-wrap {
-    flex: 1;
-    height: 36px;
-    background: var(--surface2);
-    border-radius: 8px;
-    overflow: hidden;
-    position: relative;
-  }
-  .comp-bar {
-    height: 100%;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    padding: 0 12px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    font-weight: 600;
-    color: white;
-    transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    min-width: 60px;
-  }
-  .comp-bar.control-bar { background: linear-gradient(90deg, #4a5568, #6b7280); }
-  .comp-bar.variant-bar { background: linear-gradient(90deg, var(--blue-dim), var(--blue)); }
+  .ai-key-row{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+  .ai-key{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-family:'DM Mono',monospace;font-size:11px;color:var(--dim);outline:none}
+  .ai-key:focus{border-color:var(--accent);color:var(--text)}
 
-  /* Significance Gauge */
-  .sig-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 24px;
-    margin-bottom: 24px;
-  }
-  .sig-section h3 {
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 16px;
-  }
-  .gauge-wrap {
-    position: relative;
-    margin: 20px auto;
-    width: 280px;
-    height: 150px;
-  }
-  .gauge-bg {
-    width: 280px;
-    height: 140px;
-    border-radius: 140px 140px 0 0;
-    background: conic-gradient(from 0.75turn, #ef4444 0deg, #f59e0b 90deg, #22c55e 150deg, #10b981 180deg);
-    position: relative;
-    overflow: hidden;
-  }
-  .gauge-inner {
-    position: absolute;
-    bottom: 0;
-    left: 30px;
-    right: 30px;
-    height: 110px;
-    border-radius: 110px 110px 0 0;
-    background: var(--surface);
-  }
-  .gauge-needle {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 3px;
-    height: 100px;
-    background: white;
-    border-radius: 2px;
-    transform-origin: bottom center;
-    transform: rotate(-90deg);
-    transition: transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    z-index: 2;
-  }
-  .gauge-center {
-    position: absolute;
-    bottom: -6px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 14px;
-    height: 14px;
-    background: white;
-    border-radius: 50%;
-    z-index: 3;
-  }
-  .gauge-value {
-    text-align: center;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 32px;
-    font-weight: 700;
-    margin-top: 8px;
-  }
-  .gauge-label {
-    text-align: center;
-    font-size: 12px;
-    color: var(--text-dim);
-    margin-top: 2px;
-  }
-  .gauge-marks {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 10px;
-    font-size: 10px;
-    color: var(--text-muted);
-    margin-top: 4px;
-  }
-  .threshold-line {
-    position: absolute;
-    left: 50%;
-    bottom: 0;
-    width: 2px;
-    height: 100px;
-    transform-origin: bottom center;
-    z-index: 1;
-  }
+  .ai-btn{background:linear-gradient(135deg,#0071e3,#af52de);color:white;border:none;padding:10px 22px;border-radius:8px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px}
+  .ai-btn:hover{box-shadow:0 4px 12px rgba(0,113,227,0.3)}
+  .ai-btn:disabled{opacity:0.5;cursor:not-allowed}
 
-  /* Revenue Impact */
-  .revenue-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 24px;
-    margin-bottom: 24px;
-  }
-  .revenue-section h3 { font-size: 14px; font-weight: 600; margin-bottom: 16px; }
-  .revenue-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-  }
-  .revenue-card {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px;
-    text-align: center;
-  }
-  .revenue-card .rv-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--text-dim);
-    margin-bottom: 6px;
-  }
-  .revenue-card .rv-value {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 22px;
-    font-weight: 600;
-  }
-  .revenue-card .rv-sub {
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-top: 4px;
-  }
+  .ai-result{display:none;margin-top:14px;padding:18px;background:var(--surface2);border-radius:var(--radius);border:1px solid var(--border)}
+  .ai-result.show{display:block;animation:fadeIn 0.3s ease}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .ai-result p{font-size:13px;color:var(--dim);line-height:1.7;margin-bottom:10px}
+  .ai-result p:last-child{margin-bottom:0}
+  .ai-result h4{font-size:13px;font-weight:700;color:var(--text);margin:14px 0 6px}
+  .ai-result h4:first-child{margin-top:0}
 
-  /* Recommendation */
-  .reco-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 24px;
-    margin-bottom: 24px;
-  }
-  .reco-section h3 {
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 12px;
-  }
-  .reco-item {
-    display: flex;
-    gap: 12px;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 13px;
-    line-height: 1.5;
-    color: var(--text-dim);
-  }
-  .reco-item:last-child { border-bottom: none; }
-  .reco-num {
-    width: 24px;
-    height: 24px;
-    min-width: 24px;
-    background: var(--surface3);
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--blue);
-  }
+  .ai-loading{display:none;text-align:center;padding:20px}
+  .ai-loading.show{display:block}
+  .ai-loader{width:24px;height:24px;border:2px solid var(--surface3);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto 8px}
+  @keyframes spin{to{transform:rotate(360deg)}}
 
-  /* Footer */
-  .footer {
-    text-align: center;
-    padding: 24px 0;
-    border-top: 1px solid var(--border);
-    margin-top: 32px;
-    font-size: 12px;
-    color: var(--text-muted);
-  }
+  /* Recommendations */
+  .reco-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;box-shadow:var(--shadow-sm);margin-bottom:20px}
+  .reco-card h3{font-size:14px;font-weight:700;margin-bottom:12px}
+  .reco-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--surface2);font-size:13px;color:var(--dim);line-height:1.5}
+  .reco-item:last-child{border-bottom:none}
+  .reco-num{width:24px;height:24px;min-width:24px;background:var(--surface2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--accent)}
 
-  .hidden { display: none; }
+  .footer{text-align:center;padding:28px 0;margin-top:36px;font-size:12px;color:var(--muted);border-top:1px solid var(--border)}
+  .footer a{color:var(--accent);text-decoration:none}
 
-  @media (max-width: 700px) {
-    .input-grid { grid-template-columns: 1fr; }
-    .kpi-grid { grid-template-columns: 1fr 1fr; }
-    .revenue-grid { grid-template-columns: 1fr; }
-    .header { flex-direction: column; gap: 12px; }
-  }
+  @media(max-width:700px){.input-grid{grid-template-columns:1fr}.kpi-grid{grid-template-columns:1fr 1fr}.revenue-grid{grid-template-columns:1fr}.settings-row{flex-direction:column;align-items:flex-start}}
 </style>
 </head>
 <body>
 <div class="app">
-
-  <!-- Header -->
   <div class="header">
     <div class="logo">
-      <div class="logo-icon">AB</div>
+      <div class="logo-mark">AB</div>
       <h1>AB <span>Insight</span></h1>
     </div>
-    <div class="header-tag">A/B Test Results Analyzer v1.0</div>
+    <div style="font-size:12px;color:var(--muted)">A/B Test Results Analyzer</div>
   </div>
 
-  <!-- Input -->
-  <div class="input-section">
-    <h2>📊 Enter Test Data</h2>
-    
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-      <span style="font-size:12px;color:var(--text-dim)">Enter your A/B test results or try a sample dataset:</span>
-      <div class="sample-btns">
-        <button class="sample-btn" onclick="loadSample('headline')">📝 Headline Test</button>
-        <button class="sample-btn" onclick="loadSample('cta')">🔘 CTA Button Test</button>
-        <button class="sample-btn" onclick="loadSample('form')">📋 Form Fields Test</button>
-        <button class="sample-btn" onclick="loadSample('nosig')">⚠️ No Significance</button>
-      </div>
+  <div class="card">
+    <h2>Enter test data</h2>
+    <p class="sub">Input your A/B test results or try a sample dataset to see the analysis in action.</p>
+    <div class="sample-row">
+      <button class="sample-btn" onclick="loadSample('headline')">📝 Headline Test</button>
+      <button class="sample-btn" onclick="loadSample('cta')">🔘 CTA Test</button>
+      <button class="sample-btn" onclick="loadSample('form')">📋 Form Test</button>
+      <button class="sample-btn" onclick="loadSample('nosig')">⚠️ Low Sample</button>
     </div>
-
     <div class="input-grid">
-      <div class="input-group control">
+      <div class="group control">
         <h3>Control (A) — Original</h3>
-        <div class="field">
-          <label>Total Visitors</label>
-          <input type="number" id="controlVisitors" placeholder="e.g. 5000">
-        </div>
-        <div class="field">
-          <label>Conversions</label>
-          <input type="number" id="controlConversions" placeholder="e.g. 150">
-        </div>
+        <div class="field"><label>Total Visitors</label><input type="number" id="cV" placeholder="e.g. 5000"></div>
+        <div class="field"><label>Conversions</label><input type="number" id="cC" placeholder="e.g. 150"></div>
       </div>
-      <div class="input-group variant">
+      <div class="group variant">
         <h3>Variant (B) — Modified</h3>
-        <div class="field">
-          <label>Total Visitors</label>
-          <input type="number" id="variantVisitors" placeholder="e.g. 5000">
-        </div>
-        <div class="field">
-          <label>Conversions</label>
-          <input type="number" id="variantConversions" placeholder="e.g. 195">
-        </div>
+        <div class="field"><label>Total Visitors</label><input type="number" id="vV" placeholder="e.g. 5000"></div>
+        <div class="field"><label>Conversions</label><input type="number" id="vC" placeholder="e.g. 195"></div>
       </div>
     </div>
-
-    <div class="confidence-row">
-      <label>Confidence threshold:</label>
-      <select id="confidenceLevel">
-        <option value="0.90">90%</option>
-        <option value="0.95" selected>95% (industry standard)</option>
-        <option value="0.99">99%</option>
-      </select>
-      <label style="margin-left:16px">Monthly visitors (for revenue calc):</label>
-      <input type="number" id="monthlyVisitors" value="50000" style="width:120px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;padding:8px 12px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text);outline:none">
-      <label style="margin-left:16px">Value per conversion ($):</label>
-      <input type="number" id="convValue" value="200" style="width:100px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;padding:8px 12px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text);outline:none">
+    <div class="settings-row">
+      <label>Confidence:</label>
+      <select id="confLevel"><option value="0.90">90%</option><option value="0.95" selected>95% (standard)</option><option value="0.99">99%</option></select>
+      <label style="margin-left:8px">Monthly visitors:</label>
+      <input type="number" id="monthlyV" value="50000" style="width:100px">
+      <label style="margin-left:8px">Value per conversion ($):</label>
+      <input type="number" id="convVal" value="200" style="width:80px">
     </div>
-
     <div class="btn-row">
-      <button class="btn" onclick="analyze()">🔬 Analyze Results</button>
-      <button class="btn secondary" onclick="resetAll()">Reset</button>
+      <button class="btn-primary" onclick="analyze()">Analyze Results →</button>
+      <button class="btn-ghost" onclick="resetAll()">Reset</button>
     </div>
   </div>
 
-  <!-- Results -->
   <div class="results" id="results">
+    <div class="verdict" id="verdict"><div class="verdict-icon" id="vIcon"></div><div><h3 id="vTitle"></h3><p id="vDesc"></p></div></div>
 
-    <!-- Verdict -->
-    <div class="verdict" id="verdict">
-      <div class="verdict-icon" id="verdictIcon"></div>
-      <div class="verdict-text">
-        <h3 id="verdictTitle"></h3>
-        <p id="verdictDesc"></p>
-      </div>
-    </div>
-
-    <!-- KPIs -->
     <div class="kpi-grid">
-      <div class="kpi blue">
-        <div class="kpi-label">Control CR</div>
-        <div class="kpi-value" id="kpiCR_A"></div>
-        <div class="kpi-sub" id="kpiCR_A_sub"></div>
-      </div>
-      <div class="kpi blue">
-        <div class="kpi-label">Variant CR</div>
-        <div class="kpi-value" id="kpiCR_B"></div>
-        <div class="kpi-sub" id="kpiCR_B_sub"></div>
-      </div>
-      <div class="kpi green">
-        <div class="kpi-label">Relative Lift</div>
-        <div class="kpi-value" id="kpiLift"></div>
-        <div class="kpi-sub">improvement over control</div>
-      </div>
-      <div class="kpi purple">
-        <div class="kpi-label">P-Value</div>
-        <div class="kpi-value" id="kpiPValue"></div>
-        <div class="kpi-sub" id="kpiPSub"></div>
+      <div class="kpi"><div class="kl">Control CR</div><div class="kv" id="kCR_A"></div><div class="ks" id="kCR_A_s"></div></div>
+      <div class="kpi"><div class="kl">Variant CR</div><div class="kv" id="kCR_B"></div><div class="ks" id="kCR_B_s"></div></div>
+      <div class="kpi"><div class="kl">Relative Lift</div><div class="kv" id="kLift"></div><div class="ks">vs control</div></div>
+      <div class="kpi"><div class="kl">P-Value</div><div class="kv" id="kP"></div><div class="ks" id="kP_s"></div></div>
+    </div>
+
+    <div class="bars-card"><h3>Conversion Rate Comparison</h3>
+      <div class="bar-row"><div class="bar-label c">Control A</div><div class="bar-track"><div class="bar-fill c" id="barA" style="width:0"></div></div></div>
+      <div class="bar-row"><div class="bar-label v">Variant B</div><div class="bar-track"><div class="bar-fill v" id="barB" style="width:0"></div></div></div>
+    </div>
+
+    <div class="gauge-card"><h3>Statistical Significance</h3>
+      <div class="gauge-container">
+        <div class="gauge-bg"><div class="gauge-inner"></div><div class="gauge-needle" id="needle"></div><div class="gauge-dot"></div></div>
+        <div class="gauge-val" id="gVal">—</div>
+        <div class="gauge-sub" id="gSub">confidence level</div>
+        <div class="gauge-marks"><span>0%</span><span>50%</span><span>90%</span><span>95%</span><span>100%</span></div>
       </div>
     </div>
 
-    <!-- Visual Comparison -->
-    <div class="comparison-section">
-      <h3>📊 Conversion Rate Comparison</h3>
-      <div class="comp-row">
-        <div class="comp-label control">Control A</div>
-        <div class="comp-bar-wrap">
-          <div class="comp-bar control-bar" id="barA" style="width:0%"></div>
-        </div>
-      </div>
-      <div class="comp-row">
-        <div class="comp-label variant">Variant B</div>
-        <div class="comp-bar-wrap">
-          <div class="comp-bar variant-bar" id="barB" style="width:0%"></div>
-        </div>
-      </div>
+    <div class="revenue-grid">
+      <div class="rev-card"><div class="rl">Monthly before</div><div class="rv" id="revBefore" style="color:var(--dim)"></div><div class="rs">at control rate</div></div>
+      <div class="rev-card"><div class="rl">Monthly after</div><div class="rv" id="revAfter" style="color:var(--green-dark)"></div><div class="rs">at variant rate</div></div>
+      <div class="rev-card"><div class="rl">Added revenue/mo</div><div class="rv" id="revImpact" style="color:var(--green-dark)"></div><div class="rs" id="revAnnual"></div></div>
     </div>
 
-    <!-- Significance Gauge -->
-    <div class="sig-section">
-      <h3>🎯 Statistical Significance</h3>
-      <div class="gauge-wrap">
-        <div class="gauge-bg">
-          <div class="gauge-inner"></div>
-          <div class="gauge-needle" id="gaugeNeedle"></div>
-          <div class="gauge-center"></div>
-        </div>
-        <div class="gauge-value" id="gaugeValue">—</div>
-        <div class="gauge-label" id="gaugeLabel">confidence level</div>
-        <div class="gauge-marks">
-          <span>0%</span>
-          <span>50%</span>
-          <span>90%</span>
-          <span>95%</span>
-          <span>100%</span>
-        </div>
+    <!-- AI Analysis -->
+    <div class="ai-card">
+      <h3>🤖 AI Analysis <span class="ai-badge">GPT-4o-mini</span></h3>
+      <p style="font-size:13px;color:var(--dim);margin-bottom:10px">Get an AI-powered interpretation of your results — plain-English explanation, insights, and next-step recommendations.</p>
+      <textarea class="ai-context" id="aiContext" placeholder="Optional: Describe what you tested (e.g. 'We changed the headline from feature-focused to benefit-focused on our SaaS pricing page')"></textarea>
+      <div class="ai-key-row">
+        <span style="font-size:12px">🔑</span>
+        <input type="password" class="ai-key" id="aiKey" placeholder="OpenAI API key (sk-...)">
+        <button class="ai-btn" id="aiBtn" onclick="runAI()">✨ Get AI Analysis</button>
       </div>
-    </div>
-
-    <!-- Revenue Impact -->
-    <div class="revenue-section">
-      <h3>💰 Projected Revenue Impact</h3>
-      <div class="revenue-grid">
-        <div class="revenue-card">
-          <div class="rv-label">Monthly conversions before</div>
-          <div class="rv-value" id="revBefore" style="color:var(--text-dim)"></div>
-          <div class="rv-sub">at control rate</div>
-        </div>
-        <div class="revenue-card">
-          <div class="rv-label">Monthly conversions after</div>
-          <div class="rv-value" id="revAfter" style="color:var(--green)"></div>
-          <div class="rv-sub">at variant rate</div>
-        </div>
-        <div class="revenue-card">
-          <div class="rv-label">Additional monthly revenue</div>
-          <div class="rv-value" id="revImpact" style="color:var(--green)"></div>
-          <div class="rv-sub" id="revAnnual"></div>
-        </div>
-      </div>
+      <div class="ai-loading" id="aiLoading"><div class="ai-loader"></div><div style="font-size:13px;color:var(--dim)">AI is analyzing your results...</div></div>
+      <div class="ai-result" id="aiResult"></div>
     </div>
 
     <!-- Recommendations -->
-    <div class="reco-section">
-      <h3>📋 Recommendation</h3>
-      <div id="recoList"></div>
-    </div>
-
+    <div class="reco-card"><h3>📋 Recommendations</h3><div id="recoList"></div></div>
   </div>
 
-  <div class="footer">
-    Built as a CRO portfolio project — demonstrating A/B testing analysis, statistical significance, and conversion rate optimization skills.
-  </div>
-
+  <div class="footer">AB Insight by <a href="https://abdurraheem0528.github.io" target="_blank">Abdur Raheem</a> — A/B test analysis with AI-powered insights</div>
 </div>
 
 <script>
-  // Normal CDF approximation
-  function normalCDF(x) {
-    const a1=0.254829592, a2=-0.284496736, a3=1.421413741, a4=-1.453152027, a5=1.061405429, p=0.3275911;
-    const sign = x < 0 ? -1 : 1;
-    x = Math.abs(x) / Math.sqrt(2);
-    const t = 1.0/(1.0+p*x);
-    const y = 1.0-(((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);
-    return 0.5*(1.0+sign*y);
+function normalCDF(x){const a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;const s=x<0?-1:1;x=Math.abs(x)/Math.sqrt(2);const t=1/(1+p*x);const y=1-(((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);return 0.5*(1+s*y)}
+
+const samples={headline:{cV:8240,cC:173,vV:8190,vC:254},cta:{cV:12050,cC:361,vV:11980,vC:419},form:{cV:5420,cC:114,vV:5380,vC:183},nosig:{cV:1200,cC:36,vV:1180,vC:41}};
+
+function loadSample(t){const s=samples[t];document.getElementById('cV').value=s.cV;document.getElementById('cC').value=s.cC;document.getElementById('vV').value=s.vV;document.getElementById('vC').value=s.vC}
+function resetAll(){['cV','cC','vV','vC'].forEach(id=>document.getElementById(id).value='');document.getElementById('results').classList.remove('show');document.getElementById('aiResult').classList.remove('show')}
+
+let lastCalc={};
+
+function analyze(){
+  const cV=+document.getElementById('cV').value,cC=+document.getElementById('cC').value,vV=+document.getElementById('vV').value,vC=+document.getElementById('vC').value;
+  const confT=+document.getElementById('confLevel').value,monthly=+document.getElementById('monthlyV').value||50000,val=+document.getElementById('convVal').value||200;
+  if(!cV||!cC||!vV||!vC){alert('Please fill in all fields');return}
+  if(cC>cV||vC>vV){alert('Conversions cannot exceed visitors');return}
+
+  const crA=cC/cV,crB=vC/vV,lift=((crB-crA)/crA)*100;
+  const pPool=(cC+vC)/(cV+vV),se=Math.sqrt(pPool*(1-pPool)*(1/cV+1/vV)),z=(crB-crA)/se;
+  const pValue=1-normalCDF(Math.abs(z)),confidence=(1-pValue)*100;
+  const isSig=confidence>=confT*100,bWins=crB>crA;
+
+  lastCalc={cV,cC,vV,vC,crA,crB,lift,pValue,confidence,isSig,bWins,monthly,val};
+
+  document.getElementById('results').classList.add('show');
+
+  // Verdict
+  const v=document.getElementById('verdict'),vi=document.getElementById('vIcon'),vt=document.getElementById('vTitle'),vd=document.getElementById('vDesc');
+  if(isSig&&bWins){v.className='verdict winner';vi.textContent='🏆';vt.textContent='Variant B Wins!';vd.textContent=`${confidence.toFixed(1)}% confidence. Variant B outperforms Control by ${lift.toFixed(1)}%. Implement the variant.`}
+  else if(isSig&&!bWins){v.className='verdict loser';vi.textContent='📉';vt.textContent='Control A Wins';vd.textContent=`${confidence.toFixed(1)}% confidence. Variant B performed ${Math.abs(lift).toFixed(1)}% worse. Keep the original.`}
+  else{v.className='verdict inconclusive';vi.textContent='⏳';vt.textContent='Not Yet Significant';vd.textContent=`${confidence.toFixed(1)}% confidence hasn't reached the ${(confT*100).toFixed(0)}% threshold. Keep running the test.`}
+
+  // KPIs
+  document.getElementById('kCR_A').textContent=(crA*100).toFixed(2)+'%';document.getElementById('kCR_A').style.color='var(--dim)';
+  document.getElementById('kCR_A_s').textContent=`${cC.toLocaleString()} / ${cV.toLocaleString()}`;
+  document.getElementById('kCR_B').textContent=(crB*100).toFixed(2)+'%';document.getElementById('kCR_B').style.color=bWins?'var(--green-dark)':'var(--red-dark)';
+  document.getElementById('kCR_B_s').textContent=`${vC.toLocaleString()} / ${vV.toLocaleString()}`;
+  const lE=document.getElementById('kLift');lE.textContent=(lift>=0?'+':'')+lift.toFixed(1)+'%';lE.style.color=lift>=0?'var(--green-dark)':'var(--red-dark)';
+  const pE=document.getElementById('kP');pE.textContent=pValue<0.0001?'< 0.0001':pValue.toFixed(4);pE.style.color='var(--purple)';
+  document.getElementById('kP_s').textContent=pValue<0.05?'significant':'not significant';
+
+  // Bars
+  const mx=Math.max(crA,crB);
+  setTimeout(()=>{document.getElementById('barA').style.width=(crA/mx*80)+'%';document.getElementById('barA').textContent=(crA*100).toFixed(2)+'%';document.getElementById('barB').style.width=(crB/mx*80)+'%';document.getElementById('barB').textContent=(crB*100).toFixed(2)+'%'},100);
+
+  // Gauge
+  setTimeout(()=>{document.getElementById('needle').style.transform=`rotate(${-90+(confidence/100)*180}deg)`},200);
+  document.getElementById('gVal').textContent=confidence.toFixed(1)+'%';document.getElementById('gVal').style.color=isSig?'var(--green-dark)':confidence>80?'var(--orange-dark)':'var(--red-dark)';
+  document.getElementById('gSub').textContent=isSig?'✅ Statistically Significant':'⏳ Not Yet Significant';
+
+  // Revenue
+  const convB=Math.round(monthly*crA),convA2=Math.round(monthly*crB),added=convA2-convB,mRev=added*val;
+  document.getElementById('revBefore').textContent=convB.toLocaleString();document.getElementById('revAfter').textContent=convA2.toLocaleString();
+  document.getElementById('revImpact').textContent=(mRev>=0?'+$':'-$')+Math.abs(mRev).toLocaleString();document.getElementById('revAnnual').textContent='$'+Math.abs(mRev*12).toLocaleString()+'/year';
+
+  // Recommendations
+  let recos=[];
+  if(isSig&&bWins)recos=['Implement the winning variant as the permanent page.','Document: Variant B achieved '+lift.toFixed(1)+'% lift with '+confidence.toFixed(1)+'% confidence over '+(cV+vV).toLocaleString()+' visitors.','Projected impact: '+Math.abs(added).toLocaleString()+' additional conversions/month ($'+Math.abs(mRev).toLocaleString()+'/mo).','Plan follow-up tests to identify which specific element drove the lift.','Add this pattern to your testing library for future campaigns.'];
+  else if(isSig&&!bWins)recos=['Keep Control A. The variant underperformed significantly.','Analyze why — was the change too drastic or did it confuse users?','Reframe the hypothesis and test a different approach.','Consider testing a smaller change next time.','Document the learning to avoid repeating this pattern.'];
+  else recos=['Continue running — you need more data for '+(confT*100)+'% confidence.','Current sample: '+(cV+vV).toLocaleString()+' visitors. Let it run 1-2 more weeks.','Do NOT stop early — "peeking" causes false positives.','Monitor daily that data is flowing, but don\'t call a winner yet.','If 4+ weeks pass without significance, consider a bigger change.'];
+  document.getElementById('recoList').innerHTML=recos.map((r,i)=>`<div class="reco-item"><div class="reco-num">${i+1}</div><div>${r}</div></div>`).join('');
+
+  document.getElementById('aiResult').classList.remove('show');
+  document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+async function runAI(){
+  const apiKey=document.getElementById('aiKey').value.trim();
+  if(!apiKey){alert('Please enter your OpenAI API key');return}
+  if(!lastCalc.crA){alert('Please analyze test data first');return}
+
+  const ctx=document.getElementById('aiContext').value.trim();
+  document.getElementById('aiLoading').classList.add('show');document.getElementById('aiResult').classList.remove('show');document.getElementById('aiBtn').disabled=true;
+
+  const d=lastCalc;
+  const prompt=`You are a CRO expert. Analyze these A/B test results and provide insights.
+
+TEST DATA:
+- Control (A): ${d.cV} visitors, ${d.cC} conversions (${(d.crA*100).toFixed(2)}% CR)
+- Variant (B): ${d.vV} visitors, ${d.vC} conversions (${(d.crB*100).toFixed(2)}% CR)
+- Relative Lift: ${d.lift.toFixed(1)}%
+- P-value: ${d.pValue.toFixed(4)}
+- Confidence: ${d.confidence.toFixed(1)}%
+- Statistically Significant: ${d.isSig?'Yes':'No'}
+- Monthly visitors: ${d.monthly.toLocaleString()}
+- Value per conversion: $${d.val}
+${ctx?'- Test context: '+ctx:''}
+
+Respond in this EXACT format (use these exact headers):
+
+## What Happened
+[2-3 sentences explaining the results in plain English that a non-technical stakeholder would understand]
+
+## Why This Likely Occurred
+[2-3 sentences analyzing the probable reasons behind the result, referencing CRO patterns and the test context if provided]
+
+## Business Impact
+[2 sentences on revenue/conversion impact — be specific with numbers]
+
+## What To Test Next
+[3 specific follow-up test ideas based on these results, each 1 sentence]
+
+## Key Takeaway
+[1 powerful sentence summarizing the most important insight]`;
+
+  try{
+    const r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${apiKey}`},body:JSON.stringify({model:'gpt-4o-mini',messages:[{role:'user',content:prompt}],temperature:0.7,max_tokens:1000})});
+    if(!r.ok){const e=await r.json();throw new Error(e.error?.message||'Failed')}
+    const data=await r.json(),text=data.choices[0].message.content.trim();
+
+    // Parse markdown-style response
+    let html=text.replace(/## (.+)/g,'<h4>$1</h4>').replace(/\n\n/g,'</p><p>').replace(/\n- /g,'<br>• ');
+    html='<p>'+html+'</p>';
+
+    document.getElementById('aiResult').innerHTML=html;document.getElementById('aiResult').classList.add('show');
+  }catch(e){
+    document.getElementById('aiResult').innerHTML=`<p style="color:var(--red-dark)">Error: ${e.message}</p>`;document.getElementById('aiResult').classList.add('show');
   }
-
-  function loadSample(type) {
-    const samples = {
-      headline: { cV: 8240, cC: 173, vV: 8190, vC: 254, desc: "Benefit-focused vs feature-focused headline" },
-      cta: { cV: 12050, cC: 361, vV: 11980, vC: 419, desc: "\"Start Free Trial\" vs \"Learn More\" CTA" },
-      form: { cV: 5420, cC: 114, vV: 5380, vC: 183, desc: "8-field vs 3-field form" },
-      nosig: { cV: 1200, cC: 36, vC: 41, vV: 1180, desc: "Small sample — not enough data yet" }
-    };
-    const s = samples[type];
-    document.getElementById('controlVisitors').value = s.cV;
-    document.getElementById('controlConversions').value = s.cC;
-    document.getElementById('variantVisitors').value = s.vV;
-    document.getElementById('variantConversions').value = s.vC;
-  }
-
-  function resetAll() {
-    ['controlVisitors','controlConversions','variantVisitors','variantConversions'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('results').classList.remove('show');
-  }
-
-  function analyze() {
-    const cV = parseInt(document.getElementById('controlVisitors').value);
-    const cC = parseInt(document.getElementById('controlConversions').value);
-    const vV = parseInt(document.getElementById('variantVisitors').value);
-    const vC = parseInt(document.getElementById('variantConversions').value);
-    const confThresh = parseFloat(document.getElementById('confidenceLevel').value);
-    const monthly = parseInt(document.getElementById('monthlyVisitors').value) || 50000;
-    const convVal = parseInt(document.getElementById('convValue').value) || 200;
-
-    if (!cV || !cC || !vV || !vC) { alert('Please fill in all fields'); return; }
-    if (cC > cV || vC > vV) { alert('Conversions cannot exceed visitors'); return; }
-
-    // Calculations
-    const crA = cC / cV;
-    const crB = vC / vV;
-    const lift = ((crB - crA) / crA) * 100;
-    const pPool = (cC + vC) / (cV + vV);
-    const se = Math.sqrt(pPool * (1 - pPool) * (1/cV + 1/vV));
-    const z = (crB - crA) / se;
-    const pValue = 1 - normalCDF(Math.abs(z));
-    const confidence = (1 - pValue) * 100;
-    const isSignificant = confidence >= confThresh * 100;
-    const bWins = crB > crA;
-
-    // Show results
-    document.getElementById('results').classList.add('show');
-
-    // KPIs
-    document.getElementById('kpiCR_A').textContent = (crA * 100).toFixed(2) + '%';
-    document.getElementById('kpiCR_A').className = 'kpi-value';
-    document.getElementById('kpiCR_A_sub').textContent = `${cC.toLocaleString()} / ${cV.toLocaleString()} visitors`;
-    document.getElementById('kpiCR_B').textContent = (crB * 100).toFixed(2) + '%';
-    document.getElementById('kpiCR_B').className = 'kpi-value ' + (bWins ? 'green' : 'red');
-    document.getElementById('kpiCR_B_sub').textContent = `${vC.toLocaleString()} / ${vV.toLocaleString()} visitors`;
-    
-    const liftEl = document.getElementById('kpiLift');
-    liftEl.textContent = (lift >= 0 ? '+' : '') + lift.toFixed(1) + '%';
-    liftEl.className = 'kpi-value ' + (lift >= 0 ? 'green' : 'red');
-
-    const pEl = document.getElementById('kpiPValue');
-    pEl.textContent = pValue < 0.0001 ? '< 0.0001' : pValue.toFixed(4);
-    pEl.className = 'kpi-value purple';
-    document.getElementById('kpiPSub').textContent = pValue < 0.05 ? 'significant (< 0.05)' : 'not significant (≥ 0.05)';
-
-    // Verdict
-    const v = document.getElementById('verdict');
-    const vi = document.getElementById('verdictIcon');
-    const vt = document.getElementById('verdictTitle');
-    const vd = document.getElementById('verdictDesc');
-
-    if (isSignificant && bWins) {
-      v.className = 'verdict winner';
-      vi.textContent = '🏆';
-      vt.textContent = 'Variant B Wins!';
-      vd.textContent = `With ${confidence.toFixed(1)}% confidence, Variant B outperforms Control A by ${lift.toFixed(1)}%. The result is statistically significant. Recommendation: implement the variant as the new default.`;
-    } else if (isSignificant && !bWins) {
-      v.className = 'verdict loser';
-      vi.textContent = '📉';
-      vt.textContent = 'Control A Wins — Variant B Lost';
-      vd.textContent = `With ${confidence.toFixed(1)}% confidence, Variant B performed ${Math.abs(lift).toFixed(1)}% worse than Control A. The result is statistically significant. Recommendation: keep the original and iterate on a new hypothesis.`;
-    } else {
-      v.className = 'verdict inconclusive';
-      vi.textContent = '⏳';
-      vt.textContent = 'Not Yet Significant — Keep Testing';
-      vd.textContent = `At ${confidence.toFixed(1)}% confidence, we haven't reached the ${(confThresh*100).toFixed(0)}% threshold. The data shows a ${Math.abs(lift).toFixed(1)}% ${lift >= 0 ? 'improvement' : 'decline'}, but we can't rule out random chance. Recommendation: continue running the test to collect more data.`;
-    }
-
-    // Bars
-    const maxCR = Math.max(crA, crB);
-    setTimeout(() => {
-      document.getElementById('barA').style.width = (crA / maxCR * 80) + '%';
-      document.getElementById('barA').textContent = (crA * 100).toFixed(2) + '%';
-      document.getElementById('barB').style.width = (crB / maxCR * 80) + '%';
-      document.getElementById('barB').textContent = (crB * 100).toFixed(2) + '%';
-    }, 100);
-
-    // Gauge
-    const needleAngle = -90 + (confidence / 100) * 180;
-    setTimeout(() => {
-      document.getElementById('gaugeNeedle').style.transform = `rotate(${needleAngle}deg)`;
-    }, 200);
-    document.getElementById('gaugeValue').textContent = confidence.toFixed(1) + '%';
-    document.getElementById('gaugeValue').style.color = isSignificant ? 'var(--green)' : confidence > 80 ? 'var(--orange)' : 'var(--red)';
-    document.getElementById('gaugeLabel').textContent = isSignificant ? '✅ Statistically Significant' : '⏳ Not Yet Significant';
-
-    // Revenue
-    const convBefore = Math.round(monthly * crA);
-    const convAfter = Math.round(monthly * crB);
-    const addedConv = convAfter - convBefore;
-    const monthlyRev = addedConv * convVal;
-    document.getElementById('revBefore').textContent = convBefore.toLocaleString();
-    document.getElementById('revAfter').textContent = convAfter.toLocaleString();
-    document.getElementById('revImpact').textContent = (monthlyRev >= 0 ? '+$' : '-$') + Math.abs(monthlyRev).toLocaleString();
-    document.getElementById('revAnnual').textContent = `$${Math.abs(monthlyRev * 12).toLocaleString()}/year projected`;
-
-    // Recommendations
-    const recoEl = document.getElementById('recoList');
-    let recos = [];
-    if (isSignificant && bWins) {
-      recos = [
-        'Hard-code the winning variant as the permanent page. Remove the A/B test script.',
-        `Document the result: Variant B achieved ${lift.toFixed(1)}% lift with ${confidence.toFixed(1)}% confidence over ${(cV+vV).toLocaleString()} total visitors.`,
-        `Projected impact: ${Math.abs(addedConv).toLocaleString()} additional conversions/month, worth $${Math.abs(monthlyRev).toLocaleString()}/month in pipeline.`,
-        'Plan follow-up tests to isolate which specific change drove the lift (headline, CTA, form, social proof).',
-        'Add this winning pattern to the prediction engine for future client recommendations.'
-      ];
-    } else if (isSignificant && !bWins) {
-      recos = [
-        'Keep the original Control A as the permanent page. The variant underperformed.',
-        'Analyze WHY the variant lost — was the change too drastic? Did it confuse users?',
-        'Reframe your hypothesis. The data showed visitors preferred the original approach.',
-        'Consider testing a different angle entirely rather than iterating on the failed variant.',
-        'Document the learning: this specific change pattern reduces conversions on this type of page.'
-      ];
-    } else {
-      recos = [
-        `Continue running the test. You need more data to reach ${(confThresh*100).toFixed(0)}% confidence.`,
-        `Current sample: ${(cV+vV).toLocaleString()} visitors. Consider letting it run another 1-2 weeks.`,
-        'Do NOT stop the test early — "peeking" and making decisions on insufficient data leads to false positives.',
-        'Monitor daily that data is flowing correctly, but resist the urge to call a winner prematurely.',
-        'If after 4+ weeks significance isn\'t reached, the effect may be too small — consider a bigger change ("big swing").'
-      ];
-    }
-    recoEl.innerHTML = recos.map((r, i) => `<div class="reco-item"><div class="reco-num">${i+1}</div><div>${r}</div></div>`).join('');
-
-    // Scroll to results
-    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+  document.getElementById('aiLoading').classList.remove('show');document.getElementById('aiBtn').disabled=false;
+}
 </script>
 </body>
 </html>
