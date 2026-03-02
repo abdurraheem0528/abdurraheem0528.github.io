@@ -3,58 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AB Insight — A/B Test Results Analyzer</title>
+<title>AB Insight — A/B Test Analyzer + Sample Size Calculator</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
   *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-  :root{
-    --bg:#fafafa;--surface:#fff;--surface2:#f5f5f7;--surface3:#eeeff1;
-    --border:#e5e5e7;--border2:#d1d1d6;
-    --text:#1d1d1f;--dim:#6e6e73;--muted:#aeaeb2;
-    --accent:#0071e3;--accent-light:#e8f2ff;
-    --green:#34c759;--green-light:#eafbef;--green-dark:#248a3d;
-    --red:#ff3b30;--red-light:#fff0ef;--red-dark:#d70015;
-    --orange:#ff9500;--orange-light:#fff8eb;--orange-dark:#c93400;
-    --purple:#af52de;--purple-light:#f5ecfc;
-    --shadow-sm:0 1px 3px rgba(0,0,0,0.04);--shadow-md:0 4px 12px rgba(0,0,0,0.06);
-    --radius:12px;--radius-lg:16px;--radius-xl:20px;
-  }
+  :root{--bg:#fafafa;--surface:#fff;--surface2:#f5f5f7;--surface3:#eeeff1;--border:#e5e5e7;--border2:#d1d1d6;--text:#1d1d1f;--dim:#6e6e73;--muted:#aeaeb2;--accent:#0071e3;--accent-light:#e8f2ff;--green:#34c759;--green-light:#eafbef;--green-dark:#248a3d;--red:#ff3b30;--red-light:#fff0ef;--red-dark:#d70015;--orange:#ff9500;--orange-light:#fff8eb;--orange-dark:#c93400;--purple:#af52de;--shadow-sm:0 1px 3px rgba(0,0,0,0.04);--shadow-md:0 4px 12px rgba(0,0,0,0.06);--radius:12px;--radius-lg:16px;--radius-xl:20px}
   body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
   .app{max-width:860px;margin:0 auto;padding:24px 20px 80px}
-
   .header{display:flex;align-items:center;justify-content:space-between;padding:16px 0 20px;margin-bottom:24px}
   .logo{display:flex;align-items:center;gap:10px}
   .logo-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#0071e3,#5856d6);display:flex;align-items:center;justify-content:center;color:white;font-size:14px;font-weight:800;box-shadow:0 2px 8px rgba(0,113,227,0.3)}
   .logo h1{font-size:20px;font-weight:700;letter-spacing:-0.03em}
   .logo h1 span{color:var(--accent)}
 
+  /* Mode Tabs */
+  .mode-tabs{display:flex;background:var(--surface2);border-radius:12px;padding:4px;margin-bottom:24px;border:1px solid var(--border)}
+  .mode-tab{flex:1;padding:12px;text-align:center;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;border:none;background:none;font-family:inherit;color:var(--dim)}
+  .mode-tab.active{background:var(--surface);color:var(--text);box-shadow:var(--shadow-sm)}
+  .mode-tab:hover:not(.active){color:var(--text)}
+  .mode-panel{display:none}
+  .mode-panel.active{display:block}
+
   .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:28px;box-shadow:var(--shadow-sm);margin-bottom:20px}
   .card h2{font-size:18px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
   .card .sub{font-size:13px;color:var(--dim);margin-bottom:20px;line-height:1.5}
-
   .sample-row{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap}
   .sample-btn{font-size:12px;font-weight:600;padding:6px 14px;border-radius:8px;background:var(--surface2);color:var(--dim);border:1px solid var(--border);cursor:pointer;font-family:inherit;transition:all 0.15s}
   .sample-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
-
   .input-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  .group{background:var(--surface2);border-radius:var(--radius);padding:20px;border:2px solid transparent}
-  .group.control{border-top:3px solid var(--dim)}
-  .group.variant{border-top:3px solid var(--accent)}
+  .group{background:var(--surface2);border-radius:var(--radius);padding:20px;border-top:3px solid}
+  .group.control{border-color:var(--dim)}
+  .group.variant{border-color:var(--accent)}
   .group h3{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px}
   .group.control h3{color:var(--dim)}
   .group.variant h3{color:var(--accent)}
   .field{margin-bottom:12px}
   .field:last-child{margin-bottom:0}
   .field label{display:block;font-size:12px;font-weight:500;color:var(--dim);margin-bottom:5px}
-  .field input{width:100%;background:white;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-family:'DM Mono',monospace;font-size:15px;color:var(--text);outline:none;transition:all 0.15s}
+  .field input,.field select{width:100%;background:white;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-family:'DM Mono',monospace;font-size:15px;color:var(--text);outline:none;transition:all 0.15s}
+  .field select{font-family:'DM Sans',sans-serif;font-size:13px}
   .field input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,113,227,0.08)}
   .field input::placeholder{color:var(--muted)}
-
   .settings-row{display:flex;gap:12px;align-items:center;margin-top:16px;padding:14px 16px;background:var(--surface2);border-radius:10px;flex-wrap:wrap}
   .settings-row label{font-size:12px;color:var(--dim);font-weight:500;white-space:nowrap}
   .settings-row select,.settings-row input{background:white;border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-family:'DM Mono',monospace;font-size:12px;color:var(--text);outline:none}
-  .settings-row select{font-family:'DM Sans',sans-serif}
-
   .btn-row{display:flex;gap:10px;margin-top:18px}
   .btn-primary{background:var(--accent);color:white;border:none;padding:12px 28px;border-radius:10px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s}
   .btn-primary:hover{background:#005bb5;box-shadow:0 4px 12px rgba(0,113,227,0.25)}
@@ -62,43 +54,45 @@
   .btn-ghost{background:transparent;color:var(--dim);border:1px solid var(--border);padding:12px 20px;border-radius:10px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
   .btn-ghost:hover{background:var(--surface2);color:var(--text)}
 
-  .results{display:none}
-  .results.show{display:block;animation:slideUp 0.5s ease}
+  .results{display:none}.results.show{display:block;animation:slideUp 0.5s ease}
   @keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
-  /* Verdict */
   .verdict{border-radius:var(--radius-lg);padding:24px;margin-bottom:20px;display:flex;align-items:center;gap:18px}
   .verdict.winner{background:var(--green-light);border:1px solid rgba(52,199,89,0.2)}
   .verdict.loser{background:var(--red-light);border:1px solid rgba(255,59,48,0.2)}
   .verdict.inconclusive{background:var(--orange-light);border:1px solid rgba(255,149,0,0.2)}
   .verdict-icon{font-size:36px}
   .verdict h3{font-size:17px;font-weight:700;margin-bottom:3px}
-  .verdict.winner h3{color:var(--green-dark)}
-  .verdict.loser h3{color:var(--red-dark)}
-  .verdict.inconclusive h3{color:var(--orange-dark)}
+  .verdict.winner h3{color:var(--green-dark)}.verdict.loser h3{color:var(--red-dark)}.verdict.inconclusive h3{color:var(--orange-dark)}
   .verdict p{font-size:13px;color:var(--dim);line-height:1.5}
 
-  /* KPIs */
-  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-  .kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow-sm)}
-  .kpi .kl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-bottom:6px}
-  .kpi .kv{font-family:'DM Mono',monospace;font-size:24px;font-weight:700}
-  .kpi .ks{font-size:11px;color:var(--dim);margin-top:3px}
+  .kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}
+  .kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow-sm)}
+  .kpi .kl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-bottom:6px}
+  .kpi .kv{font-family:'DM Mono',monospace;font-size:22px;font-weight:700}
+  .kpi .ks{font-size:10px;color:var(--dim);margin-top:3px}
 
-  /* Bars */
   .bars-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;margin-bottom:20px;box-shadow:var(--shadow-sm)}
   .bars-card h3{font-size:14px;font-weight:700;margin-bottom:16px}
-  .bar-row{display:flex;align-items:center;gap:14px;margin-bottom:12px}
-  .bar-row:last-child{margin-bottom:0}
+  .bar-row{display:flex;align-items:center;gap:14px;margin-bottom:12px}.bar-row:last-child{margin-bottom:0}
   .bar-label{width:90px;font-size:12px;font-weight:600;text-align:right}
-  .bar-label.c{color:var(--dim)}
-  .bar-label.v{color:var(--accent)}
+  .bar-label.c{color:var(--dim)}.bar-label.v{color:var(--accent)}
   .bar-track{flex:1;height:32px;background:var(--surface2);border-radius:8px;overflow:hidden}
   .bar-fill{height:100%;border-radius:8px;display:flex;align-items:center;padding:0 12px;font-family:'DM Mono',monospace;font-size:12px;font-weight:600;color:white;transition:width 0.8s cubic-bezier(0.25,0.46,0.45,0.94);min-width:50px}
   .bar-fill.c{background:linear-gradient(90deg,#8e8e93,#aeaeb2)}
   .bar-fill.v{background:linear-gradient(90deg,#005bb5,#0071e3)}
 
-  /* Gauge */
+  /* Bayesian */
+  .bayesian-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;margin-bottom:20px;box-shadow:var(--shadow-sm)}
+  .bayesian-card h3{font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .bayes-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;background:var(--purple-light,#f5ecfc);color:var(--purple)}
+  .prob-bar{height:40px;border-radius:10px;overflow:hidden;display:flex;margin:10px 0}
+  .prob-a{background:linear-gradient(90deg,#8e8e93,#aeaeb2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;transition:width 0.8s ease}
+  .prob-b{background:linear-gradient(90deg,#005bb5,#0071e3);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;transition:width 0.8s ease}
+  .prob-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--dim)}
+  .bayes-explain{font-size:12px;color:var(--dim);line-height:1.6;margin-top:10px;padding:12px;background:var(--surface2);border-radius:8px}
+
   .gauge-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;margin-bottom:20px;box-shadow:var(--shadow-sm);text-align:center}
   .gauge-card h3{font-size:14px;font-weight:700;margin-bottom:8px;text-align:left}
   .gauge-container{position:relative;width:240px;height:130px;margin:10px auto}
@@ -110,158 +104,201 @@
   .gauge-sub{font-size:12px;color:var(--dim);margin-top:2px}
   .gauge-marks{display:flex;justify-content:space-between;padding:0 8px;font-size:10px;color:var(--muted);margin-top:4px}
 
-  /* Revenue */
   .revenue-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
   .rev-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;text-align:center;box-shadow:var(--shadow-sm)}
   .rev-card .rl{font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-bottom:6px}
   .rev-card .rv{font-family:'DM Mono',monospace;font-size:22px;font-weight:700}
   .rev-card .rs{font-size:11px;color:var(--dim);margin-top:3px}
 
-  /* AI Section */
   .ai-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;margin-bottom:20px;box-shadow:var(--shadow-sm)}
   .ai-card h3{font-size:14px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px}
   .ai-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:100px;background:linear-gradient(135deg,#0071e3,#af52de);color:white}
-
-  .ai-input-row{display:flex;gap:10px;margin:12px 0}
-  .ai-context{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;resize:none;height:60px}
+  .ai-context{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;resize:none;height:60px;margin:12px 0}
   .ai-context:focus{border-color:var(--accent)}
   .ai-context::placeholder{color:var(--muted)}
-
   .ai-key-row{display:flex;gap:8px;align-items:center;margin-bottom:12px}
   .ai-key{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-family:'DM Mono',monospace;font-size:11px;color:var(--dim);outline:none}
   .ai-key:focus{border-color:var(--accent);color:var(--text)}
-
-  .ai-btn{background:linear-gradient(135deg,#0071e3,#af52de);color:white;border:none;padding:10px 22px;border-radius:8px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px}
+  .ai-btn{background:linear-gradient(135deg,#0071e3,#af52de);color:white;border:none;padding:10px 22px;border-radius:8px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s}
   .ai-btn:hover{box-shadow:0 4px 12px rgba(0,113,227,0.3)}
   .ai-btn:disabled{opacity:0.5;cursor:not-allowed}
-
-  .ai-result{display:none;margin-top:14px;padding:18px;background:var(--surface2);border-radius:var(--radius);border:1px solid var(--border)}
-  .ai-result.show{display:block;animation:fadeIn 0.3s ease}
-  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-  .ai-result p{font-size:13px;color:var(--dim);line-height:1.7;margin-bottom:10px}
-  .ai-result p:last-child{margin-bottom:0}
-  .ai-result h4{font-size:13px;font-weight:700;color:var(--text);margin:14px 0 6px}
-  .ai-result h4:first-child{margin-top:0}
-
-  .ai-loading{display:none;text-align:center;padding:20px}
-  .ai-loading.show{display:block}
+  .ai-loading{display:none;text-align:center;padding:20px}.ai-loading.show{display:block}
   .ai-loader{width:24px;height:24px;border:2px solid var(--surface3);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto 8px}
   @keyframes spin{to{transform:rotate(360deg)}}
+  .ai-result{display:none;margin-top:14px;padding:18px;background:var(--surface2);border-radius:var(--radius);border:1px solid var(--border)}
+  .ai-result.show{display:block;animation:fadeIn 0.3s ease}
+  .ai-result p{font-size:13px;color:var(--dim);line-height:1.7;margin-bottom:10px}.ai-result p:last-child{margin-bottom:0}
+  .ai-result h4{font-size:13px;font-weight:700;color:var(--text);margin:14px 0 6px}.ai-result h4:first-child{margin-top:0}
 
-  /* Recommendations */
   .reco-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;box-shadow:var(--shadow-sm);margin-bottom:20px}
   .reco-card h3{font-size:14px;font-weight:700;margin-bottom:12px}
   .reco-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--surface2);font-size:13px;color:var(--dim);line-height:1.5}
   .reco-item:last-child{border-bottom:none}
   .reco-num{width:24px;height:24px;min-width:24px;background:var(--surface2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--accent)}
 
+  /* Sample Size Calc */
+  .calc-result{display:none;animation:slideUp 0.4s ease}
+  .calc-result.show{display:block}
+  .calc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+  .calc-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;box-shadow:var(--shadow-sm)}
+  .calc-card .cl{font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-bottom:6px}
+  .calc-card .cv{font-family:'DM Mono',monospace;font-size:28px;font-weight:700;color:var(--accent)}
+  .calc-card .cs{font-size:11px;color:var(--dim);margin-top:4px}
+  .timeline{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;box-shadow:var(--shadow-sm)}
+  .timeline h3{font-size:14px;font-weight:700;margin-bottom:14px}
+  .tl-bar{height:10px;background:var(--surface2);border-radius:5px;margin-bottom:10px;position:relative;overflow:hidden}
+  .tl-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--accent),var(--purple));transition:width 0.8s ease}
+  .tl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .tl-item{text-align:center;padding:10px;background:var(--surface2);border-radius:8px}
+  .tl-item .tv{font-family:'DM Mono',monospace;font-size:16px;font-weight:700;margin-bottom:2px}
+  .tl-item .tl2{font-size:10px;color:var(--dim)}
+
   .footer{text-align:center;padding:28px 0;margin-top:36px;font-size:12px;color:var(--muted);border-top:1px solid var(--border)}
   .footer a{color:var(--accent);text-decoration:none}
-
-  @media(max-width:700px){.input-grid{grid-template-columns:1fr}.kpi-grid{grid-template-columns:1fr 1fr}.revenue-grid{grid-template-columns:1fr}.settings-row{flex-direction:column;align-items:flex-start}}
+  @media(max-width:700px){.input-grid{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}.revenue-grid,.calc-grid{grid-template-columns:1fr}.tl-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 <div class="app">
   <div class="header">
-    <div class="logo">
-      <div class="logo-mark">AB</div>
-      <h1>AB <span>Insight</span></h1>
-    </div>
-    <div style="font-size:12px;color:var(--muted)">A/B Test Results Analyzer</div>
+    <div class="logo"><div class="logo-mark">AB</div><h1>AB <span>Insight</span></h1></div>
+    <div style="font-size:12px;color:var(--muted)">A/B Test Analysis Suite</div>
   </div>
 
-  <div class="card">
-    <h2>Enter test data</h2>
-    <p class="sub">Input your A/B test results or try a sample dataset to see the analysis in action.</p>
-    <div class="sample-row">
-      <button class="sample-btn" onclick="loadSample('headline')">📝 Headline Test</button>
-      <button class="sample-btn" onclick="loadSample('cta')">🔘 CTA Test</button>
-      <button class="sample-btn" onclick="loadSample('form')">📋 Form Test</button>
-      <button class="sample-btn" onclick="loadSample('nosig')">⚠️ Low Sample</button>
-    </div>
-    <div class="input-grid">
-      <div class="group control">
-        <h3>Control (A) — Original</h3>
-        <div class="field"><label>Total Visitors</label><input type="number" id="cV" placeholder="e.g. 5000"></div>
-        <div class="field"><label>Conversions</label><input type="number" id="cC" placeholder="e.g. 150"></div>
+  <div class="mode-tabs">
+    <button class="mode-tab active" onclick="switchMode('analyze',this)">📊 Analyze Results</button>
+    <button class="mode-tab" onclick="switchMode('calc',this)">🔢 Sample Size Calculator</button>
+  </div>
+
+  <!-- MODE 1: Analyze Results -->
+  <div class="mode-panel active" id="panel-analyze">
+    <div class="card">
+      <h2>Enter test data</h2>
+      <p class="sub">Input A/B test results to get statistical analysis, Bayesian probability, revenue impact, and AI insights.</p>
+      <div class="sample-row">
+        <button class="sample-btn" onclick="loadSample('headline')">📝 Headline Test</button>
+        <button class="sample-btn" onclick="loadSample('cta')">🔘 CTA Button</button>
+        <button class="sample-btn" onclick="loadSample('form')">📋 Form Reduction</button>
+        <button class="sample-btn" onclick="loadSample('nosig')">⚠️ Low Sample</button>
       </div>
-      <div class="group variant">
-        <h3>Variant (B) — Modified</h3>
-        <div class="field"><label>Total Visitors</label><input type="number" id="vV" placeholder="e.g. 5000"></div>
-        <div class="field"><label>Conversions</label><input type="number" id="vC" placeholder="e.g. 195"></div>
+      <div class="input-grid">
+        <div class="group control"><h3>Control (A) — Original</h3><div class="field"><label>Total Visitors</label><input type="number" id="cV" placeholder="e.g. 5000"></div><div class="field"><label>Conversions</label><input type="number" id="cC" placeholder="e.g. 150"></div></div>
+        <div class="group variant"><h3>Variant (B) — Modified</h3><div class="field"><label>Total Visitors</label><input type="number" id="vV" placeholder="e.g. 5000"></div><div class="field"><label>Conversions</label><input type="number" id="vC" placeholder="e.g. 195"></div></div>
       </div>
+      <div class="settings-row">
+        <label>Confidence:</label><select id="confLevel"><option value="0.90">90%</option><option value="0.95" selected>95%</option><option value="0.99">99%</option></select>
+        <label style="margin-left:8px">Monthly visitors:</label><input type="number" id="monthlyV" value="50000" style="width:100px">
+        <label style="margin-left:8px">$/conversion:</label><input type="number" id="convVal" value="200" style="width:80px">
+      </div>
+      <div class="btn-row"><button class="btn-primary" onclick="analyze()">Analyze Results →</button><button class="btn-ghost" onclick="resetAll()">Reset</button></div>
     </div>
-    <div class="settings-row">
-      <label>Confidence:</label>
-      <select id="confLevel"><option value="0.90">90%</option><option value="0.95" selected>95% (standard)</option><option value="0.99">99%</option></select>
-      <label style="margin-left:8px">Monthly visitors:</label>
-      <input type="number" id="monthlyV" value="50000" style="width:100px">
-      <label style="margin-left:8px">Value per conversion ($):</label>
-      <input type="number" id="convVal" value="200" style="width:80px">
-    </div>
-    <div class="btn-row">
-      <button class="btn-primary" onclick="analyze()">Analyze Results →</button>
-      <button class="btn-ghost" onclick="resetAll()">Reset</button>
+    <div class="results" id="results">
+      <div class="verdict" id="verdict"><div class="verdict-icon" id="vIcon"></div><div><h3 id="vTitle"></h3><p id="vDesc"></p></div></div>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kl">Control CR</div><div class="kv" id="kCR_A"></div><div class="ks" id="kCR_A_s"></div></div>
+        <div class="kpi"><div class="kl">Variant CR</div><div class="kv" id="kCR_B"></div><div class="ks" id="kCR_B_s"></div></div>
+        <div class="kpi"><div class="kl">Relative Lift</div><div class="kv" id="kLift"></div><div class="ks">vs control</div></div>
+        <div class="kpi"><div class="kl">P-Value</div><div class="kv" id="kP"></div><div class="ks" id="kP_s"></div></div>
+        <div class="kpi"><div class="kl">Z-Score</div><div class="kv" id="kZ"></div><div class="ks">standard devs</div></div>
+      </div>
+      <div class="bars-card"><h3>Conversion Rate Comparison</h3>
+        <div class="bar-row"><div class="bar-label c">Control A</div><div class="bar-track"><div class="bar-fill c" id="barA" style="width:0"></div></div></div>
+        <div class="bar-row"><div class="bar-label v">Variant B</div><div class="bar-track"><div class="bar-fill v" id="barB" style="width:0"></div></div></div>
+      </div>
+      <!-- Bayesian Section -->
+      <div class="bayesian-card">
+        <h3>Bayesian Analysis <span class="bayes-badge">Probability Model</span></h3>
+        <p style="font-size:13px;color:var(--dim);margin-bottom:10px">Unlike p-values, Bayesian analysis gives you a direct answer: "What is the probability that B beats A?"</p>
+        <div class="prob-bar"><div class="prob-a" id="probA" style="width:50%">50%</div><div class="prob-b" id="probB" style="width:50%">50%</div></div>
+        <div class="prob-labels"><span>Control A wins</span><span>Variant B wins</span></div>
+        <div class="bayes-explain" id="bayesExplain"></div>
+      </div>
+      <div class="gauge-card"><h3>Frequentist Confidence</h3>
+        <div class="gauge-container"><div class="gauge-bg"><div class="gauge-inner"></div><div class="gauge-needle" id="needle"></div><div class="gauge-dot"></div></div>
+        <div class="gauge-val" id="gVal">—</div><div class="gauge-sub" id="gSub">confidence level</div>
+        <div class="gauge-marks"><span>0%</span><span>50%</span><span>90%</span><span>95%</span><span>100%</span></div></div>
+      </div>
+      <div class="revenue-grid">
+        <div class="rev-card"><div class="rl">Monthly before</div><div class="rv" id="revBefore" style="color:var(--dim)"></div><div class="rs">at control rate</div></div>
+        <div class="rev-card"><div class="rl">Monthly after</div><div class="rv" id="revAfter" style="color:var(--green-dark)"></div><div class="rs">at variant rate</div></div>
+        <div class="rev-card"><div class="rl">Added revenue/mo</div><div class="rv" id="revImpact" style="color:var(--green-dark)"></div><div class="rs" id="revAnnual"></div></div>
+      </div>
+      <div class="ai-card">
+        <h3>🤖 AI Analysis <span class="ai-badge">GPT-4o-mini</span></h3>
+        <p style="font-size:13px;color:var(--dim)">Get plain-English insights, reasoning, and next-step recommendations.</p>
+        <textarea class="ai-context" id="aiContext" placeholder="Optional: Describe what you tested (e.g. 'Changed headline from feature-focused to benefit-focused on our SaaS pricing page')"></textarea>
+        <div class="ai-key-row"><span style="font-size:12px">🔑</span><input type="password" class="ai-key" id="aiKey" placeholder="OpenAI API key (sk-...)"><button class="ai-btn" id="aiBtn" onclick="runAI()">✨ Get AI Analysis</button></div>
+        <div class="ai-loading" id="aiLoading"><div class="ai-loader"></div><div style="font-size:13px;color:var(--dim)">AI is analyzing...</div></div>
+        <div class="ai-result" id="aiResult"></div>
+      </div>
+      <div class="reco-card"><h3>📋 Statistical Recommendations</h3><div id="recoList"></div></div>
     </div>
   </div>
 
-  <div class="results" id="results">
-    <div class="verdict" id="verdict"><div class="verdict-icon" id="vIcon"></div><div><h3 id="vTitle"></h3><p id="vDesc"></p></div></div>
-
-    <div class="kpi-grid">
-      <div class="kpi"><div class="kl">Control CR</div><div class="kv" id="kCR_A"></div><div class="ks" id="kCR_A_s"></div></div>
-      <div class="kpi"><div class="kl">Variant CR</div><div class="kv" id="kCR_B"></div><div class="ks" id="kCR_B_s"></div></div>
-      <div class="kpi"><div class="kl">Relative Lift</div><div class="kv" id="kLift"></div><div class="ks">vs control</div></div>
-      <div class="kpi"><div class="kl">P-Value</div><div class="kv" id="kP"></div><div class="ks" id="kP_s"></div></div>
+  <!-- MODE 2: Sample Size Calculator -->
+  <div class="mode-panel" id="panel-calc">
+    <div class="card">
+      <h2>Pre-test sample size calculator</h2>
+      <p class="sub">Before launching an A/B test, calculate how many visitors you need to detect a meaningful difference. Running tests without enough sample is the #1 cause of false positives.</p>
+      <div class="input-grid">
+        <div class="group" style="border-color:var(--accent)">
+          <h3 style="color:var(--accent)">Test Parameters</h3>
+          <div class="field"><label>Current conversion rate (%)</label><input type="number" id="baseCR" placeholder="e.g. 3.5" step="0.1"></div>
+          <div class="field"><label>Minimum detectable effect (%)</label><input type="number" id="mde" placeholder="e.g. 15" step="1"><div style="font-size:11px;color:var(--muted);margin-top:4px">How much lift do you want to detect? (relative %)</div></div>
+        </div>
+        <div class="group" style="border-color:var(--purple)">
+          <h3 style="color:var(--purple)">Statistical Settings</h3>
+          <div class="field"><label>Confidence level</label><select id="calcConf"><option value="0.90">90%</option><option value="0.95" selected>95% (standard)</option><option value="0.99">99%</option></select></div>
+          <div class="field"><label>Statistical power</label><select id="calcPower"><option value="0.80" selected>80% (standard)</option><option value="0.90">90%</option><option value="0.95">95%</option></select></div>
+          <div class="field"><label>Daily visitors to test page</label><input type="number" id="dailyV" placeholder="e.g. 1000"></div>
+          <div class="field"><label>Traffic split (%)</label><select id="split"><option value="50" selected>50/50 (recommended)</option><option value="70">70/30</option><option value="80">80/20</option></select></div>
+        </div>
+      </div>
+      <div class="btn-row"><button class="btn-primary" onclick="calcSampleSize()">Calculate →</button></div>
     </div>
-
-    <div class="bars-card"><h3>Conversion Rate Comparison</h3>
-      <div class="bar-row"><div class="bar-label c">Control A</div><div class="bar-track"><div class="bar-fill c" id="barA" style="width:0"></div></div></div>
-      <div class="bar-row"><div class="bar-label v">Variant B</div><div class="bar-track"><div class="bar-fill v" id="barB" style="width:0"></div></div></div>
-    </div>
-
-    <div class="gauge-card"><h3>Statistical Significance</h3>
-      <div class="gauge-container">
-        <div class="gauge-bg"><div class="gauge-inner"></div><div class="gauge-needle" id="needle"></div><div class="gauge-dot"></div></div>
-        <div class="gauge-val" id="gVal">—</div>
-        <div class="gauge-sub" id="gSub">confidence level</div>
-        <div class="gauge-marks"><span>0%</span><span>50%</span><span>90%</span><span>95%</span><span>100%</span></div>
+    <div class="calc-result" id="calcResult">
+      <div class="calc-grid">
+        <div class="calc-card"><div class="cl">Sample per variation</div><div class="cv" id="ssPer"></div><div class="cs">visitors each arm</div></div>
+        <div class="calc-card"><div class="cl">Total sample needed</div><div class="cv" id="ssTotal"></div><div class="cs">across both arms</div></div>
+        <div class="calc-card"><div class="cl">Test duration</div><div class="cv" id="ssDays"></div><div class="cs" id="ssWeeks"></div></div>
+      </div>
+      <div class="timeline" id="timeline">
+        <h3>📅 Test Timeline at Your Traffic</h3>
+        <div class="tl-bar"><div class="tl-fill" id="tlFill" style="width:0"></div></div>
+        <div class="tl-grid">
+          <div class="tl-item"><div class="tv" id="tl25">—</div><div class="tl2">25% complete</div></div>
+          <div class="tl-item"><div class="tv" id="tl50">—</div><div class="tl2">50% complete</div></div>
+          <div class="tl-item"><div class="tv" id="tl75">—</div><div class="tl2">75% complete</div></div>
+          <div class="tl-item"><div class="tv" id="tl100">—</div><div class="tl2">✅ Ready to call</div></div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:20px">
+        <h3 style="font-size:14px;font-weight:700;margin-bottom:12px">⚠️ Why This Matters</h3>
+        <div id="calcWarning" style="font-size:13px;color:var(--dim);line-height:1.7"></div>
       </div>
     </div>
-
-    <div class="revenue-grid">
-      <div class="rev-card"><div class="rl">Monthly before</div><div class="rv" id="revBefore" style="color:var(--dim)"></div><div class="rs">at control rate</div></div>
-      <div class="rev-card"><div class="rl">Monthly after</div><div class="rv" id="revAfter" style="color:var(--green-dark)"></div><div class="rs">at variant rate</div></div>
-      <div class="rev-card"><div class="rl">Added revenue/mo</div><div class="rv" id="revImpact" style="color:var(--green-dark)"></div><div class="rs" id="revAnnual"></div></div>
-    </div>
-
-    <!-- AI Analysis -->
-    <div class="ai-card">
-      <h3>🤖 AI Analysis <span class="ai-badge">GPT-4o-mini</span></h3>
-      <p style="font-size:13px;color:var(--dim);margin-bottom:10px">Get an AI-powered interpretation of your results — plain-English explanation, insights, and next-step recommendations.</p>
-      <textarea class="ai-context" id="aiContext" placeholder="Optional: Describe what you tested (e.g. 'We changed the headline from feature-focused to benefit-focused on our SaaS pricing page')"></textarea>
-      <div class="ai-key-row">
-        <span style="font-size:12px">🔑</span>
-        <input type="password" class="ai-key" id="aiKey" placeholder="OpenAI API key (sk-...)">
-        <button class="ai-btn" id="aiBtn" onclick="runAI()">✨ Get AI Analysis</button>
-      </div>
-      <div class="ai-loading" id="aiLoading"><div class="ai-loader"></div><div style="font-size:13px;color:var(--dim)">AI is analyzing your results...</div></div>
-      <div class="ai-result" id="aiResult"></div>
-    </div>
-
-    <!-- Recommendations -->
-    <div class="reco-card"><h3>📋 Recommendations</h3><div id="recoList"></div></div>
   </div>
 
-  <div class="footer">AB Insight by <a href="https://abdurraheem0528.github.io" target="_blank">Abdur Raheem</a> — A/B test analysis with AI-powered insights</div>
+  <div class="footer">AB Insight by <a href="https://abdurraheem0528.github.io" target="_blank">Abdur Raheem</a> — A/B test analysis with Bayesian probability & AI insights</div>
 </div>
 
 <script>
-function normalCDF(x){const a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;const s=x<0?-1:1;x=Math.abs(x)/Math.sqrt(2);const t=1/(1+p*x);const y=1-(((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);return 0.5*(1+s*y)}
+function switchMode(mode,btn){document.querySelectorAll('.mode-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.mode-panel').forEach(p=>p.classList.remove('active'));document.getElementById('panel-'+mode).classList.add('active')}
+
+function normalCDF(x){const a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;const s=x<0?-1:1;x=Math.abs(x)/Math.sqrt(2);const t=1/(1+p*x);return 0.5*(1+s*(1-(((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-x*x)))}
+function invNorm(p){const a=[0,-3.969683028665376e1,2.209460984245205e2,-2.759285104469687e2,1.383577518672690e2,-3.066479806614716e1,2.506628277459239e0];const b=[0,-5.447609879822406e1,1.615858368580409e2,-1.556989798598866e2,6.680131188771972e1,-1.328068155288572e1];const c=[0,-7.784894002430293e-3,-3.223964580411365e-1,-2.400758277161838e0,-2.549732539343734e0,4.374664141464968e0,2.938163982698783e0];const d=[0,7.784695709041462e-3,3.224671290700398e-1,2.445134137142996e0,3.754408661907416e0];const pL=0.02425,pH=1-pL;let q,r;if(p<pL){q=Math.sqrt(-2*Math.log(p));return(((((c[1]*q+c[2])*q+c[3])*q+c[4])*q+c[5])*q+c[6])/((((d[1]*q+d[2])*q+d[3])*q+d[4])*q+1)}if(p<=pH){q=p-0.5;r=q*q;return(((((a[1]*r+a[2])*r+a[3])*r+a[4])*r+a[5])*r+a[6])*q/(((((b[1]*r+b[2])*r+b[3])*r+b[4])*r+b[5])*r+1)}q=Math.sqrt(-2*Math.log(1-p));return-(((((c[1]*q+c[2])*q+c[3])*q+c[4])*q+c[5])*q+c[6])/((((d[1]*q+d[2])*q+d[3])*q+d[4])*q+1)}
+
+// Bayesian: Monte Carlo simulation
+function bayesianProb(cV,cC,vV,vC,n=50000){
+  function betaSample(a,b){const x=gammaSample(a);return x/(x+gammaSample(b))}
+  function gammaSample(a){if(a<1){return gammaSample(a+1)*Math.pow(Math.random(),1/a)}const d=a-1/3,c=1/Math.sqrt(9*d);let x,v;while(true){do{x=normalRandom();v=1+c*x}while(v<=0);v=v*v*v;const u=Math.random();if(u<1-0.0331*(x*x)*(x*x))return d*v;if(Math.log(u)<0.5*x*x+d*(1-v+Math.log(v)))return d*v}}
+  function normalRandom(){let u=0,v=0;while(u===0)u=Math.random();while(v===0)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+  let bWins=0;
+  for(let i=0;i<n;i++){const pA=betaSample(cC+1,cV-cC+1),pB=betaSample(vC+1,vV-vC+1);if(pB>pA)bWins++}
+  return bWins/n;
+}
 
 const samples={headline:{cV:8240,cC:173,vV:8190,vC:254},cta:{cV:12050,cC:361,vV:11980,vC:419},form:{cV:5420,cC:114,vV:5380,vC:183},nosig:{cV:1200,cC:36,vV:1180,vC:41}};
-
 function loadSample(t){const s=samples[t];document.getElementById('cV').value=s.cV;document.getElementById('cC').value=s.cC;document.getElementById('vV').value=s.vV;document.getElementById('vC').value=s.vC}
 function resetAll(){['cV','cC','vV','vC'].forEach(id=>document.getElementById(id).value='');document.getElementById('results').classList.remove('show');document.getElementById('aiResult').classList.remove('show')}
 
@@ -278,102 +315,139 @@ function analyze(){
   const pValue=1-normalCDF(Math.abs(z)),confidence=(1-pValue)*100;
   const isSig=confidence>=confT*100,bWins=crB>crA;
 
-  lastCalc={cV,cC,vV,vC,crA,crB,lift,pValue,confidence,isSig,bWins,monthly,val};
+  // Bayesian
+  const bProb=bayesianProb(cV,cC,vV,vC);
 
+  lastCalc={cV,cC,vV,vC,crA,crB,lift,pValue,confidence,isSig,bWins,monthly,val,z,bProb};
   document.getElementById('results').classList.add('show');
 
-  // Verdict
   const v=document.getElementById('verdict'),vi=document.getElementById('vIcon'),vt=document.getElementById('vTitle'),vd=document.getElementById('vDesc');
-  if(isSig&&bWins){v.className='verdict winner';vi.textContent='🏆';vt.textContent='Variant B Wins!';vd.textContent=`${confidence.toFixed(1)}% confidence. Variant B outperforms Control by ${lift.toFixed(1)}%. Implement the variant.`}
-  else if(isSig&&!bWins){v.className='verdict loser';vi.textContent='📉';vt.textContent='Control A Wins';vd.textContent=`${confidence.toFixed(1)}% confidence. Variant B performed ${Math.abs(lift).toFixed(1)}% worse. Keep the original.`}
-  else{v.className='verdict inconclusive';vi.textContent='⏳';vt.textContent='Not Yet Significant';vd.textContent=`${confidence.toFixed(1)}% confidence hasn't reached the ${(confT*100).toFixed(0)}% threshold. Keep running the test.`}
+  if(isSig&&bWins){v.className='verdict winner';vi.textContent='🏆';vt.textContent='Variant B Wins!';vd.textContent=`${confidence.toFixed(1)}% confidence. Variant B outperforms Control by ${lift.toFixed(1)}%. Bayesian probability: ${(bProb*100).toFixed(1)}% chance B is better.`}
+  else if(isSig&&!bWins){v.className='verdict loser';vi.textContent='📉';vt.textContent='Control A Wins';vd.textContent=`${confidence.toFixed(1)}% confidence. Variant B performed ${Math.abs(lift).toFixed(1)}% worse.`}
+  else{v.className='verdict inconclusive';vi.textContent='⏳';vt.textContent='Not Yet Significant';vd.textContent=`${confidence.toFixed(1)}% confidence (need ${(confT*100)}%). Bayesian: ${(bProb*100).toFixed(1)}% chance B is better — keep running.`}
 
-  // KPIs
   document.getElementById('kCR_A').textContent=(crA*100).toFixed(2)+'%';document.getElementById('kCR_A').style.color='var(--dim)';
-  document.getElementById('kCR_A_s').textContent=`${cC.toLocaleString()} / ${cV.toLocaleString()}`;
+  document.getElementById('kCR_A_s').textContent=cC.toLocaleString()+' / '+cV.toLocaleString();
   document.getElementById('kCR_B').textContent=(crB*100).toFixed(2)+'%';document.getElementById('kCR_B').style.color=bWins?'var(--green-dark)':'var(--red-dark)';
-  document.getElementById('kCR_B_s').textContent=`${vC.toLocaleString()} / ${vV.toLocaleString()}`;
+  document.getElementById('kCR_B_s').textContent=vC.toLocaleString()+' / '+vV.toLocaleString();
   const lE=document.getElementById('kLift');lE.textContent=(lift>=0?'+':'')+lift.toFixed(1)+'%';lE.style.color=lift>=0?'var(--green-dark)':'var(--red-dark)';
-  const pE=document.getElementById('kP');pE.textContent=pValue<0.0001?'< 0.0001':pValue.toFixed(4);pE.style.color='var(--purple)';
+  document.getElementById('kP').textContent=pValue<0.0001?'< 0.0001':pValue.toFixed(4);document.getElementById('kP').style.color='var(--purple)';
   document.getElementById('kP_s').textContent=pValue<0.05?'significant':'not significant';
+  document.getElementById('kZ').textContent=z.toFixed(3);document.getElementById('kZ').style.color='var(--accent)';
 
-  // Bars
   const mx=Math.max(crA,crB);
   setTimeout(()=>{document.getElementById('barA').style.width=(crA/mx*80)+'%';document.getElementById('barA').textContent=(crA*100).toFixed(2)+'%';document.getElementById('barB').style.width=(crB/mx*80)+'%';document.getElementById('barB').textContent=(crB*100).toFixed(2)+'%'},100);
 
-  // Gauge
+  // Bayesian bars
+  const pA=(1-bProb)*100,pB=bProb*100;
+  setTimeout(()=>{document.getElementById('probA').style.width=pA+'%';document.getElementById('probA').textContent=pA.toFixed(1)+'%';document.getElementById('probB').style.width=pB+'%';document.getElementById('probB').textContent=pB.toFixed(1)+'%'},200);
+  const be=document.getElementById('bayesExplain');
+  if(bProb>0.95)be.innerHTML=`<strong style="color:var(--green-dark)">Strong evidence.</strong> There's a ${pB.toFixed(1)}% probability that Variant B genuinely outperforms Control A. This is equivalent to >95% Bayesian credibility. You can confidently implement B.`;
+  else if(bProb>0.8)be.innerHTML=`<strong style="color:var(--orange-dark)">Moderate evidence.</strong> ${pB.toFixed(1)}% probability B is better. Promising, but not conclusive. Continue the test for stronger certainty.`;
+  else if(bProb>0.5)be.innerHTML=`<strong>Weak evidence.</strong> Only ${pB.toFixed(1)}% probability B beats A. The difference could be noise. More data needed.`;
+  else be.innerHTML=`<strong style="color:var(--red-dark)">Evidence favors Control A.</strong> Only ${pB.toFixed(1)}% chance B is better. A appears to be the stronger version.`;
+
   setTimeout(()=>{document.getElementById('needle').style.transform=`rotate(${-90+(confidence/100)*180}deg)`},200);
   document.getElementById('gVal').textContent=confidence.toFixed(1)+'%';document.getElementById('gVal').style.color=isSig?'var(--green-dark)':confidence>80?'var(--orange-dark)':'var(--red-dark)';
   document.getElementById('gSub').textContent=isSig?'✅ Statistically Significant':'⏳ Not Yet Significant';
 
-  // Revenue
   const convB=Math.round(monthly*crA),convA2=Math.round(monthly*crB),added=convA2-convB,mRev=added*val;
   document.getElementById('revBefore').textContent=convB.toLocaleString();document.getElementById('revAfter').textContent=convA2.toLocaleString();
   document.getElementById('revImpact').textContent=(mRev>=0?'+$':'-$')+Math.abs(mRev).toLocaleString();document.getElementById('revAnnual').textContent='$'+Math.abs(mRev*12).toLocaleString()+'/year';
 
-  // Recommendations
   let recos=[];
-  if(isSig&&bWins)recos=['Implement the winning variant as the permanent page.','Document: Variant B achieved '+lift.toFixed(1)+'% lift with '+confidence.toFixed(1)+'% confidence over '+(cV+vV).toLocaleString()+' visitors.','Projected impact: '+Math.abs(added).toLocaleString()+' additional conversions/month ($'+Math.abs(mRev).toLocaleString()+'/mo).','Plan follow-up tests to identify which specific element drove the lift.','Add this pattern to your testing library for future campaigns.'];
-  else if(isSig&&!bWins)recos=['Keep Control A. The variant underperformed significantly.','Analyze why — was the change too drastic or did it confuse users?','Reframe the hypothesis and test a different approach.','Consider testing a smaller change next time.','Document the learning to avoid repeating this pattern.'];
-  else recos=['Continue running — you need more data for '+(confT*100)+'% confidence.','Current sample: '+(cV+vV).toLocaleString()+' visitors. Let it run 1-2 more weeks.','Do NOT stop early — "peeking" causes false positives.','Monitor daily that data is flowing, but don\'t call a winner yet.','If 4+ weeks pass without significance, consider a bigger change.'];
+  if(isSig&&bWins)recos=['Implement Variant B — the data supports it with both frequentist ('+confidence.toFixed(1)+'%) and Bayesian ('+(bProb*100).toFixed(1)+'%) confidence.','Projected: +'+Math.abs(added).toLocaleString()+' conversions/month = +$'+Math.abs(mRev).toLocaleString()+'/month ($'+Math.abs(mRev*12).toLocaleString()+'/year).','Document this win. Record what changed, hypothesis, sample size ('+((cV+vV).toLocaleString())+'), and lift ('+lift.toFixed(1)+'%) for your testing library.','Plan iteration: test a further refinement of the winning element to compound gains.','Share results with stakeholders — show both the statistical proof and revenue impact.'];
+  else if(isSig&&!bWins)recos=['Keep Control A. Variant B performed '+Math.abs(lift).toFixed(1)+'% worse with statistical significance.','This is still a valuable learning — you now know what DOESN\'T work.','Analyze why: was the change confusing? Did it break trust? Did the design feel worse?','Test the opposite direction — if B was more aggressive, try subtle next.','Document: "Tested [change], result was -'+Math.abs(lift).toFixed(1)+'%. Avoid this pattern."'];
+  else recos=['Keep running — at '+(cV+vV).toLocaleString()+' visitors, you haven\'t reached '+(confT*100)+'% confidence yet.','Bayesian probability is '+( bProb*100).toFixed(1)+'% — '+(bProb>0.7?'trending positive but':'')+'not conclusive.','NEVER stop a test early. "Peeking" at results causes false positives up to 30% of the time.','Estimate: you need ~'+(Math.ceil((cV+vV)*1.5/1000)*1000).toLocaleString()+' total visitors. Keep running 1-2 more weeks.','If 4+ weeks pass without significance, the effect may be too small. Consider a bolder change.'];
   document.getElementById('recoList').innerHTML=recos.map((r,i)=>`<div class="reco-item"><div class="reco-num">${i+1}</div><div>${r}</div></div>`).join('');
-
   document.getElementById('aiResult').classList.remove('show');
   document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
+// Sample Size Calculator
+function calcSampleSize(){
+  const base=+document.getElementById('baseCR').value/100,mde=+document.getElementById('mde').value/100;
+  const conf=+document.getElementById('calcConf').value,power=+document.getElementById('calcPower').value;
+  const daily=+document.getElementById('dailyV').value,split=+document.getElementById('split').value/100;
+  if(!base||!mde||!daily){alert('Please fill in baseline CR, minimum effect, and daily visitors');return}
+
+  const p2=base*(1+mde),pAvg=(base+p2)/2;
+  const zAlpha=invNorm(1-(1-conf)/2),zBeta=invNorm(power);
+  const n=Math.ceil(2*pAvg*(1-pAvg)*Math.pow(zAlpha+zBeta,2)/Math.pow(base-p2,2));
+  const total=n*2;
+  const dailyTest=daily*split;
+  const daysPerArm=Math.ceil(n/dailyTest);
+  const days=Math.max(daysPerArm,7);// minimum 7 days
+
+  document.getElementById('calcResult').classList.add('show');
+  document.getElementById('ssPer').textContent=n.toLocaleString();
+  document.getElementById('ssTotal').textContent=total.toLocaleString();
+  document.getElementById('ssDays').textContent=days+' days';
+  document.getElementById('ssWeeks').textContent='≈ '+(days/7).toFixed(1)+' weeks';
+
+  setTimeout(()=>{document.getElementById('tlFill').style.width='100%'},200);
+  document.getElementById('tl25').textContent='Day '+Math.ceil(days*0.25);
+  document.getElementById('tl50').textContent='Day '+Math.ceil(days*0.5);
+  document.getElementById('tl75').textContent='Day '+Math.ceil(days*0.75);
+  document.getElementById('tl100').textContent='Day '+days;
+
+  const newCR=(base*(1+mde)*100).toFixed(2);
+  document.getElementById('calcWarning').innerHTML=`
+    <strong>Your test needs ${n.toLocaleString()} visitors per variation</strong> (${total.toLocaleString()} total) to detect a ${(mde*100).toFixed(0)}% relative lift from ${(base*100).toFixed(2)}% to ${newCR}% conversion rate.<br><br>
+    At ${daily.toLocaleString()} daily visitors with a ${(split*100).toFixed(0)}/${(100-split*100).toFixed(0)} split, this takes <strong>${days} days (${(days/7).toFixed(1)} weeks)</strong>.<br><br>
+    <strong>Common mistakes to avoid:</strong><br>
+    • Stopping the test early because results "look significant" — this inflates false positive rates up to 30%<br>
+    • Running the test for less than 1 full business cycle (7 days minimum) even if sample size is met<br>
+    • Changing the test mid-run (updating copy, adjusting traffic split)<br>
+    • Using the same significance level as a pre-test tool already declared a winner — set your rules BEFORE launching`;
+
+  document.getElementById('calcResult').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// AI Analysis
 async function runAI(){
   const apiKey=document.getElementById('aiKey').value.trim();
-  if(!apiKey){alert('Please enter your OpenAI API key');return}
-  if(!lastCalc.crA){alert('Please analyze test data first');return}
-
+  if(!apiKey){alert('Enter your OpenAI API key');return}
+  if(!lastCalc.crA){alert('Analyze test data first');return}
   const ctx=document.getElementById('aiContext').value.trim();
   document.getElementById('aiLoading').classList.add('show');document.getElementById('aiResult').classList.remove('show');document.getElementById('aiBtn').disabled=true;
-
   const d=lastCalc;
-  const prompt=`You are a CRO expert. Analyze these A/B test results and provide insights.
+  const prompt=`You are a senior CRO analyst. Analyze these A/B test results:
 
-TEST DATA:
-- Control (A): ${d.cV} visitors, ${d.cC} conversions (${(d.crA*100).toFixed(2)}% CR)
-- Variant (B): ${d.vV} visitors, ${d.vC} conversions (${(d.crB*100).toFixed(2)}% CR)
-- Relative Lift: ${d.lift.toFixed(1)}%
-- P-value: ${d.pValue.toFixed(4)}
-- Confidence: ${d.confidence.toFixed(1)}%
-- Statistically Significant: ${d.isSig?'Yes':'No'}
-- Monthly visitors: ${d.monthly.toLocaleString()}
-- Value per conversion: $${d.val}
-${ctx?'- Test context: '+ctx:''}
+- Control A: ${d.cV} visitors, ${d.cC} conversions (${(d.crA*100).toFixed(2)}% CR)
+- Variant B: ${d.vV} visitors, ${d.vC} conversions (${(d.crB*100).toFixed(2)}% CR)
+- Lift: ${d.lift.toFixed(1)}% | P-value: ${d.pValue.toFixed(4)} | Confidence: ${d.confidence.toFixed(1)}%
+- Bayesian P(B>A): ${(d.bProb*100).toFixed(1)}%
+- Significant: ${d.isSig?'Yes':'No'} | Monthly visitors: ${d.monthly.toLocaleString()} | $/conversion: $${d.val}
+${ctx?'- Context: '+ctx:''}
 
-Respond in this EXACT format (use these exact headers):
+Use these exact headers:
 
 ## What Happened
-[2-3 sentences explaining the results in plain English that a non-technical stakeholder would understand]
+[Plain English for non-technical stakeholders — 2-3 sentences]
 
 ## Why This Likely Occurred
-[2-3 sentences analyzing the probable reasons behind the result, referencing CRO patterns and the test context if provided]
+[CRO reasoning — reference the test context — 2-3 sentences]
+
+## Bayesian vs Frequentist
+[Compare the two approaches — explain what ${(d.bProb*100).toFixed(1)}% Bayesian probability means vs ${d.confidence.toFixed(1)}% frequentist confidence — 2 sentences]
 
 ## Business Impact
-[2 sentences on revenue/conversion impact — be specific with numbers]
+[Specific revenue numbers — 2 sentences]
 
 ## What To Test Next
-[3 specific follow-up test ideas based on these results, each 1 sentence]
+[3 specific follow-up tests — 1 sentence each]
 
 ## Key Takeaway
-[1 powerful sentence summarizing the most important insight]`;
+[1 powerful summary sentence]`;
 
   try{
     const r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${apiKey}`},body:JSON.stringify({model:'gpt-4o-mini',messages:[{role:'user',content:prompt}],temperature:0.7,max_tokens:1000})});
     if(!r.ok){const e=await r.json();throw new Error(e.error?.message||'Failed')}
     const data=await r.json(),text=data.choices[0].message.content.trim();
-
-    // Parse markdown-style response
     let html=text.replace(/## (.+)/g,'<h4>$1</h4>').replace(/\n\n/g,'</p><p>').replace(/\n- /g,'<br>• ');
-    html='<p>'+html+'</p>';
-
-    document.getElementById('aiResult').innerHTML=html;document.getElementById('aiResult').classList.add('show');
-  }catch(e){
-    document.getElementById('aiResult').innerHTML=`<p style="color:var(--red-dark)">Error: ${e.message}</p>`;document.getElementById('aiResult').classList.add('show');
-  }
+    document.getElementById('aiResult').innerHTML='<p>'+html+'</p>';document.getElementById('aiResult').classList.add('show');
+  }catch(e){document.getElementById('aiResult').innerHTML=`<p style="color:var(--red-dark)">Error: ${e.message}</p>`;document.getElementById('aiResult').classList.add('show')}
   document.getElementById('aiLoading').classList.remove('show');document.getElementById('aiBtn').disabled=false;
 }
 </script>

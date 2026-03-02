@@ -5,734 +5,380 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Abdur Raheem — CRO & Analytics Portfolio</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-  :root {
-    --bg: #050608;
-    --surface: #0a0d14;
-    --surface2: #0f1420;
-    --surface3: #161d2d;
-    --border: #1a2138;
-    --text: #e4e8f1;
-    --text-dim: #7b849a;
-    --text-muted: #454d62;
-    --accent: #6366f1;
-    --accent2: #818cf8;
-    --green: #10b981;
-    --blue: #3b82f6;
-    --orange: #f59e0b;
-    --cyan: #06b6d4;
-    --pink: #ec4899;
+  :root{
+    --bg:#fafafa;--surface:#fff;--surface2:#f5f5f7;--surface3:#eeeff1;
+    --border:#e5e5e7;--text:#1d1d1f;--dim:#6e6e73;--muted:#aeaeb2;
+    --accent:#0071e3;--accent-light:#e8f2ff;
+    --green:#34c759;--green-light:#eafbef;--green-dark:#248a3d;
+    --purple:#af52de;--purple-light:#f5ecfc;
+    --gradient:linear-gradient(135deg,#0071e3,#af52de);
+    --shadow-sm:0 1px 3px rgba(0,0,0,0.04);--shadow-md:0 4px 16px rgba(0,0,0,0.06);--shadow-lg:0 8px 30px rgba(0,0,0,0.08);
+    --radius:16px;--radius-xl:24px;
   }
 
-  body {
-    font-family: 'Sora', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    overflow-x: hidden;
+  html.dark{
+    --bg:#0a0a0f;--surface:#141419;--surface2:#1c1c24;--surface3:#24242f;
+    --border:#2a2a3a;--text:#f0f0f5;--dim:#8888a0;--muted:#555570;
+    --accent:#5e9fff;--accent-light:#1a2a45;
+    --green-light:#0d2a1a;--green-dark:#4ade80;
+    --purple-light:#1f1530;
+    --shadow-sm:0 1px 3px rgba(0,0,0,0.2);--shadow-md:0 4px 16px rgba(0,0,0,0.3);--shadow-lg:0 8px 30px rgba(0,0,0,0.4);
   }
 
-  /* Animated gradient mesh bg */
-  .bg-mesh {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-  }
-  .bg-mesh .orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(100px);
-    opacity: 0.12;
-    animation: float 20s infinite ease-in-out;
-  }
-  .bg-mesh .orb:nth-child(1) { width: 500px; height: 500px; background: var(--accent); top: -10%; left: -5%; }
-  .bg-mesh .orb:nth-child(2) { width: 400px; height: 400px; background: var(--cyan); bottom: -10%; right: -5%; animation-delay: -7s; }
-  .bg-mesh .orb:nth-child(3) { width: 350px; height: 350px; background: var(--pink); top: 40%; left: 50%; animation-delay: -14s; }
-  @keyframes float {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    25% { transform: translate(30px, -40px) scale(1.05); }
-    50% { transform: translate(-20px, 20px) scale(0.95); }
-    75% { transform: translate(40px, 30px) scale(1.02); }
-  }
+  body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;transition:background 0.4s,color 0.4s;overflow-x:hidden}
 
-  .container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0 24px;
-    position: relative;
-    z-index: 1;
-  }
+  /* Dark mode toggle */
+  .theme-toggle{position:fixed;top:20px;right:20px;z-index:100;width:44px;height:44px;border-radius:12px;border:1px solid var(--border);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:var(--shadow-sm);transition:all 0.3s}
+  .theme-toggle:hover{transform:scale(1.1);box-shadow:var(--shadow-md)}
 
-  /* Nav */
-  nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    background: rgba(5,6,8,0.8);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(26,33,56,0.5);
-  }
-  nav .container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 60px;
-  }
-  nav .logo {
-    font-weight: 700;
-    font-size: 18px;
-    letter-spacing: -0.02em;
-  }
-  nav .logo span { color: var(--accent); }
-  nav .links { display: flex; gap: 28px; }
-  nav .links a {
-    color: var(--text-dim);
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 500;
-    transition: color 0.2s;
-  }
-  nav .links a:hover { color: var(--text); }
+  .container{max-width:900px;margin:0 auto;padding:0 24px}
+
+  /* Animated background blobs */
+  .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+  .blob{position:absolute;border-radius:50%;filter:blur(120px);opacity:0.08;animation:blobFloat 20s infinite ease-in-out}
+  html.dark .blob{opacity:0.12}
+  .blob:nth-child(1){width:600px;height:600px;background:#0071e3;top:-200px;left:-100px}
+  .blob:nth-child(2){width:500px;height:500px;background:#af52de;bottom:-200px;right:-100px;animation-delay:-7s}
+  .blob:nth-child(3){width:400px;height:400px;background:#34c759;top:50%;left:50%;animation-delay:-14s}
+  @keyframes blobFloat{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(30px,-40px) scale(1.05)}50%{transform:translate(-20px,30px) scale(0.95)}75%{transform:translate(40px,20px) scale(1.02)}}
 
   /* Hero */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    padding: 80px 0 60px;
-  }
-  .hero-content { max-width: 700px; }
-  .hero-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(99,102,241,0.1);
-    border: 1px solid rgba(99,102,241,0.2);
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--accent2);
-    margin-bottom: 24px;
-  }
-  .hero-tag .dot {
-    width: 6px;
-    height: 6px;
-    background: var(--green);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-  .hero h1 {
-    font-size: 52px;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    line-height: 1.1;
-    margin-bottom: 20px;
-  }
-  .hero h1 .gradient {
-    background: linear-gradient(135deg, var(--accent), var(--cyan), var(--green));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  .hero p {
-    font-size: 17px;
-    color: var(--text-dim);
-    line-height: 1.7;
-    margin-bottom: 32px;
-    max-width: 560px;
-  }
-  .hero-stats {
-    display: flex;
-    gap: 40px;
-    padding-top: 32px;
-    border-top: 1px solid var(--border);
-  }
-  .hero-stat .number {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--text);
-  }
-  .hero-stat .label {
-    font-size: 12px;
-    color: var(--text-dim);
-    margin-top: 2px;
-  }
+  .hero{padding:120px 0 80px;text-align:center;position:relative}
+  .hero-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:100px;background:var(--surface2);border:1px solid var(--border);font-size:12px;font-weight:600;color:var(--dim);margin-bottom:24px;animation:fadeDown 0.6s ease}
+  .hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 
-  /* Skills Section */
-  .section { padding: 80px 0; }
-  .section-label {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--accent2);
-    margin-bottom: 12px;
-  }
-  .section h2 {
-    font-size: 36px;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    margin-bottom: 12px;
-  }
-  .section .section-desc {
-    font-size: 15px;
-    color: var(--text-dim);
-    max-width: 500px;
-    line-height: 1.6;
-    margin-bottom: 40px;
-  }
+  .hero h1{font-size:clamp(40px,7vw,64px);font-weight:800;letter-spacing:-0.04em;line-height:1.05;margin-bottom:16px;animation:fadeUp 0.7s ease}
+  .hero h1 .gradient{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .hero p{font-size:18px;color:var(--dim);max-width:540px;margin:0 auto 32px;line-height:1.6;animation:fadeUp 0.8s ease}
+  .hero-links{display:flex;gap:12px;justify-content:center;animation:fadeUp 0.9s ease}
+  .hero-link{padding:12px 28px;border-radius:12px;font-size:14px;font-weight:700;text-decoration:none;transition:all 0.2s;font-family:inherit}
+  .hero-link.primary{background:var(--accent);color:white;box-shadow:0 4px 12px rgba(0,113,227,0.25)}
+  .hero-link.primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,113,227,0.35)}
+  .hero-link.secondary{background:var(--surface);color:var(--text);border:1px solid var(--border)}
+  .hero-link.secondary:hover{background:var(--surface2)}
 
-  .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-  }
-  .skill-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 24px;
-    transition: all 0.3s;
-  }
-  .skill-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(99,102,241,0.1);
-  }
-  .skill-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    margin-bottom: 14px;
-  }
-  .skill-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
-  .skill-card p { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+  @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
 
-  /* Projects */
-  .projects-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-  .project-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    overflow: hidden;
-    transition: all 0.3s;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-  .project-card:hover {
-    border-color: rgba(99,102,241,0.3);
-    box-shadow: 0 16px 60px rgba(0,0,0,0.3);
-    transform: translateY(-4px);
-  }
-  .project-card.featured {
-    border-color: rgba(99,102,241,0.2);
-    background: linear-gradient(135deg, var(--surface), rgba(99,102,241,0.03));
-  }
-  .project-info {
-    padding: 32px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  .project-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    width: fit-content;
-    margin-bottom: 14px;
-  }
-  .project-badge.cro { background: rgba(16,185,129,0.15); color: var(--green); }
-  .project-badge.data { background: rgba(59,130,246,0.15); color: var(--blue); }
-  .project-badge.app { background: rgba(236,72,153,0.15); color: var(--pink); }
-  .project-badge.star { background: rgba(99,102,241,0.15); color: var(--accent2); }
+  /* Stats */
+  .stats{display:flex;justify-content:center;gap:40px;padding:32px 0;margin-bottom:60px;animation:fadeUp 1s ease}
+  .stat{text-align:center}
+  .stat .sv{font-family:'DM Mono',monospace;font-size:32px;font-weight:700;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .stat .sl{font-size:12px;color:var(--muted);margin-top:4px}
 
-  .project-info h3 {
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 8px;
-    letter-spacing: -0.01em;
-  }
-  .project-info .desc {
-    font-size: 14px;
-    color: var(--text-dim);
-    line-height: 1.6;
-    margin-bottom: 16px;
-  }
-  .tech-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 18px;
-  }
-  .tech-tag {
-    background: var(--surface3);
-    border: 1px solid var(--border);
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--text-dim);
-  }
-  .project-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--accent2);
-    font-size: 13px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: gap 0.2s;
-  }
-  .project-link:hover { gap: 10px; }
+  /* Section headings */
+  .section{padding:60px 0}
+  .section-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:8px}
+  .section-title{font-size:28px;font-weight:800;letter-spacing:-0.03em;margin-bottom:8px}
+  .section-sub{font-size:15px;color:var(--dim);margin-bottom:36px;max-width:500px;line-height:1.6}
 
-  /* Project preview */
-  .project-preview {
-    background: var(--surface2);
-    padding: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 280px;
-  }
-  .preview-mock {
-    width: 100%;
-    border-radius: 10px;
-    overflow: hidden;
-    border: 1px solid var(--border);
-    background: var(--surface3);
-  }
-  .mock-bar {
-    background: var(--surface);
-    padding: 6px 12px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .mock-bar .dots { display: flex; gap: 4px; }
-  .mock-bar .dots span { width: 8px; height: 8px; border-radius: 50%; }
-  .mock-bar .dots span:nth-child(1) { background: #ef4444; }
-  .mock-bar .dots span:nth-child(2) { background: #f59e0b; }
-  .mock-bar .dots span:nth-child(3) { background: #22c55e; }
-  .mock-content {
-    padding: 16px;
-  }
+  /* Skills grid */
+  .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:60px}
+  .skill-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm);transition:all 0.3s;position:relative;overflow:hidden}
+  .skill-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:var(--accent)}
+  .skill-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient);opacity:0;transition:opacity 0.3s}
+  .skill-card:hover::before{opacity:1}
+  .skill-icon{font-size:24px;margin-bottom:10px}
+  .skill-card h3{font-size:14px;font-weight:700;margin-bottom:4px}
+  .skill-card p{font-size:12px;color:var(--dim);line-height:1.5}
 
-  /* Mini chart for EURUSD preview */
-  .mini-line-chart {
-    display: flex;
-    align-items: flex-end;
-    gap: 2px;
-    height: 80px;
-  }
-  .mini-line-chart .bar {
-    flex: 1;
-    border-radius: 2px 2px 0 0;
-    transition: all 0.3s;
-  }
+  /* Project cards */
+  .projects{display:flex;flex-direction:column;gap:20px}
+  .project{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-sm);transition:all 0.4s;opacity:0;transform:translateY(30px)}
+  .project.visible{opacity:1;transform:translateY(0)}
+  .project:hover{box-shadow:var(--shadow-lg);transform:translateY(-4px);border-color:var(--accent)}
+  .project.visible:hover{transform:translateY(-4px)}
 
-  /* Mini dashboard for AB preview */
-  .mini-dash {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-  .mini-kpi {
-    background: var(--surface);
-    border-radius: 6px;
-    padding: 10px;
-    text-align: center;
-  }
-  .mini-kpi .mk-val {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 18px;
-    font-weight: 700;
-  }
-  .mini-kpi .mk-label {
-    font-size: 9px;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-top: 2px;
-  }
+  .project-inner{display:grid;grid-template-columns:1fr 1fr;min-height:320px}
+  .project-content{padding:32px;display:flex;flex-direction:column;justify-content:center}
+  .project-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:4px 10px;border-radius:100px;margin-bottom:14px;width:fit-content}
+  .project-badge.ai{background:linear-gradient(135deg,rgba(0,113,227,0.1),rgba(175,82,222,0.1));color:var(--purple);border:1px solid rgba(175,82,222,0.15)}
+  .project-badge.tool{background:var(--green-light);color:var(--green-dark);border:1px solid rgba(52,199,89,0.15)}
+  .project-badge.study{background:var(--accent-light);color:var(--accent);border:1px solid rgba(0,113,227,0.15)}
+  .project-content h3{font-size:22px;font-weight:800;letter-spacing:-0.02em;margin-bottom:8px}
+  .project-content p{font-size:13px;color:var(--dim);line-height:1.7;margin-bottom:16px}
+  .feature-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+  .f-tag{font-size:10px;font-weight:600;padding:4px 10px;border-radius:6px;background:var(--surface2);color:var(--dim);border:1px solid var(--border)}
+  .project-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--accent);text-decoration:none;transition:gap 0.2s}
+  .project-link:hover{gap:10px}
 
-  /* Journal preview */
-  .mini-journal {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .mini-entry {
-    background: var(--surface);
-    border-radius: 6px;
-    padding: 10px 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .mini-entry .date {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: var(--text-muted);
-    white-space: nowrap;
-  }
-  .mini-entry .text {
-    font-size: 12px;
-    color: var(--text-dim);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .mini-entry .mood { font-size: 16px; }
+  .project-visual{background:var(--surface2);display:flex;align-items:center;justify-content:center;padding:24px;position:relative;overflow:hidden}
+  .project-visual::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent,rgba(0,113,227,0.03))}
+  .mock{background:var(--surface);border:1px solid var(--border);border-radius:12px;width:100%;max-width:340px;overflow:hidden;box-shadow:var(--shadow-md)}
+  .mock-bar{height:28px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 10px;gap:5px}
+  .mock-bar span{width:7px;height:7px;border-radius:50%;background:var(--border)}
+  .mock-bar span:first-child{background:#ff5f57}.mock-bar span:nth-child(2){background:#ffbd2e}.mock-bar span:nth-child(3){background:#28ca41}
+  .mock-body{padding:16px}
+
+  /* Mini visualizations in mocks */
+  .mini-score{width:50px;height:50px;border-radius:50%;border:3px solid;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:16px;font-weight:800;margin:0 auto 8px}
+  .mini-bar{height:6px;border-radius:3px;background:var(--surface2);margin-bottom:5px;overflow:hidden}
+  .mini-bar-fill{height:100%;border-radius:3px}
+  .mini-tag{display:inline-block;font-size:9px;padding:2px 6px;border-radius:3px;margin:2px}
 
   /* Contact */
-  .contact-section {
-    text-align: center;
-    padding: 80px 0;
-  }
-  .contact-section h2 {
-    font-size: 36px;
-    font-weight: 800;
-    margin-bottom: 12px;
-  }
-  .contact-section p {
-    color: var(--text-dim);
-    font-size: 15px;
-    margin-bottom: 32px;
-  }
-  .contact-links {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-  }
-  .contact-btn {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 12px 28px;
-    border-radius: 10px;
-    color: var(--text);
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-    font-family: 'Sora', sans-serif;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .contact-btn:hover {
-    border-color: var(--accent);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(99,102,241,0.15);
-  }
-  .contact-btn.primary {
-    background: linear-gradient(135deg, var(--accent), #4f46e5);
-    border: none;
-  }
+  .contact{padding:80px 0;text-align:center}
+  .contact h2{font-size:32px;font-weight:800;letter-spacing:-0.03em;margin-bottom:8px}
+  .contact p{font-size:15px;color:var(--dim);margin-bottom:32px}
+  .contact-links{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .c-link{display:flex;align-items:center;gap:8px;padding:12px 22px;border-radius:12px;background:var(--surface);border:1px solid var(--border);color:var(--text);text-decoration:none;font-size:13px;font-weight:600;transition:all 0.2s;box-shadow:var(--shadow-sm)}
+  .c-link:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow-md)}
 
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 24px 0;
-    text-align: center;
-    font-size: 12px;
-    color: var(--text-muted);
-  }
+  .footer{text-align:center;padding:32px 0;border-top:1px solid var(--border);font-size:12px;color:var(--muted)}
 
-  @media (max-width: 768px) {
-    .hero h1 { font-size: 32px; }
-    .hero-stats { flex-direction: column; gap: 16px; }
-    .skills-grid { grid-template-columns: 1fr; }
-    .project-card { grid-template-columns: 1fr; }
-    .project-preview { min-height: 200px; }
-    nav .links { display: none; }
+  /* Scroll animations */
+  .reveal{opacity:0;transform:translateY(30px);transition:all 0.6s cubic-bezier(0.25,0.46,0.45,0.94)}
+  .reveal.visible{opacity:1;transform:translateY(0)}
+
+  @media(max-width:700px){
+    .hero{padding:80px 0 40px}
+    .hero h1{font-size:36px}
+    .stats{gap:20px;flex-wrap:wrap}
+    .skills-grid{grid-template-columns:1fr 1fr}
+    .project-inner{grid-template-columns:1fr}
+    .project-visual{min-height:200px}
+    .contact-links{flex-direction:column;align-items:center}
   }
 </style>
 </head>
 <body>
 
-<div class="bg-mesh">
-  <div class="orb"></div>
-  <div class="orb"></div>
-  <div class="orb"></div>
+<div class="bg-blobs"><div class="blob"></div><div class="blob"></div><div class="blob"></div></div>
+
+<button class="theme-toggle" onclick="toggleDark()" id="themeBtn">🌙</button>
+
+<div class="container">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge"><span class="dot"></span> Open to CRO & Analytics opportunities</div>
+    <h1>Abdur Raheem.<br><span class="gradient">CRO & Analytics.</span></h1>
+    <p>I build AI-powered tools for conversion rate optimization — from A/B test analyzers to landing page auditors. Data-driven, experiment-focused, results-obsessed.</p>
+    <div class="hero-links">
+      <a href="#projects" class="hero-link primary">View Projects ↓</a>
+      <a href="https://linkedin.com/in/abdur-raheem-bbbb492ab/" target="_blank" class="hero-link secondary">LinkedIn</a>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat"><div class="sv">4</div><div class="sl">Projects</div></div>
+    <div class="stat"><div class="sv">AI</div><div class="sl">GPT-Powered</div></div>
+    <div class="stat"><div class="sv">GA4</div><div class="sl">Analytics</div></div>
+    <div class="stat"><div class="sv">A/B</div><div class="sl">Testing</div></div>
+    <div class="stat"><div class="sv">GTM</div><div class="sl">Tag Manager</div></div>
+  </div>
+
+  <!-- Skills -->
+  <section class="section reveal">
+    <div class="section-label">Skills</div>
+    <div class="section-title">What I work with</div>
+    <div class="section-sub">CRO methodology backed by analytics, experimentation, and AI.</div>
+    <div class="skills-grid">
+      <div class="skill-card"><div class="skill-icon">🧪</div><h3>A/B Testing</h3><p>Hypothesis design, statistical significance, Z-tests, p-values, Bayesian probability, sample size calculation</p></div>
+      <div class="skill-card"><div class="skill-icon">📊</div><h3>Google Analytics 4</h3><p>Event tracking, funnel exploration, conversion setup, audience segmentation, attribution analysis</p></div>
+      <div class="skill-card"><div class="skill-icon">🏷️</div><h3>Google Tag Manager</h3><p>Tag deployment, custom triggers, data layer variables, cross-domain tracking</p></div>
+      <div class="skill-card"><div class="skill-icon">🎯</div><h3>CRO Strategy</h3><p>Landing page audits, ICE prioritization, test roadmaps, competitive benchmarking, pattern analysis</p></div>
+      <div class="skill-card"><div class="skill-icon">🤖</div><h3>AI Integration</h3><p>OpenAI GPT API, AI-powered analysis tools, automated CRO recommendations</p></div>
+      <div class="skill-card"><div class="skill-icon">💻</div><h3>Web Development</h3><p>JavaScript, Python, HTML/CSS, interactive dashboards, data visualization</p></div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="section" id="projects">
+    <div class="section-label reveal">Projects</div>
+    <div class="section-title reveal">Built with purpose</div>
+    <div class="section-sub reveal">Each tool solves a real CRO workflow problem.</div>
+
+    <div class="projects">
+
+      <!-- CRO Copilot -->
+      <div class="project">
+        <div class="project-inner">
+          <div class="project-content">
+            <div class="project-badge ai">🤖 AI-Powered Flagship</div>
+            <h3>CRO Copilot</h3>
+            <p>AI landing page analyzer with industry benchmarks, multi-page comparison, and a 20-pattern CRO library. Paste any page content, select your industry, and get scored analysis with AI-generated improvements.</p>
+            <div class="feature-tags">
+              <span class="f-tag">OpenAI GPT-4o-mini</span>
+              <span class="f-tag">12 Industry Benchmarks</span>
+              <span class="f-tag">Page Comparison</span>
+              <span class="f-tag">Pattern Library</span>
+              <span class="f-tag">Export Reports</span>
+            </div>
+            <a href="cro_copilot.html" class="project-link">Open CRO Copilot →</a>
+          </div>
+          <div class="project-visual">
+            <div class="mock">
+              <div class="mock-bar"><span></span><span></span><span></span></div>
+              <div class="mock-body">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+                  <div class="mini-score" style="border-color:var(--green);color:var(--green-dark)">78</div>
+                  <div><div style="font-size:11px;font-weight:700">CRO Score</div><div style="font-size:9px;color:var(--dim)">Good — minor optimizations</div></div>
+                </div>
+                <div style="font-size:9px;color:var(--muted);margin-bottom:6px;font-weight:600">INDUSTRY BENCHMARK: SaaS</div>
+                <div style="display:flex;gap:6px;margin-bottom:10px">
+                  <div style="flex:1;text-align:center;padding:6px;background:var(--surface2);border-radius:4px"><div style="font-size:12px;font-weight:700;color:var(--accent)">3-5%</div><div style="font-size:8px;color:var(--muted)">Avg CR</div></div>
+                  <div style="flex:1;text-align:center;padding:6px;background:var(--surface2);border-radius:4px"><div style="font-size:12px;font-weight:700;color:var(--green-dark)">8-12%</div><div style="font-size:8px;color:var(--muted)">Top 10%</div></div>
+                </div>
+                <div style="background:var(--green-light);border-radius:6px;padding:6px 8px;margin-bottom:6px"><div style="font-size:8px;color:var(--green-dark);font-weight:700">🤖 IMPROVED HEADLINE</div><div style="font-size:10px;color:var(--text)">"Cut project time by 40%"</div></div>
+                <div style="font-size:8px;font-weight:600;color:var(--dim)">5 issues • 3 strengths • 4 tests</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AB Insight -->
+      <div class="project">
+        <div class="project-inner">
+          <div class="project-visual">
+            <div class="mock">
+              <div class="mock-bar"><span></span><span></span><span></span></div>
+              <div class="mock-body">
+                <div style="display:flex;justify-content:space-between;margin-bottom:10px">
+                  <div style="text-align:center"><div style="font-size:16px;font-weight:800;color:var(--dim)">2.10%</div><div style="font-size:8px;color:var(--muted)">Control A</div></div>
+                  <div style="font-size:14px;color:var(--muted)">vs</div>
+                  <div style="text-align:center"><div style="font-size:16px;font-weight:800;color:var(--accent)">3.10%</div><div style="font-size:8px;color:var(--muted)">Variant B</div></div>
+                </div>
+                <div style="text-align:center;margin-bottom:8px"><span style="font-size:18px;font-weight:800;color:var(--green-dark)">+47.6%</span><span style="font-size:10px;color:var(--dim)"> lift</span></div>
+                <div style="font-size:9px;font-weight:600;color:var(--muted);margin-bottom:4px">P(B BEATS A)</div>
+                <div style="display:flex;height:14px;border-radius:4px;overflow:hidden;margin-bottom:8px">
+                  <div style="width:8%;background:linear-gradient(90deg,#8e8e93,#aeaeb2)"></div>
+                  <div style="width:92%;background:linear-gradient(90deg,#005bb5,#0071e3)"></div>
+                </div>
+                <div style="font-size:9px;text-align:center;color:var(--green-dark);font-weight:700">99.7% Bayesian probability</div>
+              </div>
+            </div>
+          </div>
+          <div class="project-content">
+            <div class="project-badge tool">🧪 Statistical Analysis</div>
+            <h3>AB Insight</h3>
+            <p>A/B test results analyzer with both frequentist (Z-test, p-value) and Bayesian probability analysis. Includes a pre-test sample size calculator, revenue projections, and AI-powered result interpretation.</p>
+            <div class="feature-tags">
+              <span class="f-tag">Bayesian Monte Carlo</span>
+              <span class="f-tag">Sample Size Calc</span>
+              <span class="f-tag">Revenue Projections</span>
+              <span class="f-tag">AI Insights</span>
+            </div>
+            <a href="ab_insight_dashboard.html" class="project-link">Open AB Insight →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CRO Scorecard -->
+      <div class="project">
+        <div class="project-inner">
+          <div class="project-content">
+            <div class="project-badge tool">📋 Audit Framework</div>
+            <h3>CRO Scorecard</h3>
+            <p>28-point landing page audit tool across 6 weighted categories. Check pass/fail on each item, get a real-time weighted score, priority matrix, and AI-generated fix recommendations for every failed item.</p>
+            <div class="feature-tags">
+              <span class="f-tag">28 CRO Checks</span>
+              <span class="f-tag">6 Weighted Categories</span>
+              <span class="f-tag">Priority Matrix</span>
+              <span class="f-tag">AI Fix Recommendations</span>
+            </div>
+            <a href="cro_scorecard.html" class="project-link">Open CRO Scorecard →</a>
+          </div>
+          <div class="project-visual">
+            <div class="mock">
+              <div class="mock-bar"><span></span><span></span><span></span></div>
+              <div class="mock-body">
+                <div style="text-align:center;margin-bottom:10px">
+                  <div class="mini-score" style="border-color:#ff9500;color:var(--orange)">62</div>
+                  <div style="font-size:9px;color:var(--dim);font-weight:600">Average — room to improve</div>
+                </div>
+                <div style="font-size:8px;color:var(--muted);font-weight:700;margin-bottom:6px">AUDIT RESULTS</div>
+                <div style="display:flex;gap:8px;font-size:10px;margin-bottom:8px">
+                  <span style="color:var(--green-dark)">✓ 16 Pass</span>
+                  <span style="color:#ff3b30">✗ 8 Fail</span>
+                  <span style="color:var(--muted)">— 4 N/A</span>
+                </div>
+                <div style="font-size:8px;font-weight:700;color:var(--muted);margin-bottom:4px">PRIORITY</div>
+                <div class="mini-tag" style="background:#fff0ef;color:#d70015;font-size:8px">3 Urgent</div>
+                <div class="mini-tag" style="background:#fff8eb;color:#c93400;font-size:8px">3 Important</div>
+                <div class="mini-tag" style="background:var(--accent-light);color:var(--accent);font-size:8px">2 Low</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ClickUp Case Study -->
+      <div class="project">
+        <div class="project-inner">
+          <div class="project-visual">
+            <div class="mock">
+              <div class="mock-bar"><span></span><span></span><span></span></div>
+              <div class="mock-body">
+                <div style="font-size:11px;font-weight:700;margin-bottom:6px">ClickUp CRO Audit</div>
+                <div style="font-size:9px;color:var(--dim);margin-bottom:10px">B2B SaaS • Project Management</div>
+                <div style="display:flex;gap:8px;margin-bottom:8px">
+                  <div style="flex:1;text-align:center;padding:6px;background:var(--surface2);border-radius:4px"><div style="font-size:14px;font-weight:800;color:#ff9500">62</div><div style="font-size:8px;color:var(--muted)">Score</div></div>
+                  <div style="flex:1;text-align:center;padding:6px;background:var(--surface2);border-radius:4px"><div style="font-size:14px;font-weight:800;color:#ff3b30">6</div><div style="font-size:8px;color:var(--muted)">Issues</div></div>
+                  <div style="flex:1;text-align:center;padding:6px;background:var(--surface2);border-radius:4px"><div style="font-size:14px;font-weight:800;color:var(--green-dark)">+$282K</div><div style="font-size:8px;color:var(--muted)">ARR Impact</div></div>
+                </div>
+                <div style="font-size:8px;font-weight:700;color:var(--muted);margin-bottom:4px">90-DAY TEST ROADMAP</div>
+                <div class="mini-bar"><div class="mini-bar-fill" style="width:100%;background:var(--gradient)"></div></div>
+                <div style="font-size:8px;color:var(--dim)">6 tests • ICE prioritized • GA4 plan</div>
+              </div>
+            </div>
+          </div>
+          <div class="project-content">
+            <div class="project-badge study">📊 Strategic Case Study</div>
+            <h3>ClickUp CRO Audit</h3>
+            <p>Complete conversion optimization analysis of ClickUp's B2B landing page. Identified 6 issues, built a 90-day A/B test roadmap using ICE prioritization, designed a GA4/GTM measurement plan, and projected +$282K ARR impact.</p>
+            <div class="feature-tags">
+              <span class="f-tag">6 Issues Found</span>
+              <span class="f-tag">90-Day Roadmap</span>
+              <span class="f-tag">GA4 Tracking Plan</span>
+              <span class="f-tag">Revenue Projection</span>
+            </div>
+            <a href="clickup_case_study.html" class="project-link">View Case Study →</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact reveal">
+    <h2>Let's connect</h2>
+    <p>Open to CRO, analytics, and A/B testing opportunities.</p>
+    <div class="contact-links">
+      <a href="mailto:abdurraheem0528@gmail.com" class="c-link">✉️ abdurraheem0528@gmail.com</a>
+      <a href="https://linkedin.com/in/abdur-raheem-bbbb492ab/" target="_blank" class="c-link">💼 LinkedIn</a>
+      <a href="https://github.com/abdurraheem0528" target="_blank" class="c-link">🐙 GitHub</a>
+    </div>
+  </section>
+
+  <div class="footer">© 2025 Abdur Raheem. Built with data, tested with experiments.</div>
+
 </div>
 
-<nav>
-  <div class="container">
-    <div class="logo">ABDUR<span>RAHEEM</span></div>
-    <div class="links">
-      <a href="#about">About</a>
-      <a href="#skills">Skills</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
-    </div>
-  </div>
-</nav>
+<script>
+// Dark mode
+function toggleDark(){
+  document.documentElement.classList.toggle('dark');
+  const isDark=document.documentElement.classList.contains('dark');
+  document.getElementById('themeBtn').textContent=isDark?'☀️':'🌙';
+  localStorage.setItem('theme',isDark?'dark':'light');
+}
+// Persist theme
+if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.add('dark');document.getElementById('themeBtn').textContent='☀️'}
 
-<!-- Hero -->
-<section class="hero" id="about">
-  <div class="container">
-    <div class="hero-content">
-      <div class="hero-tag"><div class="dot"></div> Open to opportunities</div>
-      <h1>Abdur Raheem.<br><span class="gradient">CRO & analytics focused.</span></h1>
-      <p>I build tools and dashboards that turn data into decisions. Passionate about conversion rate optimization, A/B testing, and using analytics to drive measurable business growth.</p>
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <div class="number">4</div>
-          <div class="label">Projects built</div>
-        </div>
-        <div class="hero-stat">
-          <div class="number">A/B</div>
-          <div class="label">Testing & CRO</div>
-        </div>
-        <div class="hero-stat">
-          <div class="number">GA4</div>
-          <div class="label">Analytics</div>
-        </div>
-        <div class="hero-stat">
-          <div class="number">GTM</div>
-          <div class="label">Tag Management</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+// Scroll animations
+const observer=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible')}})},{threshold:0.1,rootMargin:'0px 0px -50px 0px'});
+document.querySelectorAll('.project,.reveal').forEach(el=>observer.observe(el));
 
-<!-- Skills -->
-<section class="section" id="skills">
-  <div class="container">
-    <div class="section-label">Skills & Tools</div>
-    <h2>What I work with</h2>
-    <div class="section-desc">Focused on the analytics and optimization stack used by top CRO agencies.</div>
-    <div class="skills-grid">
-      <div class="skill-card">
-        <div class="skill-icon" style="background:rgba(16,185,129,0.1)">🧪</div>
-        <h3>A/B Testing</h3>
-        <p>Hypothesis-driven testing, statistical significance, conversion rate analysis, and test prioritization using ICE framework.</p>
-      </div>
-      <div class="skill-card">
-        <div class="skill-icon" style="background:rgba(245,158,11,0.1)">📊</div>
-        <h3>Google Analytics 4</h3>
-        <p>Event tracking, conversion setup, funnel exploration, audience segmentation, and data-driven CRO insights.</p>
-      </div>
-      <div class="skill-card">
-        <div class="skill-icon" style="background:rgba(59,130,246,0.1)">🏷️</div>
-        <h3>Google Tag Manager</h3>
-        <p>Tag deployment, custom event triggers, variables, and tracking implementation without code changes.</p>
-      </div>
-      <div class="skill-card">
-        <div class="skill-icon" style="background:rgba(99,102,241,0.1)">📈</div>
-        <h3>CRO Strategy</h3>
-        <p>Landing page analysis, social proof optimization, CTA testing, form optimization, and revenue impact projection.</p>
-      </div>
-      <div class="skill-card">
-        <div class="skill-icon" style="background:rgba(6,182,212,0.1)">🐍</div>
-        <h3>Python</h3>
-        <p>Data analysis, API integration, automation scripts, and building analytical tools and bots.</p>
-      </div>
-      <div class="skill-card">
-        <div class="skill-icon" style="background:rgba(236,72,153,0.1)">🌐</div>
-        <h3>Web Development</h3>
-        <p>HTML, CSS, JavaScript. Building interactive dashboards, data visualizations, and web applications.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Projects -->
-<section class="section" id="projects">
-  <div class="container">
-    <div class="section-label">Portfolio</div>
-    <h2>Featured Projects</h2>
-    <div class="section-desc">Real projects demonstrating data analysis, CRO, and development skills.</div>
-
-    <div class="projects-grid">
-
-      <!-- Project 0: CRO Copilot (FEATURED) -->
-      <div class="project-card featured">
-        <div class="project-info">
-          <div class="project-badge star">🤖 AI-Powered</div>
-          <h3>CRO Copilot — AI Landing Page Analyzer</h3>
-          <div class="desc">Paste any landing page content and GPT-4o-mini analyzes it against CRO best practices — identifies conversion issues, generates improved headlines and CTAs, and builds a prioritized A/B test roadmap with hypotheses and estimated lift. What agencies charge thousands for, in 30 seconds.</div>
-          <div class="tech-tags">
-            <span class="tech-tag">OpenAI API</span>
-            <span class="tech-tag">GPT-4o-mini</span>
-            <span class="tech-tag">CRO Analysis</span>
-            <span class="tech-tag">JavaScript</span>
-          </div>
-          <a href="cro_copilot.html" class="project-link">View Live Demo →</a>
-        </div>
-        <div class="project-preview">
-          <div class="preview-mock">
-            <div class="mock-bar"><div class="dots"><span></span><span></span><span></span></div></div>
-            <div class="mock-content">
-              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-                <div style="width:48px;height:48px;border-radius:50%;border:3px solid var(--red);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:800;color:var(--red)">34</div>
-                <div>
-                  <div style="font-size:11px;font-weight:700;color:var(--red)">Critical — Major Issues</div>
-                  <div style="font-size:9px;color:var(--text-muted)">6 issues found • 4 A/B tests suggested</div>
-                </div>
-              </div>
-              <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.15);border-radius:4px;padding:6px 8px;margin-bottom:6px">
-                <div style="font-size:8px;color:var(--green);font-weight:700;margin-bottom:2px">🤖 AI-IMPROVED HEADLINE</div>
-                <div style="font-size:10px;color:var(--text)">"Cut Cloud Storage Costs by 40% — Trusted by 500+ Enterprises"</div>
-              </div>
-              <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.15);border-radius:4px;padding:6px 8px">
-                <div style="font-size:8px;color:var(--green);font-weight:700;margin-bottom:2px">🤖 AI-IMPROVED CTA</div>
-                <div style="font-size:10px;color:var(--text)">"Start Free Trial — No Credit Card Required"</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Project 1: AB Dashboard -->
-      <div class="project-card featured">
-        <div class="project-info">
-          <div class="project-badge cro">🧪 A/B Testing</div>
-          <h3>AB Insight — A/B Test Analyzer</h3>
-          <div class="desc">A full-featured A/B test results dashboard. Input test data, get instant statistical significance analysis, conversion rate comparison, lift calculation, revenue impact projections, and actionable CRO recommendations. Built to demonstrate real A/B testing knowledge used at CRO agencies.</div>
-          <div class="tech-tags">
-            <span class="tech-tag">JavaScript</span>
-            <span class="tech-tag">Statistics</span>
-            <span class="tech-tag">Z-Test</span>
-            <span class="tech-tag">CRO</span>
-            <span class="tech-tag">A/B Testing</span>
-          </div>
-          <a href="ab_insight_dashboard.html" class="project-link">View Live Demo →</a>
-        </div>
-        <div class="project-preview">
-          <div class="preview-mock">
-            <div class="mock-bar"><div class="dots"><span></span><span></span><span></span></div></div>
-            <div class="mock-content">
-              <div class="mini-dash">
-                <div class="mini-kpi"><div class="mk-val" style="color:var(--text-dim)">2.10%</div><div class="mk-label">Control CR</div></div>
-                <div class="mini-kpi"><div class="mk-val" style="color:var(--green)">3.42%</div><div class="mk-label">Variant CR</div></div>
-                <div class="mini-kpi"><div class="mk-val" style="color:var(--green)">+62.8%</div><div class="mk-label">Lift</div></div>
-                <div class="mini-kpi"><div class="mk-val" style="color:var(--accent)">99.8%</div><div class="mk-label">Confidence</div></div>
-              </div>
-              <div style="margin-top:10px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:6px;padding:8px 10px;text-align:center;font-size:11px;color:var(--green);font-weight:600">🏆 Variant B Wins — Statistically Significant</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Project 2: CRO Scorecard -->
-      <div class="project-card">
-        <div class="project-info">
-          <div class="project-badge cro">🧪 CRO Tool</div>
-          <h3>CRO Scorecard — Landing Page Audit Tool</h3>
-          <div class="desc">An interactive audit tool that evaluates any landing page against 28 CRO best practices across 6 categories. Generates a weighted score, identifies high-impact issues, and produces a prioritized action plan. Modeled after audit methodologies used by top CRO agencies.</div>
-          <div class="tech-tags">
-            <span class="tech-tag">JavaScript</span>
-            <span class="tech-tag">CRO Methodology</span>
-            <span class="tech-tag">Landing Page Audit</span>
-            <span class="tech-tag">ICE Framework</span>
-          </div>
-          <a href="cro_scorecard.html" class="project-link">View Live Demo →</a>
-        </div>
-        <div class="project-preview">
-          <div class="preview-mock">
-            <div class="mock-bar"><div class="dots"><span></span><span></span><span></span></div></div>
-            <div class="mock-content">
-              <div style="text-align:center;margin-bottom:10px">
-                <div style="width:64px;height:64px;border-radius:50%;border:3px solid var(--orange);margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:800;color:var(--orange)">62</div>
-                <div style="font-size:10px;color:var(--text-dim)">CRO Score — Average</div>
-              </div>
-              <div class="mini-dash">
-                <div class="mini-kpi"><div class="mk-val" style="color:var(--green);font-size:14px">16</div><div class="mk-label">Pass</div></div>
-                <div class="mini-kpi"><div class="mk-val" style="color:var(--red);font-size:14px">9</div><div class="mk-label">Fail</div></div>
-                <div class="mini-kpi"><div class="mk-val" style="color:var(--text-muted);font-size:14px">3</div><div class="mk-label">N/A</div></div>
-                <div class="mini-kpi"><div class="mk-val" style="color:var(--orange);font-size:14px">4</div><div class="mk-label">Critical</div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Project 3: ClickUp Case Study -->
-      <div class="project-card">
-        <div class="project-info">
-          <div class="project-badge data">📈 CRO Analysis</div>
-          <h3>ClickUp — CRO Case Study</h3>
-          <div class="desc">A complete conversion rate optimization audit of ClickUp's landing page. Includes CRO scoring, 6 identified issues with recommendations, a prioritized 90-day A/B test roadmap, revenue impact projections, and a full GA4/GTM measurement plan. Demonstrates end-to-end CRO strategic thinking.</div>
-          <div class="tech-tags">
-            <span class="tech-tag">CRO Strategy</span>
-            <span class="tech-tag">A/B Test Planning</span>
-            <span class="tech-tag">GA4 Tracking</span>
-            <span class="tech-tag">Revenue Modeling</span>
-          </div>
-          <a href="clickup_case_study.html" class="project-link">View Case Study →</a>
-        </div>
-        <div class="project-preview">
-          <div class="preview-mock">
-            <div class="mock-bar"><div class="dots"><span></span><span></span><span></span></div></div>
-            <div class="mock-content">
-              <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">CRO Audit — ClickUp.com</div>
-              <div style="display:flex;gap:6px;margin-bottom:8px">
-                <div style="flex:1;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:4px;padding:6px;text-align:center">
-                  <div style="font-size:14px;font-weight:800;color:var(--red)">3</div>
-                  <div style="font-size:8px;color:var(--text-muted)">CRITICAL</div>
-                </div>
-                <div style="flex:1;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:4px;padding:6px;text-align:center">
-                  <div style="font-size:14px;font-weight:800;color:var(--orange)">2</div>
-                  <div style="font-size:8px;color:var(--text-muted)">MEDIUM</div>
-                </div>
-                <div style="flex:1;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:4px;padding:6px;text-align:center">
-                  <div style="font-size:14px;font-weight:800;color:var(--blue)">1</div>
-                  <div style="font-size:8px;color:var(--text-muted)">MINOR</div>
-                </div>
-              </div>
-              <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.15);border-radius:4px;padding:6px;text-align:center;font-size:10px;color:var(--green);font-weight:600">Est. +35% conversion lift → +$282K ARR</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- Contact -->
-<section class="contact-section" id="contact">
-  <div class="container">
-    <h2>Let's connect</h2>
-    <p>Interested in CRO, analytics, and data-driven optimization. Always learning, always building.</p>
-    <div class="contact-links">
-      <a href="/cdn-cgi/l/email-protection#4f2e2d2b3a3d3d2e272a2a227f7a7d770f28222e2623612c2022" class="contact-btn primary">📧 Email Me</a>
-      <a href="https://www.linkedin.com/in/abdur-raheem-bbbb492ab/" target="_blank" class="contact-btn">💼 LinkedIn</a>
-      <a href="https://github.com/abdurraheem0528" target="_blank" class="contact-btn">🐙 GitHub</a>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="container">
-    <p>Built with purpose — designed to demonstrate CRO and analytics expertise.</p>
-  </div>
-</footer>
-
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  // Smo
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();document.querySelector(a.getAttribute('href')).scrollIntoView({behavior:'smooth'})})});
+</script>
+</body>
+</html>
