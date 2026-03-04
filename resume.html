@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abdur Raheem - Resume</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#f0f2f5;color:#333;min-height:100vh}
+
+/* Top bar */
+.top-bar{background:#fff;border-bottom:1px solid #e0e0e0;padding:12px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+.top-bar a.back{font-size:13px;color:#555;text-decoration:none;display:flex;align-items:center;gap:6px;font-weight:500}
+.top-bar a.back:hover{color:#2C7A7B}
+.top-bar .actions{display:flex;gap:10px}
+.btn-dl{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;transition:all 0.2s;border:none;cursor:pointer}
+.btn-dl.primary{background:#2C7A7B;color:#fff}
+.btn-dl.primary:hover{background:#236363}
+.btn-dl.secondary{background:#f5f5f5;color:#555;border:1px solid #ddd}
+.btn-dl.secondary:hover{background:#eee}
+
+/* Resume wrapper */
+.resume-wrapper{max-width:900px;margin:32px auto;background:#fff;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,0.08);display:flex;overflow:hidden;min-height:auto}
+
+/* Sidebar */
+.sidebar{width:280px;min-width:280px;background:#2C7A7B;color:#fff;padding:36px 24px}
+.profile-header{text-align:center;margin-bottom:28px}
+.profile-img{width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:28px;font-weight:700;color:#fff;border:3px solid rgba(255,255,255,0.2)}
+.profile-header h1{font-size:22px;font-weight:700;margin-bottom:4px}
+.profile-header h2{font-size:12px;font-weight:400;color:#9DD5D5;letter-spacing:1px;text-transform:uppercase}
+.sidebar-section{margin-bottom:22px}
+.sidebar-section h3{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.6);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,0.1)}
+.sidebar-section ul{list-style:none}
+.sidebar-section li{font-size:12px;margin-bottom:8px;display:flex;align-items:flex-start;gap:8px;line-height:1.4}
+.sidebar-section li i{color:#9DD5D5;font-size:12px;margin-top:2px;min-width:14px}
+.sidebar-section a{color:#fff;text-decoration:none}
+.sidebar-section a:hover{text-decoration:underline}
+.education-item h4{font-size:13px;font-weight:600;margin-bottom:2px}
+.education-item p{font-size:11px;color:#9DD5D5}
+.skills-list{display:flex;flex-wrap:wrap;gap:6px}
+.skills-list span{font-size:10px;padding:4px 10px;border-radius:100px;background:rgba(255,255,255,0.12);color:#fff;font-weight:500;border:1px solid rgba(255,255,255,0.08)}
+.simple-list{list-style:none}
+.simple-list li{font-size:12px;margin-bottom:5px;padding-left:12px;position:relative}
+.simple-list li::before{content:'';width:4px;height:4px;border-radius:50%;background:#9DD5D5;position:absolute;left:0;top:6px}
+
+/* Main content */
+.main-content{flex:1;padding:36px 32px}
+.section-title{font-size:15px;font-weight:700;color:#2C7A7B;display:flex;align-items:center;gap:8px;margin-bottom:18px;padding-bottom:8px;border-bottom:2px solid #2C7A7B}
+.section-title i{font-size:14px}
+.experience-item{margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #f0f0f0}
+.experience-item:last-child{border-bottom:none}
+.experience-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.experience-header h3{font-size:13px;font-weight:700;color:#1a1a1a}
+.experience-header h4{font-size:11.5px;color:#2C7A7B;font-weight:600}
+.date{font-size:11px;color:#999;font-weight:500;white-space:nowrap}
+.experience-details{padding-left:18px;margin:0}
+.experience-details li{font-size:11.5px;color:#555;line-height:1.6;margin-bottom:4px}
+.experience-details li::marker{color:#2C7A7B}
+.content-section{margin-bottom:28px}
+.portfolio-intro{font-size:11px;color:#999;margin-bottom:14px;font-style:italic}
+.portfolio-intro a{color:#2C7A7B}
+.portfolio-grid{display:flex;flex-direction:column;gap:10px}
+.portfolio-card{display:flex;align-items:flex-start;gap:12px;padding:12px;border-radius:10px;background:#f8fafa;border:1px solid #e8f0f0}
+.card-icon{width:36px;height:36px;border-radius:8px;background:#e8f4f4;display:flex;align-items:center;justify-content:center;color:#2C7A7B;font-size:14px;min-width:36px}
+.card-content h4{font-size:12px;font-weight:700;color:#1a1a1a;margin-bottom:2px}
+.card-content p{font-size:11px;color:#777;line-height:1.5}
+.references-section{padding:12px 0;text-align:center;font-size:11px;color:#aaa;border-top:1px solid #f0f0f0;margin-top:8px}
+.references-section i{margin-right:4px}
+
+/* Print styles */
+@media print{
+.top-bar{display:none}
+.resume-wrapper{margin:0;box-shadow:none;border-radius:0}
+body{background:#fff}
+}
+@media(max-width:700px){
+.resume-wrapper{flex-direction:column;margin:16px}
+.sidebar{width:100%;min-width:100%}
+.top-bar{flex-direction:column;gap:8px}
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+<a href="index.html" class="back"><i class="fas fa-arrow-left"></i> Back to Portfolio</a>
+<div class="actions">
+<button class="btn-dl secondary" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+<a href="Abdur_Raheem_CV.pdf" download class="btn-dl primary"><i class="fas fa-download"></i> Download PDF</a>
+</div>
+</div>
+
+<div class="resume-wrapper">
+<aside class="sidebar">
+<div class="profile-header">
+<div class="profile-img"><span>AR</span></div>
+<h1>Abdur Raheem</h1>
+<h2>Marketing & Analytics</h2>
+</div>
+
+<div class="sidebar-section contact-info">
+<h3>Contact</h3>
+<ul>
+<li><i class="fas fa-envelope"></i> <a href="mailto:abdurraheem0528@gmail.com">abdurraheem0528@gmail.com</a></li>
+<li><i class="fas fa-map-marker-alt"></i> Rawalpindi, Pakistan</li>
+<li><i class="fas fa-globe"></i> <a href="https://abdurraheem0528.github.io" target="_blank">abdurraheem0528.github.io</a></li>
+<li><i class="fab fa-linkedin"></i> <a href="https://linkedin.com/in/abdur-raheem-bbbb492ab" target="_blank">LinkedIn Profile</a></li>
+</ul>
+</div>
+
+<div class="sidebar-section">
+<h3>Education</h3>
+<div class="education-item">
+<h4>BS International Relations</h4>
+<p>Iqra University, Islamabad Campus</p>
+</div>
+</div>
+
+<div class="sidebar-section">
+<h3>Skills</h3>
+<div class="skills-list">
+<span>Google Analytics 4</span>
+<span>Google Tag Manager</span>
+<span>Website Tracking</span>
+<span>Performance Reporting</span>
+<span>Data Visualization</span>
+<span>Lead Generation</span>
+<span>Campaign Management</span>
+<span>CRMs</span>
+</div>
+</div>
+
+<div class="sidebar-section">
+<h3>Languages</h3>
+<ul class="simple-list">
+<li>English</li>
+<li>Urdu</li>
+</ul>
+</div>
+
+<div class="sidebar-section">
+<h3>Currently Learning</h3>
+<ul class="simple-list">
+<li>GA4 Certification</li>
+<li>GTM Implementation</li>
+<li>Web Analytics Methodology</li>
+</ul>
+</div>
+</aside>
+
+<main class="main-content">
+<section class="content-section">
+<h2 class="section-title"><i class="fas fa-briefcase"></i> Work Experience</h2>
+
+<div class="experience-item">
+<div class="experience-header">
+<div>
+<h3>Freelance Marketing & Analytics Consultant</h3>
+<h4>Independent Consultant</h4>
+</div>
+<span class="date">Aug 2025 – Present</span>
+</div>
+<ul class="experience-details">
+<li>Reviewed website data for SaaS and e-commerce clients to understand visitor behavior and improve user journeys.</li>
+<li>Set up tracking using Google Analytics 4 (GA4) and Google Tag Manager (GTM) to measure page views and link clicks.</li>
+<li>Managed digital marketing campaigns and created weekly performance reports to show improvements in lead generation.</li>
+</ul>
+</div>
+
+<div class="experience-item">
+<div class="experience-header">
+<div>
+<h3>Business Development Manager / Project Manager</h3>
+<h4>AIDONES PVT LTD</h4>
+</div>
+<span class="date">Jan 2024 – Jul 2025</span>
+</div>
+<ul class="experience-details">
+<li>Led client acquisition efforts and developed outreach strategies that increased positive response rates.</li>
+<li>Managed project delivery across design, development, and client teams to ensure on-time setup.</li>
+<li>Tracked campaign performance metrics in dashboards and presented weekly results to stakeholders.</li>
+<li>Built client-facing pitch decks and proposals using data to highlight specific pain points.</li>
+</ul>
+</div>
+
+<div class="experience-item">
+<div class="experience-header">
+<div>
+<h3>Business Development Executive / Project Manager</h3>
+<h4>FINCORD Consultants</h4>
+</div>
+<span class="date">Feb 2023 – Dec 2023</span>
+</div>
+<ul class="experience-details">
+<li>Built and managed client pipeline through targeted B2B outreach and relationship building.</li>
+<li>Introduced simple tracking systems to measure how many clients engaged with our campaigns.</li>
+<li>Managed project timelines and deliverables for consulting engagements.</li>
+</ul>
+</div>
+
+<div class="experience-item">
+<div class="experience-header">
+<div>
+<h3>Marketing Executive</h3>
+<h4>Fincord LLC</h4>
+</div>
+<span class="date">Jul 2022 – Feb 2023</span>
+</div>
+<ul class="experience-details">
+<li>Executed digital marketing campaigns across email, social media, and paid channels.</li>
+<li>Reviewed campaign data to find the best audiences and improve the return on investment.</li>
+<li>Created marketing content and managed regular performance reporting for the team.</li>
+</ul>
+</div>
+</section>
+
+<section class="content-section">
+<h2 class="section-title"><i class="fas fa-chart-pie"></i> Analytics Portfolio</h2>
+<p class="portfolio-intro">Self-directed projects live at <a href="https://abdurraheem0528.github.io" target="_blank">abdurraheem0528.github.io</a></p>
+
+<div class="portfolio-grid">
+<div class="portfolio-card">
+<div class="card-icon"><i class="fas fa-search-plus"></i></div>
+<div class="card-content">
+<h4>Notion Page Tracking</h4>
+<p>Reviewed homepage performance and created a basic measurement plan using GA4 to track important button clicks.</p>
+</div>
+</div>
+
+<div class="portfolio-card">
+<div class="card-icon"><i class="fas fa-filter"></i></div>
+<div class="card-content">
+<h4>ClickUp Page Tracking</h4>
+<p>Looked at how visitors navigate the page and designed a straightforward GA4 and GTM tracking setup.</p>
+</div>
+</div>
+
+<div class="portfolio-card">
+<div class="card-icon"><i class="fas fa-tools"></i></div>
+<div class="card-content">
+<h4>Analytics Examples</h4>
+<p>Built 3 simple practice setups to demonstrate hands-on understanding of how to track website performance.</p>
+</div>
+</div>
+</div>
+</section>
+
+<div class="references-section">
+<p><i class="fas fa-info-circle"></i> References available upon request</p>
+</div>
+</main>
+</div>
+
+</body>
+</html>
