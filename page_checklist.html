@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page Checklist — Landing Page Review</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{--bg:#fafafa;--surface:#fff;--surface2:#f5f5f7;--surface3:#eeeff1;--border:#e5e5e7;--border2:#d1d1d6;--text:#1d1d1f;--dim:#6e6e73;--muted:#aeaeb2;--accent:#0071e3;--accent-light:#e8f2ff;--green:#34c759;--green-light:#eafbef;--green-dark:#248a3d;--red:#ff3b30;--red-light:#fff0ef;--red-dark:#d70015;--orange:#ff9500;--orange-light:#fff8eb;--orange-dark:#c93400;--purple:#af52de;--shadow-sm:0 1px 3px rgba(0,0,0,0.04);--shadow-md:0 4px 12px rgba(0,0,0,0.06);--radius:12px;--radius-lg:16px;--radius-xl:20px}
+  body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+  .app{max-width:860px;margin:0 auto;padding:24px 20px 80px}
+  .header{display:flex;align-items:center;justify-content:space-between;padding:16px 0 20px;margin-bottom:24px}
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#34c759,#0071e3);display:flex;align-items:center;justify-content:center;color:white;font-size:16px;box-shadow:0 2px 8px rgba(52,199,89,0.3)}
+  .logo h1{font-size:20px;font-weight:700;letter-spacing:-0.03em}
+  .logo h1 span{color:var(--green-dark)}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:28px;box-shadow:var(--shadow-sm);margin-bottom:20px}
+  .card h2{font-size:18px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
+  .card .sub{font-size:13px;color:var(--dim);margin-bottom:20px;line-height:1.5}
+  .url-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-family:'DM Mono',monospace;font-size:13px;color:var(--text);outline:none;margin-bottom:20px}
+  .url-input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,113,227,0.08)}
+  .score-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 24px;margin-bottom:20px;box-shadow:var(--shadow-md);display:flex;align-items:center;gap:20px;position:sticky;top:10px;z-index:50}
+  .score-circle{width:60px;height:60px;min-width:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:24px;font-weight:800;border:3px solid}
+  .score-info{flex:1}
+  .score-info h3{font-size:15px;font-weight:700}
+  .score-info p{font-size:12px;color:var(--dim)}
+  .score-counts{display:flex;gap:16px;font-size:12px;font-weight:600}
+  .sc-item{display:flex;align-items:center;gap:4px}
+  .sc-dot{width:8px;height:8px;border-radius:50%}
+  .category{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:12px;overflow:hidden;box-shadow:var(--shadow-sm)}
+  .cat-header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background 0.15s}
+  .cat-header:hover{background:var(--surface2)}
+  .cat-left{display:flex;align-items:center;gap:12px}
+  .cat-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px}
+  .cat-header h3{font-size:14px;font-weight:700}
+  .cat-header .weight{font-size:11px;color:var(--muted)}
+  .cat-score{font-family:'DM Mono',monospace;font-size:13px;font-weight:700;padding:4px 10px;border-radius:6px}
+  .cat-body{padding:0 20px 16px;display:none}
+  .category.open .cat-body{display:block}
+  .check-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--surface2);align-items:flex-start}
+  .check-item:last-child{border-bottom:none}
+  .toggle-group{display:flex;flex-direction:column;gap:3px}
+  .tog{width:28px;height:22px;border-radius:4px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:inherit;color:var(--muted);transition:all 0.15s}
+  .tog:hover{border-color:var(--accent)}
+  .tog.pass{background:var(--green);border-color:var(--green);color:white}
+  .tog.fail{background:var(--red);border-color:var(--red);color:white}
+  .tog.na{background:var(--muted);border-color:var(--muted);color:white}
+  .check-content{flex:1}
+  .check-content h4{font-size:13px;font-weight:600;margin-bottom:2px}
+  .check-content p{font-size:12px;color:var(--dim);line-height:1.5}
+  .impact-tag{display:inline-flex;font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;margin-top:3px;text-transform:uppercase;letter-spacing:0.04em}
+  .impact-tag.high{background:var(--red-light);color:var(--red-dark)}
+  .impact-tag.medium{background:var(--orange-light);color:var(--orange-dark)}
+  .impact-tag.low{background:var(--accent-light);color:var(--accent)}
+  .btn-row{display:flex;gap:10px;margin:24px 0;justify-content:center}
+  .btn-primary{background:var(--accent);color:white;border:none;padding:12px 28px;border-radius:10px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s}
+  .btn-primary:hover{background:#005bb5;box-shadow:0 4px 12px rgba(0,113,227,0.25)}
+  .btn-ai{background:linear-gradient(135deg,#0071e3,#af52de);color:white;border:none;padding:12px 28px;border-radius:10px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px}
+  .btn-ai:hover{box-shadow:0 4px 12px rgba(0,113,227,0.3)}
+  .btn-ai:disabled{opacity:0.5;cursor:not-allowed}
+  .report{display:none;animation:fadeIn 0.3s ease}
+  .report.show{display:block}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .report-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;margin-bottom:16px;box-shadow:var(--shadow-sm)}
+  .report-card h3{font-size:15px;font-weight:700;margin-bottom:12px}
+  .report-item{padding:10px 0;border-bottom:1px solid var(--surface2);font-size:13px;line-height:1.6;color:var(--dim)}
+  .report-item:last-child{border-bottom:none}
+  .report-item strong{color:var(--red-dark)}
+  .report-item .fix{color:var(--green-dark)}
+  .priority-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+  .pri-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px}
+  .pri-card h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px}
+  .pri-card.urgent h4{color:var(--red-dark)}
+  .pri-card.important h4{color:var(--orange-dark)}
+  .pri-card.moderate h4{color:var(--accent)}
+  .pri-card.good h4{color:var(--green-dark)}
+  .pri-card li{font-size:12px;color:var(--dim);padding:2px 0;list-style:none;padding-left:14px;position:relative}
+  .pri-card li::before{content:'>';position:absolute;left:0;color:var(--muted)}
+  .ai-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;margin-bottom:16px;box-shadow:var(--shadow-sm)}
+  .ai-section h3{font-size:15px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .ai-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:100px;background:linear-gradient(135deg,#0071e3,#af52de);color:white}
+  .ai-key-row{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+  .ai-key{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-family:'DM Mono',monospace;font-size:11px;color:var(--dim);outline:none}
+  .ai-loading{display:none;text-align:center;padding:20px}
+  .ai-loading.show{display:block}
+  .ai-loader{width:24px;height:24px;border:2px solid var(--surface3);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto 8px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .ai-result{display:none;padding:18px;background:var(--surface2);border-radius:var(--radius);border:1px solid var(--border);margin-top:12px}
+  .ai-result.show{display:block;animation:fadeIn 0.3s ease}
+  .ai-result p{font-size:13px;color:var(--dim);line-height:1.7;margin-bottom:10px}
+  .ai-result h4{font-size:13px;font-weight:700;color:var(--text);margin:14px 0 6px}
+  .ai-result h4:first-child{margin-top:0}
+  .footer{text-align:center;padding:28px 0;margin-top:36px;font-size:12px;color:var(--muted);border-top:1px solid var(--border)}
+  .footer a{color:var(--accent);text-decoration:none}
+  @media(max-width:700px){.priority-grid{grid-template-columns:1fr}.score-bar{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="logo"><div class="logo-mark">&#128203;</div><h1>Page <span>Checklist</span></h1></div>
+    <div style="font-size:12px;color:var(--muted)">Page Review Tool</div>
+  </div>
+
+  <div class="card">
+    <h2>Review a landing page</h2>
+    <p class="sub">Go through 28 items to review any landing page. Mark each one as Pass, Fail, or N/A. Get an overall score and a simple action plan.</p>
+    <input type="text" class="url-input" id="pageUrl" placeholder="Page URL (optional, e.g. https://example.com)">
+  </div>
+
+  <div class="score-bar" id="scoreBar">
+    <div class="score-circle" id="bigScore" style="border-color:var(--muted);color:var(--muted)">-</div>
+    <div class="score-info"><h3 id="scoreLabel">Complete the checklist</h3><p id="scoreSub">Rate each item below to see your score</p></div>
+    <div class="score-counts">
+      <div class="sc-item"><div class="sc-dot" style="background:var(--green)"></div><span id="passC">0</span> Pass</div>
+      <div class="sc-item"><div class="sc-dot" style="background:var(--red)"></div><span id="failC">0</span> Fail</div>
+      <div class="sc-item"><div class="sc-dot" style="background:var(--muted)"></div><span id="naC">0</span> N/A</div>
+    </div>
+  </div>
+
+  <div id="categories"></div>
+
+  <div class="btn-row">
+    <button class="btn-primary" onclick="generateReport()">Generate Report</button>
+  </div>
+
+  <div class="report" id="report">
+    <div class="report-card"><h3>Review Report</h3><div id="reportUrl" style="font-size:12px;color:var(--dim);font-family:'DM Mono',monospace;margin-bottom:14px"></div><div id="reportContent"></div></div>
+    <div class="report-card"><h3>Priority List</h3><div class="priority-grid" id="priorityGrid"></div></div>
+    <div class="report-card"><h3>Estimated Impact</h3><div id="impactEst" style="font-size:14px;line-height:1.7;color:var(--dim)"></div></div>
+    <div class="ai-section">
+      <h3>AI Suggestions <span class="ai-badge">GPT-4o-mini</span></h3>
+      <p style="font-size:13px;color:var(--dim);margin-bottom:10px">Get AI-powered suggestions for each item that failed, plus a simple test plan.</p>
+      <div class="ai-key-row">
+        <span style="font-size:12px">Key:</span>
+        <input type="password" class="ai-key" id="aiKey" placeholder="OpenAI API key (sk-...)">
+        <button class="btn-ai" id="aiBtn" onclick="runAI()">Get AI Suggestions</button>
+      </div>
+      <div class="ai-loading" id="aiLoading"><div class="ai-loader"></div><div style="font-size:13px;color:var(--dim)">Generating suggestions...</div></div>
+      <div class="ai-result" id="aiResult"></div>
+    </div>
+  </div>
+
+  <div class="footer">Page Checklist by <a href="https://abdurraheem0528.github.io" target="_blank">Abdur Raheem</a></div>
+</div>
+
+<script>
+const auditData=[
+  {name:"Headline & Value Prop",icon:"&#128221;",color:"#ff3b30",weight:25,items:[
+    {id:"h1",title:"Benefit-focused headline",desc:"Communicates what the visitor gets, not just what the product is.",impact:"high"},
+    {id:"h2",title:"Clear value proposition",desc:"Visitor understands the main benefit within 5 seconds.",impact:"high"},
+    {id:"h3",title:"Specific results mentioned",desc:"Uses specific numbers or timeframes for credibility.",impact:"medium"},
+    {id:"h4",title:"Message matches ad or source",desc:"Headline delivers on the promise from wherever the visitor came from.",impact:"high"},
+    {id:"h5",title:"Easy to understand",desc:"A non-expert can understand the headline instantly.",impact:"medium"}
+  ]},
+  {name:"Call to Action",icon:"&#128280;",color:"#0071e3",weight:20,items:[
+    {id:"c1",title:"Action-oriented button text",desc:"'Start Free Trial', 'Get Started' — not 'Learn More' or 'Submit'.",impact:"high"},
+    {id:"c2",title:"Button stands out visually",desc:"Contrasting color, large enough, clear hierarchy.",impact:"high"},
+    {id:"c3",title:"Button visible without scrolling",desc:"Primary button is visible at the top of the page.",impact:"high"},
+    {id:"c4",title:"Low-pressure language",desc:"Words like 'Free', 'No credit card', 'Cancel anytime' near the button.",impact:"medium"},
+    {id:"c5",title:"One main button per section",desc:"One clear action — no competing buttons causing confusion.",impact:"medium"}
+  ]},
+  {name:"Social Proof & Trust",icon:"&#11088;",color:"#ff9500",weight:20,items:[
+    {id:"s1",title:"Customer logos shown",desc:"Recognizable company logos help build trust quickly.",impact:"high"},
+    {id:"s2",title:"Testimonials with names",desc:"Real quotes with full names, titles, and photos.",impact:"medium"},
+    {id:"s3",title:"Third-party ratings shown",desc:"G2, Capterra, TrustPilot ratings visible on the page.",impact:"high"},
+    {id:"s4",title:"Customer count mentioned",desc:"'Trusted by 10,000+ teams' with a real number.",impact:"medium"},
+    {id:"s5",title:"Security or trust badges",desc:"Relevant certifications or badges displayed.",impact:"low"}
+  ]},
+  {name:"Form & Sign Up",icon:"&#128203;",color:"#34c759",weight:20,items:[
+    {id:"f1",title:"Short form (4 fields or fewer)",desc:"Keeping the form short makes it easier to complete.",impact:"high"},
+    {id:"f2",title:"Clear field labels",desc:"Visible labels, not just placeholder text.",impact:"low"},
+    {id:"f3",title:"No unnecessary fields",desc:"Remove fields like phone or company size if not essential.",impact:"medium"},
+    {id:"f4",title:"Helpful error messages",desc:"Shows clear errors so users know what to fix.",impact:"low"},
+    {id:"f5",title:"Privacy note near submit",desc:"'We never share your info' reassures users before they submit.",impact:"medium"},
+    {id:"f6",title:"Clear next step",desc:"User knows what happens after they submit the form.",impact:"low"}
+  ]},
+  {name:"Page Design & UX",icon:"&#127912;",color:"#af52de",weight:10,items:[
+    {id:"d1",title:"Clear visual flow",desc:"Clear path: headline, value, features, proof, then button.",impact:"medium"},
+    {id:"d2",title:"Works on mobile",desc:"Page looks and works properly on a phone.",impact:"high"},
+    {id:"d3",title:"Loads quickly",desc:"Page loads in under 3 seconds.",impact:"high"},
+    {id:"d4",title:"Minimal navigation",desc:"Landing pages work better with fewer menu links.",impact:"medium"},
+    {id:"d5",title:"Easy to scan",desc:"Short paragraphs, subheadings, and icons break up the text.",impact:"low"}
+  ]},
+  {name:"Content & Messaging",icon:"&#128172;",color:"#0071e3",weight:5,items:[
+    {id:"p1",title:"Features explained as benefits",desc:"Translates features into outcomes users actually care about.",impact:"medium"},
+    {id:"p2",title:"Common concerns addressed",desc:"FAQ or content handling questions visitors might have.",impact:"medium"}
+  ]}
+];
+
+const state={};
+
+function init(){
+  const c=document.getElementById('categories');
+  auditData.forEach(cat=>{
+    const el=document.createElement('div');el.className='category open';
+    el.innerHTML=`<div class="cat-header" onclick="this.parentElement.classList.toggle('open')"><div class="cat-left"><div class="cat-icon" style="background:${cat.color}12">${cat.icon}</div><div><h3>${cat.name}</h3><span class="weight">${cat.weight}% weight</span></div></div><div class="cat-score" id="cs_${cat.name.replace(/\W/g,'')}" style="background:var(--surface2);color:var(--muted)">-</div></div>
+    <div class="cat-body">${cat.items.map(item=>`<div class="check-item"><div class="toggle-group"><button class="tog" onclick="setVal('${item.id}','pass',this)">Pass</button><button class="tog" onclick="setVal('${item.id}','fail',this)">Fail</button><button class="tog" onclick="setVal('${item.id}','na',this)">N/A</button></div><div class="check-content"><h4>${item.title}</h4><p>${item.desc}</p><span class="impact-tag ${item.impact}">${item.impact}</span></div></div>`).join('')}</div>`;
+    c.appendChild(el);
+  });
+}
+
+function setVal(id,val,btn){
+  state[id]=val;
+  btn.parentElement.querySelectorAll('.tog').forEach(t=>t.classList.remove('pass','fail','na'));
+  btn.classList.add(val);
+  updateScore();
+}
+
+function updateScore(){
+  let tw=0,totalW=0,passes=0,fails=0,nas=0;
+  auditData.forEach(cat=>{
+    let cp=0,ct=0;
+    cat.items.forEach(item=>{const v=state[item.id];if(v==='pass'){passes++;cp++;ct++}else if(v==='fail'){fails++;ct++}else if(v==='na')nas++});
+    const badge=document.getElementById('cs_'+cat.name.replace(/\W/g,''));
+    if(ct>0){const pct=Math.round(cp/ct*100);badge.textContent=pct+'%';badge.style.background=pct>=80?'var(--green-light)':pct>=50?'var(--orange-light)':'var(--red-light)';badge.style.color=pct>=80?'var(--green-dark)':pct>=50?'var(--orange-dark)':'var(--red-dark)';tw+=(cp/ct)*cat.weight;totalW+=cat.weight}
+    else{badge.textContent='-';badge.style.background='var(--surface2)';badge.style.color='var(--muted)'}
+  });
+  document.getElementById('passC').textContent=passes;document.getElementById('failC').textContent=fails;document.getElementById('naC').textContent=nas;
+  if(totalW>0){const score=Math.round(tw/totalW*100);const el=document.getElementById('bigScore');el.textContent=score;
+    el.style.borderColor=score>=80?'var(--green)':score>=50?'var(--orange)':'var(--red)';el.style.color=score>=80?'var(--green-dark)':score>=50?'var(--orange-dark)':'var(--red-dark)';
+    document.getElementById('scoreLabel').textContent=`Page Score: ${score}/100`;
+    document.getElementById('scoreSub').textContent=score>=80?'Strong page — minor improvements possible':score>=60?'Average — some areas to work on':score>=40?'Below average — several issues found':'Needs work — multiple issues to address'}
+}
+
+function generateReport(){
+  const section=document.getElementById('report');section.classList.add('show');
+  document.getElementById('reportUrl').textContent='Page: '+(document.getElementById('pageUrl').value||'Not specified');
+  const failItems=[],passItems=[];
+  auditData.forEach(cat=>{cat.items.forEach(item=>{if(state[item.id]==='fail')failItems.push({...item,category:cat.name});if(state[item.id]==='pass')passItems.push({...item,category:cat.name})})});
+
+  let rpt='';
+  if(!failItems.length)rpt='<div class="report-item" style="color:var(--green-dark)">No issues found. Good work — consider testing individual elements to improve further.</div>';
+  else failItems.forEach((item,i)=>{rpt+=`<div class="report-item"><strong>Issue ${i+1}: ${item.title}</strong> <span style="color:var(--muted)">(${item.category})</span><br>${item.desc}<br><span class="fix">Action: ${item.impact==='high'?'Fix this first':'Address in next round'}</span></div>`});
+  document.getElementById('reportContent').innerHTML=rpt;
+
+  const urgent=failItems.filter(i=>i.impact==='high'),important=failItems.filter(i=>i.impact==='medium'),moderate=failItems.filter(i=>i.impact==='low');
+  document.getElementById('priorityGrid').innerHTML=`
+    <div class="pri-card urgent"><h4>Fix First</h4><ul>${urgent.length?urgent.map(i=>`<li>${i.title}</li>`).join(''):'<li>None</li>'}</ul></div>
+    <div class="pri-card important"><h4>Fix Next</h4><ul>${important.length?important.map(i=>`<li>${i.title}</li>`).join(''):'<li>None</li>'}</ul></div>
+    <div class="pri-card moderate"><h4>Fix Later</h4><ul>${moderate.length?moderate.map(i=>`<li>${i.title}</li>`).join(''):'<li>None</li>'}</ul></div>
+    <div class="pri-card good"><h4>Working Well (${passItems.length})</h4><ul>${passItems.slice(0,5).map(i=>`<li>${i.title}</li>`).join('')}${passItems.length>5?`<li>+${passItems.length-5} more</li>`:''}</ul></div>`;
+
+  const hf=urgent.length,est=hf*8+important.length*4+moderate.length;
+  document.getElementById('impactEst').innerHTML=`<strong style="color:var(--red-dark)">${failItems.length} issues</strong> found (${hf} high, ${important.length} medium, ${moderate.length} low). Addressing these could improve page performance by an estimated <strong style="color:var(--green-dark)">${est}-${Math.round(est*1.5)}%</strong>. Start with the ${hf} high-priority items first.`;
+
+  section.scrollIntoView({behavior:'smooth'});
+}
+
+async function runAI(){
+  const apiKey=document.getElementById('aiKey').value.trim();
+  if(!apiKey){alert('Please enter your OpenAI API key');return}
+  const failItems=[];
+  auditData.forEach(cat=>{cat.items.forEach(item=>{if(state[item.id]==='fail')failItems.push({title:item.title,category:cat.name,impact:item.impact,desc:item.desc})})});
+  if(!failItems.length){alert('No failed items to analyze. Complete the checklist first.');return}
+  document.getElementById('aiLoading').classList.add('show');document.getElementById('aiResult').classList.remove('show');document.getElementById('aiBtn').disabled=true;
+  const url=document.getElementById('pageUrl').value||'Not specified';
+  const prompt=`You are a page review assistant. A landing page review found these issues:\n\nPage: ${url}\n\nFailed Items:\n${failItems.map((f,i)=>`${i+1}. [${f.impact.toUpperCase()}] ${f.title} (${f.category}) - ${f.desc}`).join('\n')}\n\nFor each failed item, provide:\n1. A specific, actionable suggestion (tell them exactly what to change)\n2. If it's a headline or button issue, write 2-3 improved alternatives\n\nThen provide:\n- A simple 3-test plan with what to test and why\n- The single most important quick fix they can do today\n\nFormat with ## headers for each section. Be specific and practical.`;
+  try{
+    const r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${apiKey}`},body:JSON.stringify({model:'gpt-4o-mini',messages:[{role:'user',content:prompt}],temperature:0.7,max_tokens:2000})});
+    if(!r.ok){const e=await r.json();throw new Error(e.error?.message||'Failed')}
+    const data=await r.json(),text=data.choices[0].message.content.trim();
+    let html=text.replace(/## (.+)/g,'<h4>$1</h4>').replace(/### (.+)/g,'<h4>$1</h4>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n\n/g,'</p><p>').replace(/\n- /g,'<br>- ').replace(/\n(\d+)\. /g,'<br>$1. ');
+    html='<p>'+html+'</p>';
+    document.getElementById('aiResult').innerHTML=html;document.getElementById('aiResult').classList.add('show');
+  }catch(e){
+    document.getElementById('aiResult').innerHTML=`<p style="color:var(--red-dark)">Error: ${e.message}</p>`;document.getElementById('aiResult').classList.add('show');
+  }
+  document.getElementById('aiLoading').classList.remove('show');document.getElementById('aiBtn').disabled=false;
+}
+
+init();
+</script>
+</body>
+</html>
