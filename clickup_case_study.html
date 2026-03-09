@@ -23,8 +23,9 @@ a.back:hover{color:var(--accent)}
 .cm .cl{font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-sm);margin-bottom:20px}
 .card h2{font-size:17px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.card h2 .badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px}
 .card p,.card li{font-size:13px;color:var(--dim);line-height:1.7}
+.card ul{padding-left:20px;margin-top:8px}
+.card li{margin-bottom:10px}
 
 /* Wireframes */
 .wireframe{border:2px solid var(--border);border-radius:var(--radius);overflow:hidden;margin:16px 0;background:var(--surface2)}
@@ -81,30 +82,6 @@ a.back:hover{color:var(--accent)}
 .comp-table tr:hover{background:var(--surface2)}
 .check{color:var(--green-dark);font-weight:700}.cross{color:var(--red-dark);font-weight:700}
 
-/* Tests */
-.test{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:12px;border-left:4px solid}
-.test.p1{border-left-color:var(--red)}.test.p2{border-left-color:var(--orange)}.test.p3{border-left-color:var(--accent)}
-.test h3{font-size:14px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
-.test .pri{font-size:9px;font-weight:700;padding:2px 8px;border-radius:4px;color:white}
-.test .pri.p1{background:var(--red)}.test .pri.p2{background:var(--orange)}.test .pri.p3{background:var(--accent)}
-.test p{font-size:12px;color:var(--dim);line-height:1.6;margin-top:4px}
-.test .meta{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
-.test .meta span{font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;background:var(--surface2);border:1px solid var(--border)}
-
-.ga-event{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--surface2);font-size:11px}
-.ga-event:last-child{border-bottom:none}
-.ga-cat{font-size:9px;font-weight:700;padding:2px 8px;border-radius:4px;background:var(--surface2);color:var(--dim);min-width:55px;text-align:center}
-.ga-name{font-family:'DM Mono',monospace;font-weight:600;flex:1;font-size:11px}
-.ga-trigger{color:var(--muted);font-size:10px}
-
-.timeline{position:relative;padding-left:24px;margin-top:14px}
-.timeline::before{content:'';position:absolute;left:7px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,#7b68ee,var(--green),var(--accent))}
-.tl-item{position:relative;padding-bottom:22px}
-.tl-item::before{content:'';position:absolute;left:-21px;top:4px;width:10px;height:10px;border-radius:50%;background:#7b68ee;border:2px solid var(--surface)}
-.tl-item .week{font-size:10px;font-weight:700;color:#7b68ee}
-.tl-item h4{font-size:13px;font-weight:700;margin:2px 0}
-.tl-item p{font-size:11px;color:var(--dim);line-height:1.5}
-
 .footer{text-align:center;padding:28px 0;margin-top:36px;font-size:12px;color:var(--muted);border-top:1px solid var(--border)}
 .footer a{color:var(--accent);text-decoration:none}
 @media(max-width:700px){.cover{padding:32px 24px}.cover-meta{gap:12px}.compare-container{grid-template-columns:1fr}.compare-label{display:none}.comp-table{font-size:10px}}
@@ -118,60 +95,57 @@ a.back:hover{color:var(--accent)}
 <div class="cover">
 <div class="cover-badge">&#x1F4CA; Landing Page Analysis &bull; B2B SaaS &bull; Project Management</div>
 <h1>ClickUp Homepage<br>Analysis &amp; Redesign</h1>
-<p>A landing page analysis covering competitive benchmarking against 4 competitors, before/after redesign wireframes, conversion funnel breakdown, and a 90-day A/B test plan with a GA4 measurement setup.</p>
+<p>A landing page analysis covering competitive benchmarking, before/after redesign wireframes, estimated conversion funnel, and suggested A/B tests with a GA4 tracking plan.</p>
 <div class="cover-meta">
 <div class="cm"><div class="cv" style="color:#ff9500">62</div><div class="cl">Page Score</div></div>
 <div class="cm"><div class="cv" style="color:#ff3b30">6</div><div class="cl">Issues Found</div></div>
-<div class="cm"><div class="cv" style="color:#34c759">6</div><div class="cl">A/B Tests</div></div>
+<div class="cm"><div class="cv" style="color:#34c759">3</div><div class="cl">Tests Suggested</div></div>
 </div>
 </div>
 
 <!-- SUMMARY -->
 <div class="card">
 <h2>&#x1F4CB; Summary</h2>
-<p>ClickUp does several things well: strong social proof (800,000+ teams, G2 badges), a clear free-tier offer, and a competitive headline. However, the homepage tries to communicate too many things at once — the hero lists 6+ feature categories, there are two competing CTAs, and the strongest trust signals are buried far below the fold. The page is trying to serve every type of visitor simultaneously and ends up feeling cluttered.</p>
+<p>ClickUp does several things well: strong social proof (800,000+ teams, G2 badges), a clear free-tier offer, and a competitive headline. However, the homepage tries to communicate too many things at once — the hero lists 6+ feature categories, there are two competing CTAs, and the strongest trust signals are buried far below the fold.</p>
 <p style="margin-top:10px"><strong>Key finding:</strong> ClickUp's social proof (800,000+ teams, #1 on G2) is stronger than most competitors, but it's positioned below 3+ scroll depths. Moving that information above the fold is the first change I'd test.</p>
 </div>
 
 <!-- COMPETITIVE ANALYSIS -->
 <div class="card">
-<h2>&#x1F50D; Competitive Analysis <span class="badge" style="background:rgba(123,104,238,0.1);color:#7b68ee">vs Top 4 Competitors</span></h2>
-<p>I compared ClickUp's homepage against 4 competitors. Green = ClickUp leads. Red = ClickUp is behind.</p>
+<h2>&#x1F50D; Competitive Comparison</h2>
+<p>I visited ClickUp's homepage and two competitors to compare how they handle key trust and conversion elements.</p>
 <table class="comp-table">
-<thead><tr><th>Element</th><th>ClickUp</th><th>Monday.com</th><th>Asana</th><th>Notion</th><th>Wrike</th></tr></thead>
+<thead><tr><th>Element</th><th>ClickUp</th><th>Monday.com</th><th>Asana</th></tr></thead>
 <tbody>
-<tr><td><strong>Headline specificity</strong></td><td class="check">&#x2713; "One app to replace them all"</td><td class="check">&#x2713; "225K+ customers"</td><td class="cross">&#x2717; Vague</td><td class="cross">&#x2717; Vague</td><td class="check">&#x2713; Outcome-focused</td></tr>
-<tr><td><strong>Customer count visible</strong></td><td class="check">&#x2713; "800,000+ teams"</td><td class="check">&#x2713; "225,000+"</td><td class="check">&#x2713; "85% Fortune 100"</td><td class="cross">&#x2717; Hidden</td><td class="check">&#x2713; "20,000+"</td></tr>
-<tr><td><strong>G2/Review badges</strong></td><td class="check">&#x2713; Multiple</td><td class="check">&#x2713; G2 Leader</td><td class="cross">&#x2717; None</td><td class="cross">&#x2717; None</td><td class="check">&#x2713; Yes</td></tr>
-<tr><td><strong>Above-fold clarity</strong></td><td class="cross">&#x2717; Cluttered</td><td class="check">&#x2713; Clean</td><td class="check">&#x2713; Clean</td><td class="check">&#x2713; Very clean</td><td class="cross">&#x2717; Dense</td></tr>
-<tr><td><strong>Single clear CTA</strong></td><td class="cross">&#x2717; 2+ competing</td><td class="check">&#x2713; One primary</td><td class="check">&#x2713; One primary</td><td class="check">&#x2713; One primary</td><td class="cross">&#x2717; Multiple</td></tr>
-<tr><td><strong>Product demo in hero</strong></td><td class="check">&#x2713; UI screenshot</td><td class="check">&#x2713; Auto-play video</td><td class="check">&#x2713; Video button</td><td class="check">&#x2713; Product visual</td><td class="cross">&#x2717; Illustration</td></tr>
-<tr><td><strong>"Free" in CTA</strong></td><td class="check">&#x2713; "Get Started Free"</td><td class="cross">&#x2717; "Get Started"</td><td class="cross">&#x2717; "Get Started"</td><td class="check">&#x2713; "Get Notion free"</td><td class="cross">&#x2717; "Try Free"</td></tr>
-<tr><td><strong>Page load speed</strong></td><td class="cross">&#x2717; Heavy/slow</td><td class="cross">&#x2717; Medium</td><td class="check">&#x2713; Fast</td><td class="check">&#x2713; Very fast</td><td class="cross">&#x2717; Medium</td></tr>
+<tr><td><strong>Above-fold clarity</strong></td><td class="cross">&#x2717; Cluttered hero</td><td class="check">&#x2713; Clean, focused</td><td class="check">&#x2713; Clean, focused</td></tr>
+<tr><td><strong>Single primary CTA</strong></td><td class="cross">&#x2717; 2 competing CTAs</td><td class="check">&#x2713; One main CTA</td><td class="check">&#x2713; One main CTA</td></tr>
+<tr><td><strong>Trust badges visible early</strong></td><td class="cross">&#x2717; Buried below fold</td><td class="check">&#x2713; Above fold</td><td class="cross">&#x2717; Not present</td></tr>
+<tr><td><strong>Customer count in hero</strong></td><td class="check">&#x2713; "800,000+ teams"</td><td class="check">&#x2713; "225,000+"</td><td class="check">&#x2713; "85% Fortune 100"</td></tr>
+<tr><td><strong>Feature overload in hero</strong></td><td class="cross">&#x2717; 6+ categories listed</td><td class="check">&#x2713; One clear message</td><td class="check">&#x2713; One clear message</td></tr>
 </tbody>
 </table>
-<p style="margin-top:14px"><strong>Observation:</strong> ClickUp wins on social proof quantity but loses on above-fold clarity and CTA focus. Monday.com and Asana have simpler hero sections that make it easier for visitors to take action, even though ClickUp has more impressive credentials.</p>
+<p style="margin-top:14px"><strong>Observation:</strong> ClickUp has better social proof than both competitors but a messier above-fold experience. Monday.com and Asana convert better in part because they say one thing clearly instead of listing everything the product can do.</p>
 </div>
 
 <!-- FUNNEL ANALYSIS -->
 <div class="card">
 <h2>&#x1F4C9; Estimated Conversion Funnel</h2>
-<p>A rough breakdown of how users likely move through the page, using industry benchmarks as a reference. Numbers are estimates to illustrate where drop-off probably happens.</p>
+<p>A rough breakdown of how users likely move through the page, using general B2B SaaS benchmarks as a reference. Numbers are estimates to illustrate where drop-off probably happens.</p>
 <div class="funnel">
 <div class="funnel-step"><div class="funnel-label">Page Load</div><div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:100%;background:linear-gradient(90deg,#7b68ee,#a78bfa)">1,500,000</div></div><div class="funnel-pct">100%</div></div>
 <div class="funnel-drop">&darr; ~40% bounce (slow load + cluttered hero)</div>
 <div class="funnel-step"><div class="funnel-label">Scroll 50%</div><div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:60%;background:linear-gradient(90deg,#7b68ee,#a78bfa)">900,000</div></div><div class="funnel-pct">60%</div></div>
 <div class="funnel-drop">&darr; ~30% confused by feature overload</div>
 <div class="funnel-step"><div class="funnel-label">CTA Click</div><div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:22%;background:linear-gradient(90deg,#ff9500,#ffb84d)">330,000</div></div><div class="funnel-pct">22%</div></div>
-<div class="funnel-drop">&darr; ~55% abandon at signup (pricing confusion, unclear next step)</div>
+<div class="funnel-drop">&darr; ~55% abandon at signup</div>
 <div class="funnel-step"><div class="funnel-label">Signup Complete</div><div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:10%;background:linear-gradient(90deg,#34c759,#5ed67b)">150,000</div></div><div class="funnel-pct">10%</div></div>
 </div>
-<p style="margin-top:12px"><strong>Biggest estimated leaks:</strong> 1) Early bounce — listing 6+ feature categories instead of one clear outcome. 2) Feature overload — "everything app" positioning creates too many choices. 3) Signup drop-off — unclear whether the free tier includes what they need.</p>
+<p style="margin-top:12px"><strong>Biggest estimated leaks:</strong> 1) Early bounce — listing 6+ features instead of one outcome. 2) Feature overload mid-page. 3) Signup drop-off — unclear what the free tier actually includes.</p>
 </div>
 
 <!-- BEFORE / AFTER -->
 <div class="card">
-<h2>&#x1F3A8; Before &amp; After Redesign <span class="badge" style="background:var(--green-light);color:var(--green-dark)">Visual Mockup</span></h2>
+<h2>&#x1F3A8; Before &amp; After Redesign <span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;background:var(--green-light);color:var(--green-dark)">Visual Mockup</span></h2>
 <p>Side-by-side wireframe: current page vs. what an improved version could look like.</p>
 
 <div class="compare-container">
@@ -195,15 +169,14 @@ a.back:hover{color:var(--accent)}
 </div>
 <p style="font-size:8px;color:var(--muted);margin-top:6px">Free Forever. No credit card.</p>
 </div>
-<div class="wire-section"><h4>Feature showcase (6+ categories)</h4><p style="font-size:9px;color:var(--muted)">Tasks, Docs, Goals, Chat, Dashboards, Whiteboards, AI, Time Tracking...</p><p style="font-size:9px;color:var(--red-dark);margin-top:4px">&#x26A0; Too many categories competing for attention</p></div>
-<div class="wire-section"><h4>Social proof (scattered)</h4><div class="wire-logos"><div class="wire-logo"></div><div class="wire-logo"></div><div class="wire-logo"></div><div class="wire-logo"></div></div><p style="font-size:9px;color:var(--muted);text-align:center;margin-top:6px">(Badges exist but far below fold)</p></div>
+<div class="wire-section"><h4>Feature showcase (6+ categories)</h4><p style="font-size:9px;color:var(--muted)">Tasks, Docs, Goals, Chat, Dashboards, Whiteboards, AI...</p></div>
+<div class="wire-section"><h4>Social proof (scattered)</h4><div class="wire-logos"><div class="wire-logo"></div><div class="wire-logo"></div><div class="wire-logo"></div><div class="wire-logo"></div></div><p style="font-size:9px;color:var(--muted);text-align:center;margin-top:6px">(Badges far below fold)</p></div>
 </div>
 </div>
 <div class="annotation">
-<div class="a-line"><div class="a-marker" style="background:var(--red)">1</div><div class="a-text"><strong>"Tasks. Docs. Goals. Chat..."</strong> — feature list, not an outcome</div></div>
-<div class="a-line"><div class="a-marker" style="background:var(--red)">2</div><div class="a-text"><strong>2 competing CTAs</strong> dilute the primary action</div></div>
-<div class="a-line"><div class="a-marker" style="background:var(--red)">3</div><div class="a-text"><strong>6+ feature sections</strong> before any social proof</div></div>
-<div class="a-line"><div class="a-marker" style="background:var(--red)">4</div><div class="a-text"><strong>G2 badges buried</strong> below 3+ scrolls</div></div>
+<div class="a-line"><div class="a-marker" style="background:var(--red)">1</div><div class="a-text"><strong>Feature list in hero</strong> — not an outcome</div></div>
+<div class="a-line"><div class="a-marker" style="background:var(--red)">2</div><div class="a-text"><strong>2 competing CTAs</strong> split attention</div></div>
+<div class="a-line"><div class="a-marker" style="background:var(--red)">3</div><div class="a-text"><strong>G2 badges buried</strong> 3+ scrolls down</div></div>
 </div>
 </div>
 
@@ -222,22 +195,20 @@ a.back:hover{color:var(--accent)}
 </div>
 <div class="wire-hero" style="border-color:var(--green)">
 <h3 style="color:var(--text)">800,000+ teams replaced 5 tools<br>with one. You're next.</h3>
-<p>Project management, docs, goals, and chat — in one app. Powered by AI.</p>
+<p>Project management, docs, goals, and chat &mdash; all in one app.</p>
 <div class="cta-row" style="margin-top:10px">
 <div class="cta" style="background:#7b68ee;color:white">Get Started Free &rarr;</div>
 </div>
 <p style="font-size:9px;color:var(--green-dark);margin-top:8px;font-weight:600">&#x2713; Free forever &bull; No credit card &bull; Setup in 60 seconds</p>
 </div>
-<div class="wire-section" style="border-color:var(--green)"><h4>Trusted by 800,000+ teams worldwide</h4><div class="wire-logos"><div class="wire-logo"></div><div class="wire-logo"></div><div class="wire-logo"></div><div class="wire-logo"></div><div class="wire-logo"></div></div><div class="wire-badge-row"><div class="wire-badge" style="background:rgba(123,104,238,0.1);color:#7b68ee">&#x2B50; #1 on G2</div><div class="wire-badge" style="background:var(--green-light);color:var(--green-dark)">4.7/5 &bull; 9,500+ reviews</div><div class="wire-badge" style="background:var(--orange-light);color:var(--orange-dark)">Leader 2025</div></div></div>
-<div class="wire-testimonial"><p>"We replaced Asana, Trello, and Slack with ClickUp. Our team saved 8 hours per week and hit every sprint deadline for 6 months straight."</p><div class="name">&mdash; Head of Product, Series B SaaS (200 employees)</div></div>
+<div class="wire-section" style="border-color:var(--green)"><h4>Trusted by 800,000+ teams worldwide</h4><div class="wire-logos"><div class="wire-logo"></div><div class="wire-logo"></div><div class="wire-logo"></div><div class="wire-logo"></div><div class="wire-logo"></div></div><div class="wire-badge-row"><div class="wire-badge" style="background:rgba(123,104,238,0.1);color:#7b68ee">&#x2B50; #1 on G2</div><div class="wire-badge" style="background:var(--green-light);color:var(--green-dark)">4.7/5 &bull; 9,500+ reviews</div></div></div>
+<div class="wire-testimonial"><p>"We replaced Asana, Trello, and Slack with ClickUp. Our team saved 8 hours per week."</p><div class="name">&mdash; Head of Product, Series B SaaS</div></div>
 </div>
 </div>
 <div class="annotation">
-<div class="a-line"><div class="a-marker" style="background:var(--green)">1</div><div class="a-text"><strong>Specific headline</strong> with social proof baked in</div></div>
-<div class="a-line"><div class="a-marker" style="background:var(--green)">2</div><div class="a-text"><strong>Single primary CTA</strong> — no competing actions</div></div>
-<div class="a-line"><div class="a-marker" style="background:var(--green)">3</div><div class="a-text"><strong>Trust badges above fold</strong> (G2, review count)</div></div>
-<div class="a-line"><div class="a-marker" style="background:var(--green)">4</div><div class="a-text"><strong>Testimonial with a specific result</strong> + company size</div></div>
-<div class="a-line"><div class="a-marker" style="background:var(--green)">5</div><div class="a-text"><strong>Three risk-reducers</strong> near CTA — free, no card, quick setup</div></div>
+<div class="a-line"><div class="a-marker" style="background:var(--green)">1</div><div class="a-text"><strong>Outcome headline</strong> with customer count</div></div>
+<div class="a-line"><div class="a-marker" style="background:var(--green)">2</div><div class="a-text"><strong>One CTA</strong> — clear next step</div></div>
+<div class="a-line"><div class="a-marker" style="background:var(--green)">3</div><div class="a-text"><strong>Badges above fold</strong> + testimonial with result</div></div>
 </div>
 </div>
 </div>
@@ -245,80 +216,31 @@ a.back:hover{color:var(--accent)}
 
 <!-- A/B TESTS -->
 <div class="card">
-<h2>&#x1F9EA; 90-Day A/B Test Plan</h2>
-<p>6 tests prioritized by expected impact. Each test has a clear hypothesis explaining what to change, why, and what to measure.</p>
-
-<div class="test p1">
-<h3><span class="pri p1">P1</span> Single CTA in Hero (Remove "Talk to Sales")</h3>
-<p><strong>Hypothesis:</strong> Having two CTAs in the hero forces visitors to make a decision before they've seen the product. Removing "Talk to Sales" from the hero and making "Get Started Free" the only option there should make the path forward clearer. Enterprise visitors can still find sales via navigation.</p>
-<div class="meta"><span>KPI: Hero CTA click rate</span><span>Duration: 3 weeks</span><span>Split: 50/50</span></div>
+<h2>&#x1F9EA; Suggested A/B Tests</h2>
+<p>Three changes I'd test first, based on what's most clearly hurting the page right now:</p>
+<ul>
+<li><strong>Single CTA in the hero:</strong> Remove "Talk to Sales" from the hero and leave only "Get Started Free." Two CTAs split attention — making one the clear primary action should increase clicks on it. Enterprise visitors can still find the sales contact via nav.</li>
+<li><strong>Move G2 badges above fold:</strong> The review badges and customer count are currently 3+ scrolls down. Moving them directly below the hero means visitors see the social proof before deciding whether to keep reading.</li>
+<li><strong>Simplified hero subheading:</strong> "Tasks. Docs. Goals. Chat. Dashboards. Whiteboards." lists features instead of communicating one clear benefit. Testing a single outcome-focused line could reduce the cognitive load on new visitors.</li>
+</ul>
 </div>
 
-<div class="test p1">
-<h3><span class="pri p1">P1</span> Headline with Customer Count</h3>
-<p><strong>Hypothesis:</strong> "One app to replace them all" is a generic claim. Changing to something like "800,000+ teams replaced 5 tools with one. You're next." makes the same point but backs it up with a number, which gives new visitors more reason to trust it.</p>
-<div class="meta"><span>KPI: Signup conversion rate</span><span>Duration: 3 weeks</span></div>
-</div>
-
-<div class="test p2">
-<h3><span class="pri p2">P2</span> Move Trust Badges Above Fold</h3>
-<p><strong>Hypothesis:</strong> The G2 badges and review count are currently 3+ scrolls below the hero. Moving them directly under the hero section means visitors see social proof before they decide whether to scroll further or leave.</p>
-<div class="meta"><span>KPI: CTA click-through rate</span><span>Duration: 2 weeks</span></div>
-</div>
-
-<div class="test p2">
-<h3><span class="pri p2">P2</span> Reduce Feature Categories (6 &rarr; 3)</h3>
-<p><strong>Hypothesis:</strong> Listing 6+ feature categories in the hero creates too many things for a visitor to process. Highlighting just the top 3 use cases (Projects, Docs, AI) with a "see all features" link simplifies the decision and reduces cognitive load.</p>
-<div class="meta"><span>KPI: Scroll depth + time on page</span><span>Duration: 3 weeks</span></div>
-</div>
-
-<div class="test p2">
-<h3><span class="pri p2">P2</span> Add a Testimonial Near the Hero</h3>
-<p><strong>Hypothesis:</strong> There are no testimonials near the signup CTA. Adding one quote with a specific result ("saved 8 hours/week") directly below the CTA would give hesitant visitors a more concrete reason to try the product.</p>
-<div class="meta"><span>KPI: Signup conversion rate</span><span>Duration: 3 weeks</span></div>
-</div>
-
-<div class="test p3">
-<h3><span class="pri p3">P3</span> Expand the Risk Reversal Copy</h3>
-<p><strong>Hypothesis:</strong> "Free Forever. No credit card." is present but small. Enlarging it and adding "Setup in 60 seconds" would reduce a common concern for visitors who aren't sure what they're committing to by signing up.</p>
-<div class="meta"><span>KPI: Form completion rate</span><span>Duration: 2 weeks</span></div>
-</div>
-</div>
-
-<!-- GA4/GTM -->
+<!-- GA4 PLAN -->
 <div class="card">
-<h2>&#x1F4C8; GA4 / GTM Measurement Plan</h2>
-<p>10 custom events set up via Google Tag Manager to track each test properly and measure funnel drop-off accurately.</p>
-<div class="ga-event"><span class="ga-cat">CTA</span><span class="ga-name">cta_hero_click</span><span class="ga-trigger">Click &rarr; "Get Started Free" hero button</span></div>
-<div class="ga-event"><span class="ga-cat">CTA</span><span class="ga-name">cta_sales_click</span><span class="ga-trigger">Click &rarr; "Talk to Sales" button</span></div>
-<div class="ga-event"><span class="ga-cat">NAV</span><span class="ga-name">nav_link_click</span><span class="ga-trigger">Click &rarr; Any nav link (captures label)</span></div>
-<div class="ga-event"><span class="ga-cat">SCROLL</span><span class="ga-name">scroll_depth</span><span class="ga-trigger">Scroll &rarr; 25%, 50%, 75%, 100%</span></div>
-<div class="ga-event"><span class="ga-cat">FEAT</span><span class="ga-name">feature_tab_click</span><span class="ga-trigger">Click &rarr; Feature category tab (captures which)</span></div>
-<div class="ga-event"><span class="ga-cat">TRUST</span><span class="ga-name">badge_view</span><span class="ga-trigger">Visibility &rarr; G2/review badge enters viewport</span></div>
-<div class="ga-event"><span class="ga-cat">VIDEO</span><span class="ga-name">demo_video_play</span><span class="ga-trigger">Click &rarr; Product demo play button</span></div>
-<div class="ga-event"><span class="ga-cat">FORM</span><span class="ga-name">signup_start</span><span class="ga-trigger">Focus &rarr; Email/name field</span></div>
-<div class="ga-event"><span class="ga-cat">FORM</span><span class="ga-name">signup_complete</span><span class="ga-trigger">Submit &rarr; Registration success</span></div>
-<div class="ga-event"><span class="ga-cat">EXIT</span><span class="ga-name">exit_intent</span><span class="ga-trigger">Mouse &rarr; Cursor exits viewport</span></div>
-<p style="margin-top:14px;font-size:12px;color:var(--dim)"><strong>GA4 Funnel:</strong> Page View &rarr; Scroll 50% &rarr; Feature Tab Click &rarr; CTA Click &rarr; Signup Start &rarr; Signup Complete. Tracking each step shows exactly where visitors are dropping off.</p>
+<h2>&#x1F4C8; GA4 Tracking Plan</h2>
+<p>To measure each test I'd set up custom events in GA4 via GTM: separate click tracking for the two hero CTAs (to see which one gets used more), scroll depth milestones, nav link clicks to identify which links pull people away before converting, and signup form start/complete events. With these in place I could clearly see whether each test change is actually moving the right numbers.</p>
 </div>
 
-<!-- TIMELINE -->
+<!-- TEST APPROACH -->
 <div class="card">
-<h2>&#x1F4C5; 90-Day Execution Timeline</h2>
-<div class="timeline">
-<div class="tl-item"><div class="week">WEEK 1-2 &bull; SETUP</div><h4>Deploy GA4 events + establish baselines</h4><p>10 GTM tags configured. Build conversion funnel in GA4 Explore. 2-week baseline measurement before any tests start.</p></div>
-<div class="tl-item"><div class="week">WEEK 3-5 &bull; TEST 1</div><h4>Single CTA hero</h4><p>Remove "Talk to Sales" from hero. 50/50 split, 3 weeks minimum. Monitor hero CTA click rate as the primary KPI.</p></div>
-<div class="tl-item"><div class="week">WEEK 5-7 &bull; TEST 2</div><h4>Headline with customer count</h4><p>Replace current headline with social-proof-embedded version. Monitor signup conversion rate.</p></div>
-<div class="tl-item"><div class="week">WEEK 7-9 &bull; TEST 3</div><h4>Trust badges above fold</h4><p>Move G2 badges and review count from below fold to directly under the hero. Can layer with winning result from Test 1 or 2.</p></div>
-<div class="tl-item"><div class="week">WEEK 9-11 &bull; TESTS 4-5</div><h4>Feature hierarchy + testimonial</h4><p>Reduce feature sections to top 3. Add outcome-based testimonial near hero. Run in parallel if traffic allows.</p></div>
-<div class="tl-item"><div class="week">WEEK 11-13 &bull; TEST 6 + REPORT</div><h4>Risk reversal copy + full review</h4><p>Update risk reversal text. Compile complete results with wins, losses, and recommendations for next quarter.</p></div>
-</div>
+<h2>&#x1F4C5; How I'd Run the Tests</h2>
+<p>I'd run one test at a time so it's easy to tell which change made the difference. Start with the single CTA test since it's the simplest change with the clearest hypothesis, let it run for at least 3 weeks before reviewing results, then move on to badge placement and the hero subheading. Recording a 2-week baseline in GA4 before any tests start gives a clean starting point to compare against.</p>
 </div>
 
 <!-- KEY INSIGHT -->
 <div class="card" style="background:linear-gradient(135deg,rgba(123,104,238,0.04),rgba(52,199,89,0.04));border:1px solid rgba(123,104,238,0.12)">
 <h2>&#x1F4A1; Key Takeaway</h2>
-<p style="font-size:14px;line-height:1.7">ClickUp's biggest issue on the homepage is the same thing that makes it a great product: it does everything. That's hard to communicate clearly in a first impression. The page lists 6+ feature categories, has two competing CTAs, and buries its strongest asset (800K+ teams, #1 on G2) below the fold. The fix isn't removing features — it's prioritizing the first few seconds. Lead with the outcome and the social proof number, then let the features support that claim further down the page.</p>
+<p style="font-size:14px;line-height:1.7">ClickUp's biggest issue on the homepage is the same thing that makes it a great product: it does everything. That's hard to communicate clearly in a first impression. The fix isn't removing features — it's leading with the outcome and letting features support that further down the page. The social proof is already there and strong; it just needs to be shown earlier.</p>
 </div>
 
 <div class="footer">Landing page analysis by <a href="index.html">Abdur Raheem</a></div>

@@ -26,10 +26,9 @@ a.back:hover{color:var(--accent)}
 
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-sm);margin-bottom:20px}
 .card h2{font-size:17px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.card h2 .badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px}
 .card p,.card li{font-size:13px;color:var(--dim);line-height:1.7}
 .card ul{padding-left:20px;margin-top:8px}
-.card li{margin-bottom:6px}
+.card li{margin-bottom:10px}
 
 /* Wireframes */
 .wireframe{border:2px solid var(--border);border-radius:var(--radius);overflow:hidden;margin:16px 0;background:var(--surface2)}
@@ -86,32 +85,6 @@ a.back:hover{color:var(--accent)}
 .comp-table tr:hover{background:var(--surface2)}
 .check{color:var(--green-dark);font-weight:700}.cross{color:var(--red-dark);font-weight:700}
 
-/* Test cards */
-.test{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:12px;border-left:4px solid}
-.test.p1{border-left-color:var(--red)}.test.p2{border-left-color:var(--orange)}.test.p3{border-left-color:var(--accent)}
-.test h3{font-size:14px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
-.test .pri{font-size:9px;font-weight:700;padding:2px 8px;border-radius:4px;color:white}
-.test .pri.p1{background:var(--red)}.test .pri.p2{background:var(--orange)}.test .pri.p3{background:var(--accent)}
-.test p{font-size:12px;color:var(--dim);line-height:1.6;margin-top:4px}
-.test .meta{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
-.test .meta span{font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;background:var(--surface2);border:1px solid var(--border)}
-
-/* GA4 */
-.ga-event{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--surface2);font-size:11px}
-.ga-event:last-child{border-bottom:none}
-.ga-cat{font-size:9px;font-weight:700;padding:2px 8px;border-radius:4px;background:var(--surface2);color:var(--dim);min-width:55px;text-align:center}
-.ga-name{font-family:'DM Mono',monospace;font-weight:600;flex:1;font-size:11px}
-.ga-trigger{color:var(--muted);font-size:10px}
-
-/* Timeline */
-.timeline{position:relative;padding-left:24px;margin-top:14px}
-.timeline::before{content:'';position:absolute;left:7px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--accent),var(--green),var(--purple))}
-.tl-item{position:relative;padding-bottom:22px}
-.tl-item::before{content:'';position:absolute;left:-21px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid var(--surface)}
-.tl-item .week{font-size:10px;font-weight:700;color:var(--accent)}
-.tl-item h4{font-size:13px;font-weight:700;margin:2px 0}
-.tl-item p{font-size:11px;color:var(--dim);line-height:1.5}
-
 .footer{text-align:center;padding:28px 0;margin-top:36px;font-size:12px;color:var(--muted);border-top:1px solid var(--border)}
 .footer a{color:var(--accent);text-decoration:none}
 @media(max-width:700px){.cover{padding:32px 24px}.cover-meta{gap:12px}.compare-container{grid-template-columns:1fr}.compare-label{display:none}.comp-table{font-size:10px}}
@@ -125,45 +98,42 @@ a.back:hover{color:var(--accent)}
 <div class="cover">
 <div class="cover-badge">&#x1F4CA; Landing Page Analysis &bull; B2B SaaS &bull; Productivity</div>
 <h1>Notion Homepage<br>Analysis &amp; Redesign</h1>
-<p>A landing page analysis covering competitive benchmarking against 4 competitors, before/after redesign wireframes, conversion funnel breakdown, and a 90-day A/B test plan with a GA4 measurement setup.</p>
+<p>A landing page analysis covering competitive benchmarking, before/after redesign wireframes, estimated conversion funnel, and suggested A/B tests with a GA4 tracking plan.</p>
 <div class="cover-meta">
 <div class="cm"><div class="cv" style="color:#ff9500">58</div><div class="cl">Page Score</div></div>
 <div class="cm"><div class="cv" style="color:#ff3b30">7</div><div class="cl">Issues Found</div></div>
-<div class="cm"><div class="cv" style="color:#34c759">6</div><div class="cl">A/B Tests</div></div>
+<div class="cm"><div class="cv" style="color:#34c759">3</div><div class="cl">Tests Suggested</div></div>
 </div>
 </div>
 
 <!-- SUMMARY -->
 <div class="card">
 <h2>&#x1F4CB; Summary</h2>
-<p>Notion's homepage works well for existing users and organic traffic, but leaves room for improvement for new visitors who don't know the product yet. The page is designed for <strong>brand awareness</strong> rather than <strong>getting visitors to sign up</strong>. This analysis identifies 7 issues and proposes changes based on what tends to work well on similar B2B SaaS pages.</p>
+<p>Notion's homepage works well for existing users and organic traffic, but leaves room for improvement for new visitors who don't know the product yet. The page is built for <strong>brand awareness</strong> rather than <strong>getting new visitors to sign up</strong>. This analysis identifies 7 issues and suggests changes based on what tends to work well on similar B2B SaaS pages.</p>
 <p style="margin-top:10px"><strong>Key finding:</strong> Notion has 100M+ users but doesn't mention this anywhere on their homepage. Adding a visible user count is a simple change that would likely increase trust for new visitors — it's one of the first things I'd test.</p>
 </div>
 
 <!-- COMPETITIVE ANALYSIS -->
 <div class="card">
-<h2>&#x1F50D; Competitive Analysis <span class="badge" style="background:var(--accent-light);color:var(--accent)">vs Top 4 Competitors</span></h2>
-<p>I compared Notion's homepage against 4 competitors to see where it stands on key elements. Red = Notion is behind. Green = Notion leads.</p>
+<h2>&#x1F50D; Competitive Comparison</h2>
+<p>I visited Notion's homepage and two competitors to compare how they handle key trust and conversion elements.</p>
 <table class="comp-table">
-<thead><tr><th>Element</th><th>Notion</th><th>Monday.com</th><th>Asana</th><th>Coda</th><th>ClickUp</th></tr></thead>
+<thead><tr><th>Element</th><th>Notion</th><th>Monday.com</th><th>ClickUp</th></tr></thead>
 <tbody>
-<tr><td><strong>Quantified headline</strong></td><td class="cross">&#x2717; Vague</td><td class="check">&#x2713; "225K+ customers"</td><td class="cross">&#x2717; Vague</td><td class="check">&#x2713; "Replaces 5 tools"</td><td class="check">&#x2713; "One app to replace them all"</td></tr>
-<tr><td><strong>Customer count visible</strong></td><td class="cross">&#x2717; None</td><td class="check">&#x2713; "225,000+"</td><td class="check">&#x2713; "85% of Fortune 100"</td><td class="cross">&#x2717; None</td><td class="check">&#x2713; "800,000+ teams"</td></tr>
-<tr><td><strong>G2/Review badges</strong></td><td class="cross">&#x2717; None</td><td class="check">&#x2713; "G2 Leader"</td><td class="cross">&#x2717; None</td><td class="cross">&#x2717; None</td><td class="check">&#x2713; Multiple badges</td></tr>
-<tr><td><strong>Named testimonials</strong></td><td class="cross">&#x2717; None</td><td class="check">&#x2713; Yes</td><td class="cross">&#x2717; None</td><td class="check">&#x2713; Yes</td><td class="check">&#x2713; Yes</td></tr>
-<tr><td><strong>"No credit card" text</strong></td><td class="cross">&#x2717; Missing</td><td class="check">&#x2713; Yes</td><td class="cross">&#x2717; Missing</td><td class="check">&#x2713; Yes</td><td class="check">&#x2713; Yes</td></tr>
-<tr><td><strong>Product demo in hero</strong></td><td class="check">&#x2713; Yes</td><td class="check">&#x2713; Auto-play video</td><td class="check">&#x2713; Video button</td><td class="check">&#x2713; Interactive</td><td class="check">&#x2713; Yes</td></tr>
-<tr><td><strong>Low-friction CTA</strong></td><td class="check">&#x2713; "Get Notion free"</td><td class="check">&#x2713; "Get Started"</td><td class="check">&#x2713; "Get Started"</td><td class="check">&#x2713; "Get Started"</td><td class="check">&#x2713; "Get Started Free"</td></tr>
-<tr><td><strong>Simplified nav</strong></td><td class="cross">&#x2717; 6+ links</td><td class="cross">&#x2717; 5+ links</td><td class="cross">&#x2717; 5+ links</td><td class="check">&#x2713; Minimal</td><td class="cross">&#x2717; Many links</td></tr>
+<tr><td><strong>Customer count visible</strong></td><td class="cross">&#x2717; None shown</td><td class="check">&#x2713; "225,000+"</td><td class="check">&#x2713; "800,000+ teams"</td></tr>
+<tr><td><strong>Named testimonials</strong></td><td class="cross">&#x2717; None</td><td class="check">&#x2713; Yes</td><td class="check">&#x2713; Yes</td></tr>
+<tr><td><strong>Review badges (G2 etc.)</strong></td><td class="cross">&#x2717; None</td><td class="check">&#x2713; G2 Leader badge</td><td class="check">&#x2713; Multiple</td></tr>
+<tr><td><strong>"No credit card" text</strong></td><td class="cross">&#x2717; Missing</td><td class="check">&#x2713; Yes</td><td class="check">&#x2713; Yes</td></tr>
+<tr><td><strong>Navigation simplicity</strong></td><td class="cross">&#x2717; 6+ links</td><td class="cross">&#x2717; 5+ links</td><td class="cross">&#x2717; Many links</td></tr>
 </tbody>
 </table>
-<p style="margin-top:14px"><strong>Observation:</strong> Notion falls behind on 5 of 8 elements. The biggest gap is social proof — Notion has more users than its competitors but communicates this the least on their page.</p>
+<p style="margin-top:14px"><strong>Observation:</strong> Notion has the largest user base but communicates it the least. Monday.com and ClickUp both show customer counts, review badges, and testimonials that Notion is missing entirely.</p>
 </div>
 
 <!-- FUNNEL ANALYSIS -->
 <div class="card">
 <h2>&#x1F4C9; Estimated Conversion Funnel</h2>
-<p>A rough breakdown of how users likely move through the page, based on industry benchmarks for B2B SaaS. The numbers are estimates to illustrate where drop-off probably happens.</p>
+<p>A rough breakdown of how users likely move through the page, based on general B2B SaaS benchmarks. The numbers are estimates to illustrate where drop-off probably happens.</p>
 <div class="funnel">
 <div class="funnel-step"><div class="funnel-label">Page Load</div><div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:100%;background:linear-gradient(90deg,#0071e3,#3b9cff)">2,000,000</div></div><div class="funnel-pct">100%</div></div>
 <div class="funnel-drop">&darr; ~35% bounce (vague headline, no urgency)</div>
@@ -178,7 +148,7 @@ a.back:hover{color:var(--accent)}
 
 <!-- BEFORE / AFTER WIREFRAMES -->
 <div class="card">
-<h2>&#x1F3A8; Before &amp; After Redesign <span class="badge" style="background:var(--green-light);color:var(--green-dark)">Visual Mockup</span></h2>
+<h2>&#x1F3A8; Before &amp; After Redesign <span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;background:var(--green-light);color:var(--green-dark)">Visual Mockup</span></h2>
 <p>Side-by-side wireframe showing the current page vs. what an improved version could look like.</p>
 
 <div class="compare-container">
@@ -202,7 +172,7 @@ a.back:hover{color:var(--accent)}
 </div>
 </div>
 <div class="wire-section"><h4>Company Logos</h4><div class="wire-logos"><div class="wire-logo"></div><div class="wire-logo"></div><div class="wire-logo"></div><div class="wire-logo"></div><div class="wire-logo"></div></div><p style="font-size:9px;color:var(--muted);text-align:center;margin-top:6px">(No count, no context, no badges)</p></div>
-<div class="wire-section"><h4>Features (long scroll)</h4><p style="font-size:9px;color:var(--muted)">Docs, Wikis, Projects, AI... (product-focused, not outcome-focused)</p></div>
+<div class="wire-section"><h4>Features (long scroll)</h4><p style="font-size:9px;color:var(--muted)">Docs, Wikis, Projects, AI... (product-focused)</p></div>
 </div>
 </div>
 <div class="annotation">
@@ -249,81 +219,33 @@ a.back:hover{color:var(--accent)}
 </div>
 </div>
 
-<!-- A/B TEST ROADMAP -->
+<!-- A/B TESTS -->
 <div class="card">
-<h2>&#x1F9EA; 90-Day A/B Test Plan</h2>
-<p>6 tests prioritized by expected impact. Each test has a clear hypothesis explaining what to change, why, and what to measure.</p>
-
-<div class="test p1">
-<h3><span class="pri p1">P1</span> Quantified Outcome Headline</h3>
-<p><strong>Hypothesis:</strong> The current headline ("Write. Plan. Collaborate.") describes features without conveying a specific benefit. Testing a headline like "Replace 5 tools with one workspace — used by 100M+ people" would give new visitors a clearer reason to sign up.</p>
-<div class="meta"><span>KPI: Signup click rate</span><span>Duration: 3 weeks</span><span>Split: 50/50</span></div>
+<h2>&#x1F9EA; Suggested A/B Tests</h2>
+<p>Three changes I'd test first, based on what's most clearly missing from the current page:</p>
+<ul>
+<li><strong>Headline:</strong> Change "Write. Plan. Collaborate." to something that includes Notion's user count — for example, "Used by 100M+ people. Get your whole team in one place." New visitors have more reason to sign up when they see a specific number.</li>
+<li><strong>Social proof above fold:</strong> Add "100M+ users" and a G2 review badge directly below the hero section. Currently no trust signals are visible without scrolling down significantly.</li>
+<li><strong>Navigation:</strong> Reduce nav links from 6 to 2 (Product + Pricing). More links = more ways to leave before signing up.</li>
+</ul>
 </div>
 
-<div class="test p1">
-<h3><span class="pri p1">P1</span> Add Quantified Social Proof + Review Badge</h3>
-<p><strong>Hypothesis:</strong> The logo strip shows company names but no numbers. Adding "Trusted by 100M+ people" and a G2 rating badge would give new visitors a stronger trust signal, especially visitors who don't already know Notion.</p>
-<div class="meta"><span>KPI: Signup conversion rate</span><span>Duration: 3 weeks</span></div>
-</div>
-
-<div class="test p2">
-<h3><span class="pri p2">P2</span> Simplify Navigation (6 &rarr; 2 links)</h3>
-<p><strong>Hypothesis:</strong> With 6+ nav links, many visitors click away before reaching the CTA. Reducing navigation to just Product and Pricing keeps visitors on a cleaner path toward signing up.</p>
-<div class="meta"><span>KPI: CTA click rate</span><span>Duration: 3 weeks</span></div>
-</div>
-
-<div class="test p2">
-<h3><span class="pri p2">P2</span> Add a Named Testimonial with Specific Result</h3>
-<p><strong>Hypothesis:</strong> The page currently has no testimonials. Adding 2-3 quotes from real users with specific outcomes ("saved X hours/week") would increase confidence for visitors who are evaluating whether to try the product.</p>
-<div class="meta"><span>KPI: Demo request rate</span><span>Duration: 3 weeks</span></div>
-</div>
-
-<div class="test p2">
-<h3><span class="pri p2">P2</span> Separate CTA Paths for SMB and Enterprise</h3>
-<p><strong>Hypothesis:</strong> The page serves both individual/SMB users and enterprise teams with one CTA. Visually separating "Get free" and "Talk to sales" paths would help each visitor type find the right next step more easily.</p>
-<div class="meta"><span>KPI: Total conversion rate</span><span>Duration: 2 weeks</span></div>
-</div>
-
-<div class="test p3">
-<h3><span class="pri p3">P3</span> Add "No credit card required" Near CTA</h3>
-<p><strong>Hypothesis:</strong> The sign-up button doesn't address the common concern about entering payment details. Adding "No credit card required • Free forever for individuals" near the CTA would reduce hesitation for new visitors.</p>
-<div class="meta"><span>KPI: CTA click-through rate</span><span>Duration: 2 weeks</span></div>
-</div>
-</div>
-
-<!-- GA4/GTM PLAN -->
+<!-- GA4 PLAN -->
 <div class="card">
-<h2>&#x1F4C8; GA4 / GTM Measurement Plan</h2>
-<p>9 custom events set up via Google Tag Manager to track each step of the funnel and measure test results accurately.</p>
-<div class="ga-event"><span class="ga-cat">CTA</span><span class="ga-name">cta_primary_click</span><span class="ga-trigger">Click &rarr; "Get Notion free"</span></div>
-<div class="ga-event"><span class="ga-cat">CTA</span><span class="ga-name">cta_demo_click</span><span class="ga-trigger">Click &rarr; "Request a demo"</span></div>
-<div class="ga-event"><span class="ga-cat">NAV</span><span class="ga-name">nav_link_click</span><span class="ga-trigger">Click &rarr; Any nav link (captures which)</span></div>
-<div class="ga-event"><span class="ga-cat">SCROLL</span><span class="ga-name">scroll_depth</span><span class="ga-trigger">Scroll &rarr; 25%, 50%, 75%, 100%</span></div>
-<div class="ga-event"><span class="ga-cat">VIDEO</span><span class="ga-name">demo_video_play</span><span class="ga-trigger">Click &rarr; Product demo play button</span></div>
-<div class="ga-event"><span class="ga-cat">TRUST</span><span class="ga-name">social_proof_view</span><span class="ga-trigger">Visibility &rarr; Logo/testimonial section enters view</span></div>
-<div class="ga-event"><span class="ga-cat">FORM</span><span class="ga-name">signup_start</span><span class="ga-trigger">Focus &rarr; First form field</span></div>
-<div class="ga-event"><span class="ga-cat">FORM</span><span class="ga-name">signup_complete</span><span class="ga-trigger">Submit &rarr; Form success</span></div>
-<div class="ga-event"><span class="ga-cat">EXIT</span><span class="ga-name">exit_intent</span><span class="ga-trigger">Mouse &rarr; Leaves viewport</span></div>
-<p style="margin-top:14px;font-size:12px;color:var(--dim)"><strong>GA4 Funnel:</strong> Page View &rarr; Scroll 50% &rarr; CTA Click &rarr; Signup Start &rarr; Signup Complete. Tracking drop-off between each step shows exactly where visitors are losing interest.</p>
+<h2>&#x1F4C8; GA4 Tracking Plan</h2>
+<p>To measure each test properly I'd set up custom events in GA4 via GTM: CTA button clicks, scroll depth milestones (25%, 50%, 75%), nav link clicks to see which links pull people away, and signup form start/complete events to track drop-off at the form step. With these in place, I could see exactly which part of the page visitors are leaving at — and whether the test changes are actually moving those numbers.</p>
 </div>
 
-<!-- 90-DAY TIMELINE -->
+<!-- TEST APPROACH -->
 <div class="card">
-<h2>&#x1F4C5; 90-Day Execution Timeline</h2>
-<div class="timeline">
-<div class="tl-item"><div class="week">WEEK 1-2 &bull; SETUP</div><h4>Deploy GA4 events + establish baselines</h4><p>Configure 9 GTM tags. Build conversion funnel in GA4 Explore. Record 2-week baseline for all KPIs before any tests launch.</p></div>
-<div class="tl-item"><div class="week">WEEK 3-5 &bull; TEST 1</div><h4>Quantified outcome headline</h4><p>A/B test current vs "Replace 5 tools with one workspace." 50/50 split, minimum 3 weeks. Do not check results early.</p></div>
-<div class="tl-item"><div class="week">WEEK 5-7 &bull; TEST 2</div><h4>Social proof + G2 badge</h4><p>Add "100M+ users" text + G2 badge above fold. Can run alongside Test 1 if traffic supports it.</p></div>
-<div class="tl-item"><div class="week">WEEK 7-9 &bull; TEST 3</div><h4>Simplified navigation</h4><p>Reduce from 6 to 2 nav links + sticky CTA. Measure nav click distribution and overall conversion impact.</p></div>
-<div class="tl-item"><div class="week">WEEK 9-11 &bull; TEST 4</div><h4>Named testimonials</h4><p>Add 3 outcome-based testimonials. Test placement: above vs below the features section.</p></div>
-<div class="tl-item"><div class="week">WEEK 11-13 &bull; TESTS 5-6</div><h4>Segmented CTAs + risk reversal</h4><p>Run final tests. Compile 90-day report with results and next quarter recommendations.</p></div>
-</div>
+<h2>&#x1F4C5; How I'd Run the Tests</h2>
+<p>I'd run one test at a time so it's clear which change is making the difference. Start with the headline test (biggest potential impact), let it run for at least 3 weeks before looking at results, then move on to social proof and navigation. Before any tests start, I'd record a 2-week baseline in GA4 to have something to compare against.</p>
 </div>
 
 <!-- KEY INSIGHT -->
 <div class="card" style="background:linear-gradient(135deg,rgba(0,113,227,0.04),rgba(175,82,222,0.04));border:1px solid rgba(0,113,227,0.12)">
 <h2>&#x1F4A1; Key Takeaway</h2>
-<p style="font-size:14px;line-height:1.7">Notion has the strongest product and largest user base in its category, but its homepage doesn't reflect that. The page feels like a brand site rather than a conversion page for new visitors. The biggest opportunity is simply making their 100M+ user count visible — it's the strongest trust signal available, and it's completely missing from the page. That single change would likely be the first thing worth testing.</p>
+<p style="font-size:14px;line-height:1.7">Notion has the strongest product and largest user base in its category, but its homepage doesn't reflect that. The page feels like a brand site rather than a page designed to get new visitors to sign up. The simplest fix is making their 100M+ user count visible — it's the strongest trust signal available, and it's completely missing from the page.</p>
 </div>
 
 <div class="footer">Landing page analysis by <a href="index.html">Abdur Raheem</a></div>
